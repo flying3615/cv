@@ -222,9 +222,9 @@ public class SeekCrawler implements Crawler {
         return email;
     }
 
-    private String extractYearExperience(String description) {
+    private static String extractYearExperience(String description) {
         String experience = "";
-        Matcher experienceMatcher = Pattern.compile("(\\s{1}\\d|\\s{1}\\w+) (years|Years|year|Year)").matcher(description);
+        Matcher experienceMatcher = Pattern.compile("(\\d+|\\w+)(\\+{0,1})\\s(Years|years|Year|year)").matcher(description);
         if (experienceMatcher.find()) {
             experience += experienceMatcher.group() + " ";
         }
@@ -232,8 +232,16 @@ public class SeekCrawler implements Crawler {
     }
 
     public static void main(String[] args) {
-        String desc = "aaa 2 Years aaa";
-//        System.out.println(extractYearExperience(desc));
+        String desc1 = "bbb aaa 2 Years aaa";
+        String desc2 = "bbb aaa 3+ year's aaa";
+        String desc3 = "3+ year's hands-on software";
+        String desc4 = "aaa two Years aaa";
+        String desc5 = "two+ Years' aaa";
+        System.out.println(extractYearExperience(desc1));
+        System.out.println(extractYearExperience(desc2));
+        System.out.println(extractYearExperience(desc3));
+        System.out.println(extractYearExperience(desc4));
+        System.out.println(extractYearExperience(desc5));
     }
 
 
