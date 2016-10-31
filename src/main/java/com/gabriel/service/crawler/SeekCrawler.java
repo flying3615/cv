@@ -174,7 +174,7 @@ public class SeekCrawler implements Crawler {
 
 
     @Override
-    public void updateJobDetail(Job job) {
+    public Job updateJobDetail(Job job) {
         Connection.Response response;
         try {
             response = Jsoup.connect(detail_url + job.getExternalID())
@@ -209,6 +209,8 @@ public class SeekCrawler implements Crawler {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return job;
+
 
     }
 

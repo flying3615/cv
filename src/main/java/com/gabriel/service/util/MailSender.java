@@ -67,8 +67,9 @@ public class MailSender {
             jobs.forEach(job -> {
 
                 sb.append(job.getTitle() + "\n");
+                sb.append(job.getListDate() + "\n");
                 sb.append(job.getOrigURL() + "\n");
-                sb.append("=============================");
+                sb.append("=============================\n");
 
             });
             message.setText(sb.toString());

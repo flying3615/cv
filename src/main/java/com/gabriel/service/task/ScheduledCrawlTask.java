@@ -12,9 +12,8 @@ import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by liuyufei on 31/10/16.
@@ -50,16 +49,16 @@ public class ScheduledCrawlTask {
 
             //check if job exist...
             Set<Job> exciting_jobs = jobService.findBySearchWordAndFromSite("java", from_site);
-            Map<String,Job> now_jobs = crawler.listJobs("java");
+            Map<String, Job> now_jobs = crawler.listJobs("java");
 
 
-            log.info("existing jobs {}, {}",exciting_jobs.size(),exciting_jobs);
+            log.info("existing jobs {}, {}", exciting_jobs.size(), exciting_jobs);
 
             //only care about the latest jobs
             exciting_jobs.forEach(existing_job -> {
                     if (now_jobs.containsKey(existing_job.getExternalID())) {
                         now_jobs.remove(existing_job.getExternalID());
-                    }else{
+                    } else {
                         //means job has been removed from website...
                     }
                 }
@@ -70,12 +69,17 @@ public class ScheduledCrawlTask {
             now_jobs.values().forEach(jobService::save);
 
             //update job detail
-            if(now_jobs.size()!=0){
-                log.info("update new coming jobs {}, {}",now_jobs.size(),now_jobs);
-                now_jobs.values().parallelStream().forEach(crawler::updateJobDetail);
+            if (now_jobs.size() != 0) {
+                log.info("update new coming jobs {}, {}", now_jobs.size(), now_jobs);
+                List<Job> sortedList = new ArrayList<Job>();
+                now_jobs.values().parallelStream().forEach(job -> sortedList.add(crawler.updateJobDetail(job)));
                 //send mail notify now coming jobs
-                mailSender.sendMail(now_jobs.values());
-            }else{
+
+                //sort by date now_jobs.values()
+                Collections.sort(sortedList,(a,b)->b.getListDate().compareTo(a.getListDate()));
+
+                mailSender.sendMail(sortedList);
+            } else {
                 log.info("No job today...");
             }
 
