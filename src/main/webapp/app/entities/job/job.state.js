@@ -109,6 +109,7 @@
                                 listDate: null,
                                 fromSite: null,
                                 origURL: null,
+                                experienceReq: null,
                                 id: null
                             };
                         }

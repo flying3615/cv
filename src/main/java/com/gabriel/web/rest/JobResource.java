@@ -154,13 +154,10 @@ public class JobResource {
 
     @GetMapping("/schedule/jobs")
     @Timed
-    public ResponseEntity<Void> schedule(@RequestParam String query, Pageable pageable)
+    public ResponseEntity<Void> schedule()
         throws URISyntaxException {
         scheduledCrawlTask.dailyCrawl();
-        log.debug("REST request to search for a page of Jobs for query {}", query);
-        HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, null, "/api/schedule/jobs");
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("job", "")).build();
-
     }
 
 }

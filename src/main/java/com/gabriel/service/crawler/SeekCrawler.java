@@ -180,12 +180,7 @@ public class SeekCrawler implements Crawler {
 
     }
 
-    public static void main(String[] args) {
-//        SeekCrawler seekCrawler = new SeekCrawler();
-//        seekCrawler.detail_url = "https://www.seek.co.nz/job/";
-//        seekCrawler.userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36";
-//        seekCrawler.jobDetail("32149854");
-    }
+
 
 
     @Override
@@ -205,15 +200,12 @@ public class SeekCrawler implements Crawler {
                 Elements divs = document.getElementsByClass("templatetext");
                 Element div_description;
                 if ((div_description = divs.get(0)) != null) {
-                    String email = "";
                     String description = div_description.text();
-                    Matcher emailMatcher = Pattern.compile("[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+").matcher(description);
-                    while (emailMatcher.find()) {
-                        //email
-                        email += emailMatcher.group() + " ";
-                    }
+
                     job.setDescription(description);
-                    job.setContact(email);
+                    job.setContact(extractEmailAddr(description));
+                    job.setExperienceReq(extractYearExperience(description));
+
                     jobService.save(job);
 
                 }else{
@@ -229,6 +221,33 @@ public class SeekCrawler implements Crawler {
         }
 
     }
+
+    private String extractEmailAddr(String description) {
+        String email = "";
+        Matcher emailMatcher = Pattern.compile("[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+").matcher(description);
+        while (emailMatcher.find()) {
+            //email
+            email += emailMatcher.group() + " ";
+        }
+        return email;
+    }
+
+    private String extractYearExperience(String description) {
+        String experience = "";
+        Matcher experienceMatcher = Pattern.compile("(\\s{1}\\d|\\s{1}\\w+) (years|Years|year|Year)").matcher(description);
+        if (experienceMatcher.find()) {
+            experience += experienceMatcher.group() + " ";
+        }
+        return experience;
+    }
+
+    public static void main(String[] args) {
+        String desc = "aaa 2 Years aaa";
+//        System.out.println(extractYearExperience(desc));
+    }
+
+
+
 
 
 }

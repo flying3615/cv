@@ -70,6 +70,9 @@ public class Job implements Serializable {
     @Column(name = "orig_url")
     private String origURL;
 
+    @Column(name = "experience_req")
+    private String experienceReq;
+
     public Long getId() {
         return id;
     }
@@ -260,6 +263,19 @@ public class Job implements Serializable {
         this.origURL = origURL;
     }
 
+    public String getExperienceReq() {
+        return experienceReq;
+    }
+
+    public Job experienceReq(String experienceReq) {
+        this.experienceReq = experienceReq;
+        return this;
+    }
+
+    public void setExperienceReq(String experienceReq) {
+        this.experienceReq = experienceReq;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -298,6 +314,7 @@ public class Job implements Serializable {
             ", listDate='" + listDate + "'" +
             ", fromSite='" + fromSite + "'" +
             ", origURL='" + origURL + "'" +
+            ", experienceReq='" + experienceReq + "'" +
             '}';
     }
 }

@@ -77,6 +77,10 @@
                 <constraints nullable="true" />
             </column>
 
+            <column name="experience_req" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
             <!-- jhipster-needle-liquibase-add-column - Jhipster will add columns here, do not remove-->
         </createTable>
         <dropDefaultValue tableName="job" columnName="creation_time" columnDataType="datetime"/>

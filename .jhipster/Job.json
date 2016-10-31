@@ -63,6 +63,10 @@
         {
             "fieldName": "origURL",
             "fieldType": "String"
+        },
+        {
+            "fieldName": "experienceReq",
+            "fieldType": "String"
         }
     ],
     "changelogDate": "20161030033438",
