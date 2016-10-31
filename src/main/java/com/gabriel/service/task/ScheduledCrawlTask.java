@@ -74,7 +74,6 @@ public class ScheduledCrawlTask {
                 log.info("No job today...");
             }
 
-
         });
 
     }
