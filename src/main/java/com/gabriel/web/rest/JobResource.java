@@ -3,6 +3,7 @@ package com.gabriel.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import com.gabriel.domain.Job;
 import com.gabriel.service.JobService;
+import com.gabriel.service.task.ScheduledCrawlTask;
 import com.gabriel.web.rest.util.HeaderUtil;
 import com.gabriel.web.rest.util.PaginationUtil;
 import org.slf4j.Logger;
@@ -33,7 +34,7 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class JobResource {
 
     private final Logger log = LoggerFactory.getLogger(JobResource.class);
-        
+
     @Inject
     private JobService jobService;
 
@@ -132,7 +133,7 @@ public class JobResource {
      * SEARCH  /_search/jobs?query=:query : search for the job corresponding
      * to the query.
      *
-     * @param query the query of the job search 
+     * @param query the query of the job search
      * @param pageable the pagination information
      * @return the result of the search
      * @throws URISyntaxException if there is an error to generate the pagination HTTP headers
@@ -147,5 +148,19 @@ public class JobResource {
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
+
+    @Inject
+    ScheduledCrawlTask scheduledCrawlTask;
+
+    @GetMapping("/schedule/jobs")
+    @Timed
+    public ResponseEntity<Void> schedule(@RequestParam String query, Pageable pageable)
+        throws URISyntaxException {
+        scheduledCrawlTask.dailyCrawl();
+        log.debug("REST request to search for a page of Jobs for query {}", query);
+        HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, null, "/api/schedule/jobs");
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("job", "")).build();
+
+    }
 
 }

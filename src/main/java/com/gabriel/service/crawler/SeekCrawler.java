@@ -1,7 +1,7 @@
 package com.gabriel.service.crawler;
 
 import com.gabriel.domain.Job;
-import com.gabriel.repository.JobRepository;
+import com.gabriel.service.JobService;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -57,7 +57,7 @@ public class SeekCrawler implements Crawler {
     String detail_url;
 
     @Inject
-    JobRepository jobRepository;
+    JobService jobService;
 
 //
 //    String userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36";
@@ -121,7 +121,7 @@ public class SeekCrawler implements Crawler {
 
     private String getRawResponse(String searchWord, int pageNum) throws Exception {
 
-        Connection.Response response = null;
+        Connection.Response response;
         try {
             response = Jsoup.connect(requestUrl)
                 .header("Accept", "*/*")
@@ -214,7 +214,8 @@ public class SeekCrawler implements Crawler {
                     }
                     job.setDescription(description);
                     job.setContact(email);
-                    jobRepository.save(job);
+                    jobService.save(job);
+
                 }else{
                     log.error("Job detail not found in <div class=templatetext>");
                 }
