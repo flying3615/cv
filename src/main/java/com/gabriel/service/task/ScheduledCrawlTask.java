@@ -27,7 +27,7 @@ public class ScheduledCrawlTask {
     @Inject
     Map<String, Crawler> crawlerStrategy = new HashMap<>();
 
-    @Value("${crawler.seek.from_site}")
+    @Value("${crawler.seek.fromSite}")
     String from_site;
 
     @Inject
@@ -40,31 +40,37 @@ public class ScheduledCrawlTask {
         Set<Map.Entry<String, Crawler>> crawlerSet = crawlerStrategy.entrySet();
         crawlerSet.stream().forEach(crawlerEntry -> {
 
-            log.info("{}->{} ready to GO!!!", crawlerEntry.getKey(), crawlerEntry.getValue());
+            log.info("{} ready to GO!!!", crawlerEntry.getKey());
 
             Crawler crawler = crawlerEntry.getValue();
 
 
             //check if job exist...
-            Set<Job> exsiting_jobs = jobRepository.findBySearchWordAndFromSite("java", from_site);
-            Set<Job> now_jobs = crawler.listJobs("java");
+            Set<Job> exciting_jobs = jobRepository.findBySearchWordAndFromSite("java", from_site);
+            Map<String,Job> now_jobs = crawler.listJobs("java");
+
+
+
+
+            log.info("existing jobs {}, {}",exciting_jobs.size(),exciting_jobs);
 
             //only care about the latest jobs
-            exsiting_jobs.forEach(exsiting_job -> {
-                    if (now_jobs.contains(exsiting_job)) {
-                        now_jobs.remove(exsiting_jobs);
+            exciting_jobs.forEach(exsiting_job -> {
+
+                    if (now_jobs.containsKey(exsiting_job.getExternalID())) {
+                        now_jobs.remove(exsiting_job.getExternalID());
                     }
                 }
 
             );
 
 
-            jobRepository.save(now_jobs);
+            jobRepository.save(now_jobs.values());
 
             //update job detail
             if(now_jobs.size()!=0){
                 log.info("update new coming jobs {}, {}",now_jobs.size(),now_jobs);
-                now_jobs.forEach(rest_job->{
+                now_jobs.values().forEach(rest_job->{
                     crawler.updateJobDetail(rest_job);
                 });
                 //send mail notify now coming jobs

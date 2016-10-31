@@ -24,58 +24,58 @@
             <column name="title" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
-            
+
             <column name="company" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
-            
+
             <column name="salary" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            
+
             <column name="location" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            
-            <column name="description" type="varchar(255)">
+
+            <column name="description" type="varchar(10000)">
                 <constraints nullable="true" />
             </column>
-            
+
             <column name="keywords" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            
+
             <column name="contact" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            
+
             <column name="creation_time" type="timestamp">
                 <constraints nullable="true" />
             </column>
-            
+
             <column name="external_id" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            
+
             <column name="search_word" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            
+
             <column name="work_type" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            
+
             <column name="list_date" type="date">
                 <constraints nullable="true" />
             </column>
-            
+
             <column name="from_site" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            
+
             <!-- jhipster-needle-liquibase-add-column - Jhipster will add columns here, do not remove-->
         </createTable>
         <dropDefaultValue tableName="job" columnName="creation_time" columnDataType="datetime"/>
-        
+
     </changeSet>
 </databaseChangeLog>

@@ -13,6 +13,5 @@ import java.util.Set;
 @SuppressWarnings("unused")
 public interface JobRepository extends JpaRepository<Job,Long> {
 
-    Set<Job> findBySearchWordAndFromSite(String searchWord, String fromSite);
-
+    Set<Job> findBySearchWordAndFromSite(String java, String from_site);
 }

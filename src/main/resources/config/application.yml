@@ -80,3 +80,14 @@ jhipster:
     ribbon:
         # comma seperated list of profiles to show a ribbon on the GUI
         displayOnActiveProfiles: dev
+
+
+crawler:
+    userAgent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36
+    seek:
+        requestUrl: https://jobsearch-api.cloud.seek.com.au/search
+        callback: jQuery18203420653892844612_1477784271109
+        nation: 3001
+        itemsPerPage: 20
+        fromSite: SEEK
+        detailUrl: https://www.seek.co.nz/job/

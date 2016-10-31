@@ -3,6 +3,7 @@ package com.gabriel.service.crawler;
 import com.gabriel.domain.Job;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -14,7 +15,7 @@ public class TreadMeCrawler implements Crawler {
 
     @Override
     public Set<Job> listJobs(String searchWord) {
-        return null;
+        return new HashSet<>();
     }
 
     @Override

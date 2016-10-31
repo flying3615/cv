@@ -3,6 +3,7 @@ package com.gabriel.service.crawler;
 import com.gabriel.domain.Job;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -11,7 +12,7 @@ import java.util.Set;
 public interface Crawler {
 
 
-    Set<Job> listJobs(String searchWord);
+    Map<String,Job> listJobs(String searchWord);
 
     void updateJobDetail(Job jobID);
 

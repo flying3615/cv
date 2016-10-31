@@ -2,7 +2,6 @@ package com.gabriel.service.crawler;
 
 import com.gabriel.domain.Job;
 import com.gabriel.repository.JobRepository;
-import com.gabriel.service.JobService;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,7 +21,6 @@ import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
@@ -40,7 +38,7 @@ public class SeekCrawler implements Crawler {
     @Value("${crawler.userAgent}")
     String userAgent;
 
-    @Value("${crawler.seek.url}")
+    @Value("${crawler.seek.requestUrl}")
     String requestUrl;
 
     @Value("${crawler.seek.callback}")
@@ -52,10 +50,10 @@ public class SeekCrawler implements Crawler {
     @Value("${crawler.seek.itemsPerPage}")
     String itemsPerPage;
 
-    @Value("${crawler.seek.from_site}")
+    @Value("${crawler.seek.fromSite}")
     String from_site;
 
-    @Value("${crawler.seek.detail_url}")
+    @Value("${crawler.seek.detailUrl}")
     String detail_url;
 
     @Inject
@@ -76,15 +74,15 @@ public class SeekCrawler implements Crawler {
 
 
     @Override
-    public Set<Job> listJobs(String searchWord) {
+    public Map<String,Job> listJobs(String searchWord) {
         this.searchWord = searchWord;
-        Set<Job> all_jobs = new HashSet<>();
+        Map<String,Job> all_jobs = new HashMap<>();
         try {
             int total_pages = this.getTotalPage(searchWord);
             //use parallel to process each page
             IntStream.rangeClosed(1, total_pages).parallel().forEach(i -> {
                 try {
-                    all_jobs.addAll(this.listJobsByPage(searchWord, i));
+                    all_jobs.putAll(this.listJobsByPage(searchWord, i));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -98,7 +96,7 @@ public class SeekCrawler implements Crawler {
         return all_jobs;
     }
 
-    private List<Job> listJobsByPage(String searchWord, int pageNum) throws Exception {
+    private Map<String,Job> listJobsByPage(String searchWord, int pageNum) throws Exception {
         String job_raw = this.getRawResponse(searchWord, pageNum);
         return this.parseTextToJson(job_raw);
     }
@@ -150,7 +148,7 @@ public class SeekCrawler implements Crawler {
     }
 
 
-    private List<Job> parseTextToJson(String rawStr) throws JSONException {
+    private Map<String,Job> parseTextToJson(String rawStr) throws JSONException {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
         String tmp = rawStr.split(callback + "\\(")[1];
         String rawJSON = tmp.substring(0, tmp.length() - 2);
@@ -158,7 +156,7 @@ public class SeekCrawler implements Crawler {
 
 
         JSONArray jobs = jsonObject.getJSONArray("data");
-        List<Job> jobList = new ArrayList<>();
+        Map<String,Job> jobList = new HashMap<>();
         for (int i = 0; i < jobs.length(); i++) {
             JSONObject job = (JSONObject) jobs.get(i);
 
@@ -174,7 +172,7 @@ public class SeekCrawler implements Crawler {
             job_domain.setFromSite(from_site);
             job_domain.setSearchWord(searchWord);
             job_domain.setCreationTime(ZonedDateTime.now());
-            jobList.add(job_domain);
+            jobList.put(job.get("id").toString(),job_domain);
         }
         //return standard job json array format
         return jobList;

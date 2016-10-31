@@ -40,7 +40,7 @@ public class Job implements Serializable {
     @Column(name = "location")
     private String location;
 
-    @Column(name = "description")
+    @Column(length = 10000)
     private String description;
 
     @Column(name = "keywords")
