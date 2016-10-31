@@ -1,0 +1,71 @@
+
+<div>
+    <h2><span>Job</span> {{vm.job.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="dl-horizontal jh-entity-details">
+        <dt><span>Title</span></dt>
+        <dd>
+            <span>{{vm.job.title}}</span>
+        </dd>
+        <dt><span>Company</span></dt>
+        <dd>
+            <span>{{vm.job.company}}</span>
+        </dd>
+        <dt><span data-translate="cvApp.job.external_id">External Id</span></dt>
+        <dd>
+            <span>{{vm.job.external_id}}</span>
+        </dd>
+        <dt><span data-translate="cvApp.job.list_date">List Date</span></dt>
+        <dd>
+            <span>{{vm.job.list_date | date:'mediumDate'}}</span>
+        </dd>
+        <dt><span>Salary</span></dt>
+        <dd>
+            <span>{{vm.job.salary}}</span>
+        </dd>
+        <dt><span>Location</span></dt>
+        <dd>
+            <span>{{vm.job.location}}</span>
+        </dd>
+        <dt><span data-translate="cvApp.job.work_type">Work Type</span></dt>
+        <dd>
+            <span>{{vm.job.work_type}}</span>
+        </dd>
+        <dt><span>Description</span></dt>
+        <dd>
+            <span>{{vm.job.description}}</span>
+        </dd>
+        <dt><span>Keywords</span></dt>
+        <dd>
+            <span>{{vm.job.keywords}}</span>
+        </dd>
+        <dt><span data-translate="cvApp.job.search_word">Search Word</span></dt>
+        <dd>
+            <span>{{vm.job.search_word}}</span>
+        </dd>
+        <dt><span data-translate="cvApp.job.from_site">From Site</span></dt>
+        <dd>
+            <span>{{vm.job.from_site}}</span>
+        </dd>
+        <dt><span>Contact</span></dt>
+        <dd>
+            <span>{{vm.job.contact}}</span>
+        </dd>
+        <dt><span data-translate="cvApp.job.creation_time">Creation Time</span></dt>
+        <dd>
+            <span>{{vm.job.creation_time | date:'medium'}}</span>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            ui-sref="{{ vm.previousState }}"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button type="button" ui-sref="job-detail.edit({id:vm.job.id})" class="btn btn-primary">
+        <span class="glyphicon glyphicon-pencil"></span>
+        <span class="hidden-xs hidden-sm"> Edit</span>
+    </button>
+</div>

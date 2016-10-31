@@ -1,0 +1,97 @@
+<div>
+    <h2>Jobs</h2>
+    <jhi-alert></jhi-alert>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-4 no-padding-left">
+                <button class="btn btn-primary" ui-sref="job.new" >
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <span class="hidden-xs" >
+                        Create new Job
+                    </span>
+                </button>
+            </div>
+            <div class="col-xs-8 no-padding-right">
+                <form name="searchForm" class="form-inline">
+                    <div class="input-group pull-right" >
+                        <input type="text" class="form-control" ng-model="vm.searchQuery" id="searchQuery" placeholder="Query">
+                        <span  class="input-group-btn width-min" >
+                            <button class="btn btn-info" ng-click="vm.search(vm.searchQuery)">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                        </span>
+                        <span class="input-group-btn width-min" ng-if="vm.currentSearch">
+                            <button class="btn btn-info" ng-click="vm.clear()">
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </button>
+                        </span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <div class="table-responsive">
+        <table class="jh-table table table-striped">
+            <thead>
+                <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.reset()">
+                    <th jh-sort-by="id"><span>ID</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="title"><span>Title</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="company"><span>Company</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="external_id"><span data-translate="cvApp.job.external_id">External Id</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="list_date"><span data-translate="cvApp.job.list_date">List Date</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="salary"><span>Salary</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="location"><span>Location</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="work_type"><span data-translate="cvApp.job.work_type">Work Type</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="description"><span>Description</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="keywords"><span>Keywords</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="search_word"><span data-translate="cvApp.job.search_word">Search Word</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="from_site"><span data-translate="cvApp.job.from_site">From Site</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="contact"><span>Contact</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="creation_time"><span data-translate="cvApp.job.creation_time">Creation Time</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody infinite-scroll="vm.loadPage(vm.page + 1)" infinite-scroll-disabled="vm.page >= vm.links['last']">
+                <tr ng-repeat="job in vm.jobs track by job.id">
+                    <td><a ui-sref="job-detail({id:job.id})">{{job.id}}</a></td>
+                    <td>{{job.title}}</td>
+                    <td>{{job.company}}</td>
+                    <td>{{job.external_id}}</td>
+                        <td>{{job.list_date | date:'mediumDate'}}</td>
+                    <td>{{job.salary}}</td>
+                    <td>{{job.location}}</td>
+                    <td>{{job.work_type}}</td>
+                    <td>{{job.description}}</td>
+                    <td>{{job.keywords}}</td>
+                    <td>{{job.search_word}}</td>
+                    <td>{{job.from_site}}</td>
+                    <td>{{job.contact}}</td>
+                    <td>{{job.creation_time | date:'medium'}}</td>
+                    <td class="text-right">
+                        <div class="btn-group flex-btn-group-container">
+                            <button type="submit"
+                                    ui-sref="job-detail({id:job.id})"
+                                    class="btn btn-info btn-sm">
+                                <span class="glyphicon glyphicon-eye-open"></span>
+                                <span class="hidden-xs hidden-sm"></span>
+                            </button>
+                            <button type="submit"
+                                    ui-sref="job.edit({id:job.id})"
+                                    class="btn btn-primary btn-sm">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                                <span class="hidden-xs hidden-sm"></span>
+                            </button>
+                            <button type="submit"
+                                    ui-sref="job.delete({id:job.id})"
+                                    class="btn btn-danger btn-sm">
+                                <span class="glyphicon glyphicon-remove-circle"></span>
+                                <span class="hidden-xs hidden-sm"></span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

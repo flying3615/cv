@@ -1,0 +1,142 @@
+
+<form name="editForm" role="form" novalidate ng-submit="vm.save()" show-validation>
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="vm.clear()">&times;</button>
+        <h4 class="modal-title" id="myJobLabel">Create or edit a Job</h4>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" ng-show="vm.job.id">
+            <label for="id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                    ng-model="vm.job.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_title">Title</label>
+            <input type="text" class="form-control" name="title" id="field_title"
+                    ng-model="vm.job.title"
+                    required />
+            <div ng-show="editForm.title.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.title.$error.required">
+                    This field is required.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_company">Company</label>
+            <input type="text" class="form-control" name="company" id="field_company"
+                    ng-model="vm.job.company"
+                    required />
+            <div ng-show="editForm.company.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.company.$error.required">
+                    This field is required.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" data-translate="cvApp.job.external_id" for="field_external_id">External Id</label>
+            <input type="text" class="form-control" name="external_id" id="field_external_id"
+                    ng-model="vm.job.external_id"
+                    required />
+            <div ng-show="editForm.external_id.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.external_id.$error.required">
+                    This field is required.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" data-translate="cvApp.job.list_date" for="field_list_date">List Date</label>
+                <div class="input-group">
+                    <input id="field_list_date" type="text" class="form-control" name="list_date" uib-datepicker-popup="{{dateformat}}" ng-model="vm.job.list_date" is-open="vm.datePickerOpenStatus.list_date"
+                    />
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="vm.openCalendar('list_date')"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_salary">Salary</label>
+            <input type="text" class="form-control" name="salary" id="field_salary"
+                    ng-model="vm.job.salary"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_location">Location</label>
+            <input type="text" class="form-control" name="location" id="field_location"
+                    ng-model="vm.job.location"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" data-translate="cvApp.job.work_type" for="field_work_type">Work Type</label>
+            <input type="text" class="form-control" name="work_type" id="field_work_type"
+                    ng-model="vm.job.work_type"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_description">Description</label>
+            <input type="text" class="form-control" name="description" id="field_description"
+                    ng-model="vm.job.description"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_keywords">Keywords</label>
+            <input type="text" class="form-control" name="keywords" id="field_keywords"
+                    ng-model="vm.job.keywords"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" data-translate="cvApp.job.search_word" for="field_search_word">Search Word</label>
+            <input type="text" class="form-control" name="search_word" id="field_search_word"
+                    ng-model="vm.job.search_word"
+                    required />
+            <div ng-show="editForm.search_word.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.search_word.$error.required">
+                    This field is required.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" data-translate="cvApp.job.from_site" for="field_from_site">From Site</label>
+            <input type="text" class="form-control" name="from_site" id="field_from_site"
+                    ng-model="vm.job.from_site"
+                    required />
+            <div ng-show="editForm.from_site.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.from_site.$error.required">
+                    This field is required.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_contact">Contact</label>
+            <input type="text" class="form-control" name="contact" id="field_contact"
+                    ng-model="vm.job.contact"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" data-translate="cvApp.job.creation_time" for="field_creation_time">Creation Time</label>
+                <div class="input-group">
+                    <input id="field_creation_time" type="text" class="form-control" name="creation_time" datetime-picker="{{dateformat}}" ng-model="vm.job.creation_time" is-open="vm.datePickerOpenStatus.creation_time"
+                      />
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="vm.openCalendar('creation_time')"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Cancel</span>
+        </button>
+        <button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
+        </button>
+    </div>
+</form>

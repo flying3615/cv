@@ -1,0 +1,10 @@
+version: '2'
+services:
+    cv-elasticsearch:
+        container_name: cv-elasticsearch
+        image: elasticsearch:2.4.0
+        # volumes:
+        #     - ~/volumes/jhipster/cv/elasticsearch/:/usr/share/elasticsearch/data/
+        ports:
+            - 9200:9200
+            - 9300:9300
