@@ -55,10 +55,10 @@ public class ScheduledCrawlTask {
             log.info("existing jobs {}, {}",exciting_jobs.size(),exciting_jobs);
 
             //only care about the latest jobs
-            exciting_jobs.forEach(exsiting_job -> {
+            exciting_jobs.forEach(existing_job -> {
 
-                    if (now_jobs.containsKey(exsiting_job.getExternalID())) {
-                        now_jobs.remove(exsiting_job.getExternalID());
+                    if (now_jobs.containsKey(existing_job.getExternalID())) {
+                        now_jobs.remove(existing_job.getExternalID());
                     }
                 }
 
