@@ -59,16 +59,6 @@ public class SeekCrawler implements Crawler {
     @Inject
     JobService jobService;
 
-//
-//    String userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36";
-//
-//    String requestUrl = "https://jobsearch-api.cloud.seek.com.au/search";
-//
-//    String callback = "jQuery18203420653892844612_1477784271109";
-//
-//    String nation = "3001";
-//
-//    Integer itemsPerPage = 20;
 
     private String searchWord;
 
