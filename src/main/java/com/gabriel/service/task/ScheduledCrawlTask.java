@@ -1,7 +1,7 @@
 package com.gabriel.service.task;
 
 import com.gabriel.domain.Job;
-import com.gabriel.repository.JobRepository;
+import com.gabriel.service.JobService;
 import com.gabriel.service.crawler.Crawler;
 import com.gabriel.service.util.MailSender;
 import org.slf4j.Logger;
@@ -35,10 +35,10 @@ public class ScheduledCrawlTask {
     String from_site;
 
     @Inject
-    JobRepository jobRepository;
+    JobService jobService;
 
-//    @Scheduled(cron = "0 0 6 * * *")  //@ 6:00:00 am every day
-    @Scheduled(cron = "0 */5 * * * *") //every ten minutes for test
+    @Scheduled(cron = "0 0 6 * * *")  //@ 6:00:00 am every day
+//    @Scheduled(cron = "0 */5 * * * *") //every ten minutes for test
     public void dailyCrawl() {
         log.info("crawl task start @ {}", LocalDateTime.now());
         Set<Map.Entry<String, Crawler>> crawlerSet = crawlerStrategy.entrySet();
@@ -49,7 +49,7 @@ public class ScheduledCrawlTask {
             Crawler crawler = crawlerEntry.getValue();
 
             //check if job exist...
-            Set<Job> exciting_jobs = jobRepository.findBySearchWordAndFromSite("java", from_site);
+            Set<Job> exciting_jobs = jobService.findBySearchWordAndFromSite("java", from_site);
             Map<String,Job> now_jobs = crawler.listJobs("java");
 
 
@@ -59,20 +59,20 @@ public class ScheduledCrawlTask {
             exciting_jobs.forEach(existing_job -> {
                     if (now_jobs.containsKey(existing_job.getExternalID())) {
                         now_jobs.remove(existing_job.getExternalID());
+                    }else{
+                        //means job has been removed from website...
                     }
                 }
 
             );
 
-
-            jobRepository.save(now_jobs.values());
+            //save new jobs
+            now_jobs.values().forEach(jobService::save);
 
             //update job detail
             if(now_jobs.size()!=0){
                 log.info("update new coming jobs {}, {}",now_jobs.size(),now_jobs);
-                now_jobs.values().parallelStream().forEach(rest_job->{
-                    crawler.updateJobDetail(rest_job);
-                });
+                now_jobs.values().parallelStream().forEach(crawler::updateJobDetail);
                 //send mail notify now coming jobs
                 mailSender.sendMail(now_jobs.values());
             }else{

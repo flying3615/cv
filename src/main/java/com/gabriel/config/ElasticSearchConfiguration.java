@@ -2,8 +2,8 @@ package com.gabriel.config;
 
 import java.io.IOException;
 
+import com.gabriel.service.util.MailSender;
 import org.elasticsearch.client.Client;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
@@ -15,6 +15,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration
 public class ElasticSearchConfiguration {
+
+
+    @Bean
+    public MailSender getMailSender(){
+        return new MailSender();
+    }
 
     @Bean
     public ElasticsearchTemplate elasticsearchTemplate(Client client, Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder) {

@@ -15,7 +15,6 @@ import java.util.Properties;
  * Created by liuyufei on 31/10/16.
  */
 
-@Component
 public class MailSender {
 
     private final Logger log = LoggerFactory.getLogger(MailSender.class);
