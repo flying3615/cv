@@ -2,7 +2,7 @@ package com.gabriel.service.task;
 
 import com.gabriel.domain.Job;
 import com.gabriel.repository.JobRepository;
-import com.gabriel.service.crawler.Crawlers;
+import com.gabriel.service.crawler.Crawler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,7 +25,7 @@ public class ScheduledCrawlTask {
     private final Logger log = LoggerFactory.getLogger(ScheduledCrawlTask.class);
 
     @Inject
-    Map<String,Crawlers> crawlerStrategy = new HashMap<>();
+    Map<String, Crawler> crawlerStrategy = new HashMap<>();
 
     @Value("${crawler.seek.from_site}")
     String from_site;
@@ -33,18 +33,39 @@ public class ScheduledCrawlTask {
     @Inject
     JobRepository jobRepository;
 
-    @Scheduled(cron = "0 0 6 * * *")  //@ 6:00:00 am every day
-//    @Scheduled(cron = "0 */5 * * * *") //every ten minutes for test
-    public void dailyCrawl(){
+//    @Scheduled(cron = "0 0 6 * * *")  //@ 6:00:00 am every day
+    @Scheduled(cron = "0 */5 * * * *") //every ten minutes for test
+    public void dailyCrawl() {
         log.info("crawl task start @ {}", LocalDateTime.now());
-        Set<Map.Entry<String,Crawlers>> crawlerSet = crawlerStrategy.entrySet();
-        crawlerSet.stream().forEach(crawler -> {
-            log.info("{}->{} ready to GO!!!",crawler.getKey(),crawler.getValue());
+        Set<Map.Entry<String, Crawler>> crawlerSet = crawlerStrategy.entrySet();
+        crawlerSet.stream().forEach(crawlerEntry -> {
 
-            Set<Job> jobs = jobRepository.findBySearch_wordAndFrom_site("java",from_site);
-            jobs.addAll(crawler.getValue().listJobs("java"));
-            //TODO check if job exist...
-            jobRepository.save(jobs);
+            log.info("{}->{} ready to GO!!!", crawlerEntry.getKey(), crawlerEntry.getValue());
+
+            Crawler crawler = crawlerEntry.getValue();
+
+
+            //check if job exist...
+            Set<Job> exsiting_jobs = jobRepository.findBySearch_wordAndFrom_site("java", from_site);
+            Set<Job> now_jobs = crawler.listJobs("java");
+
+            //only care about the latest jobs
+            exsiting_jobs.forEach(exsiting_job -> {
+                    if (now_jobs.contains(exsiting_job)) {
+                        now_jobs.remove(exsiting_jobs);
+                    }
+                }
+
+            );
+
+            log.info("update new coming jobs {}, {}",now_jobs.size(),now_jobs);
+            jobRepository.save(now_jobs);
+
+            //update job detail
+            now_jobs.forEach(rest_job->{
+                crawler.updateJobDetail(rest_job);
+            });
+
         });
 
     }

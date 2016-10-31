@@ -9,3 +9,4 @@ crawler:
         nation: 3001
         itemsPerPage: 20
         from_site: SEEK
+        detail_url: https://www.seek.co.nz/job/

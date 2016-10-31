@@ -1,19 +1,30 @@
 package com.gabriel.service.crawler;
 
 import com.gabriel.domain.Job;
+import com.gabriel.repository.JobRepository;
+import com.gabriel.service.JobService;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.inject.Inject;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 
 /**
@@ -22,7 +33,9 @@ import java.util.stream.IntStream;
 
 
 @Component
-public class SeekCrawler implements Crawlers {
+public class SeekCrawler implements Crawler {
+
+    private final Logger log = LoggerFactory.getLogger(SeekCrawler.class);
 
     @Value("${crawler.userAgent}")
     String userAgent;
@@ -42,6 +55,12 @@ public class SeekCrawler implements Crawlers {
     @Value("${crawler.seek.from_site}")
     String from_site;
 
+    @Value("${crawler.seek.detail_url}")
+    String detail_url;
+
+    @Inject
+    JobRepository jobRepository;
+
 //
 //    String userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36";
 //
@@ -57,9 +76,9 @@ public class SeekCrawler implements Crawlers {
 
 
     @Override
-    public List<Job> listJobs(String searchWord) {
+    public Set<Job> listJobs(String searchWord) {
         this.searchWord = searchWord;
-        List<Job> all_jobs = new ArrayList<>();
+        Set<Job> all_jobs = new HashSet<>();
         try {
             int total_pages = this.getTotalPage(searchWord);
             //use parallel to process each page
@@ -163,12 +182,53 @@ public class SeekCrawler implements Crawlers {
     }
 
     public static void main(String[] args) {
-      IntStream.rangeClosed(1,10).parallel().forEach(i-> System.out.println(i));
+//        SeekCrawler seekCrawler = new SeekCrawler();
+//        seekCrawler.detail_url = "https://www.seek.co.nz/job/";
+//        seekCrawler.userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36";
+//        seekCrawler.jobDetail("32149854");
     }
 
 
     @Override
-    public Job jobDetail(String jobID) {
-        return null;
+    public void updateJobDetail(Job job) {
+        Connection.Response response;
+        try {
+            response = Jsoup.connect(detail_url + job.getExternal_id())
+                .header("Accept", "*/*")
+                .header("Content-Type", "application/json;charset=UTF-8")
+                .userAgent(userAgent)
+                .method(Connection.Method.GET)
+                .ignoreContentType(true)
+                .execute();
+
+            if (response.statusCode() == 200) {
+                Document document = response.parse();
+                Elements divs = document.getElementsByClass("templatetext");
+                Element div_description;
+                if ((div_description = divs.get(0)) != null) {
+                    String email = "";
+                    String description = div_description.text();
+                    Matcher emailMatcher = Pattern.compile("[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+").matcher(description);
+                    while (emailMatcher.find()) {
+                        //email
+                        email += emailMatcher.group() + ", ";
+                    }
+                    job.setDescription(description);
+                    job.setContact(email);
+                    jobRepository.save(job);
+                }else{
+                    log.error("Job detail not found in <div class=templatetext>");
+                }
+
+            } else {
+                //TODO throw exception NETWORKERROR
+//                throw new Exception("remote response code is NOT 200");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
+
+
 }

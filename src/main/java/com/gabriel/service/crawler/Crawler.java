@@ -3,16 +3,17 @@ package com.gabriel.service.crawler;
 import com.gabriel.domain.Job;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by liuyufei on 31/10/16.
  */
-public interface Crawlers {
+public interface Crawler {
 
 
-    List<Job> listJobs(String searchWord);
+    Set<Job> listJobs(String searchWord);
 
-    Job jobDetail(String jobID);
+    void updateJobDetail(Job jobID);
 
 
 

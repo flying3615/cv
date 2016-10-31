@@ -10,7 +10,7 @@ import java.util.List;
  */
 
 @Component
-public class TreadMeCrawler implements Crawlers {
+public class TreadMeCrawler implements Crawler {
     @Override
     public List<Job> listJobs(String searchWord) {
         return null;
