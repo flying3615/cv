@@ -44,19 +44,15 @@ public class ScheduledCrawlTask {
 
             Crawler crawler = crawlerEntry.getValue();
 
-
             //check if job exist...
             Set<Job> exciting_jobs = jobRepository.findBySearchWordAndFromSite("java", from_site);
             Map<String,Job> now_jobs = crawler.listJobs("java");
-
-
 
 
             log.info("existing jobs {}, {}",exciting_jobs.size(),exciting_jobs);
 
             //only care about the latest jobs
             exciting_jobs.forEach(existing_job -> {
-
                     if (now_jobs.containsKey(existing_job.getExternalID())) {
                         now_jobs.remove(existing_job.getExternalID());
                     }
