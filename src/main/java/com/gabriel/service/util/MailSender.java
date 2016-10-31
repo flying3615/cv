@@ -63,16 +63,15 @@ public class MailSender {
             message.setSubject("New Jobs Published");
 
             // Now set the actual message
-            jobs.forEach(job->{
-                    try {
-                        message.setText(job.getTitle()+"\n");
-                        message.setText(job.getOrigURL()+"\n");
-                    } catch (MessagingException e) {
-                        e.printStackTrace();
-                    }
-                }
+            StringBuffer sb = new StringBuffer();
+            jobs.forEach(job -> {
 
-            );
+                sb.append(job.getTitle() + "\n");
+                sb.append(job.getOrigURL() + "\n");
+                sb.append("=============================");
+
+            });
+            message.setText(sb.toString());
 
             // Send message
             Transport.send(message);
