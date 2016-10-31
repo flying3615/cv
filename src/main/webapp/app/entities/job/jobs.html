@@ -49,6 +49,7 @@
                     <th jh-sort-by="workType"><span>Work Type</span> <span class="glyphicon glyphicon-sort"></span></th>
                     <th jh-sort-by="listDate"><span>List Date</span> <span class="glyphicon glyphicon-sort"></span></th>
                     <th jh-sort-by="fromSite"><span>From Site</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="origURL"><span>Orig URL</span> <span class="glyphicon glyphicon-sort"></span></th>
                     <th></th>
                 </tr>
             </thead>
@@ -68,6 +69,7 @@
                     <td>{{job.workType}}</td>
                         <td>{{job.listDate | date:'mediumDate'}}</td>
                     <td>{{job.fromSite}}</td>
+                    <td>{{job.origURL}}</td>
                     <td class="text-right">
                         <div class="btn-group flex-btn-group-container">
                             <button type="submit"

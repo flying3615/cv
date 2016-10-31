@@ -108,6 +108,7 @@
                                 workType: null,
                                 listDate: null,
                                 fromSite: null,
+                                origURL: null,
                                 id: null
                             };
                         }

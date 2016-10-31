@@ -3,6 +3,7 @@ package com.gabriel.service.task;
 import com.gabriel.domain.Job;
 import com.gabriel.repository.JobRepository;
 import com.gabriel.service.crawler.Crawler;
+import com.gabriel.service.util.MailSender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,6 +27,9 @@ public class ScheduledCrawlTask {
 
     @Inject
     Map<String, Crawler> crawlerStrategy = new HashMap<>();
+
+    @Inject
+    MailSender mailSender;
 
     @Value("${crawler.seek.fromSite}")
     String from_site;
@@ -70,6 +74,7 @@ public class ScheduledCrawlTask {
                     crawler.updateJobDetail(rest_job);
                 });
                 //send mail notify now coming jobs
+                mailSender.sendMail(now_jobs.values());
             }else{
                 log.info("No job today...");
             }

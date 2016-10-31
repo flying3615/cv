@@ -85,6 +85,9 @@ public class JobResourceIntTest {
     private static final String DEFAULT_FROM_SITE = "AAAAA";
     private static final String UPDATED_FROM_SITE = "BBBBB";
 
+    private static final String DEFAULT_ORIG_URL = "AAAAA";
+    private static final String UPDATED_ORIG_URL = "BBBBB";
+
     @Inject
     private JobRepository jobRepository;
 
@@ -137,7 +140,8 @@ public class JobResourceIntTest {
                 .searchWord(DEFAULT_SEARCH_WORD)
                 .workType(DEFAULT_WORK_TYPE)
                 .listDate(DEFAULT_LIST_DATE)
-                .fromSite(DEFAULT_FROM_SITE);
+                .fromSite(DEFAULT_FROM_SITE)
+                .origURL(DEFAULT_ORIG_URL);
         return job;
     }
 
@@ -176,6 +180,7 @@ public class JobResourceIntTest {
         assertThat(testJob.getWorkType()).isEqualTo(DEFAULT_WORK_TYPE);
         assertThat(testJob.getListDate()).isEqualTo(DEFAULT_LIST_DATE);
         assertThat(testJob.getFromSite()).isEqualTo(DEFAULT_FROM_SITE);
+        assertThat(testJob.getOrigURL()).isEqualTo(DEFAULT_ORIG_URL);
 
         // Validate the Job in ElasticSearch
         Job jobEs = jobSearchRepository.findOne(testJob.getId());
@@ -241,7 +246,8 @@ public class JobResourceIntTest {
                 .andExpect(jsonPath("$.[*].searchWord").value(hasItem(DEFAULT_SEARCH_WORD.toString())))
                 .andExpect(jsonPath("$.[*].workType").value(hasItem(DEFAULT_WORK_TYPE.toString())))
                 .andExpect(jsonPath("$.[*].listDate").value(hasItem(DEFAULT_LIST_DATE.toString())))
-                .andExpect(jsonPath("$.[*].fromSite").value(hasItem(DEFAULT_FROM_SITE.toString())));
+                .andExpect(jsonPath("$.[*].fromSite").value(hasItem(DEFAULT_FROM_SITE.toString())))
+                .andExpect(jsonPath("$.[*].origURL").value(hasItem(DEFAULT_ORIG_URL.toString())));
     }
 
     @Test
@@ -267,7 +273,8 @@ public class JobResourceIntTest {
             .andExpect(jsonPath("$.searchWord").value(DEFAULT_SEARCH_WORD.toString()))
             .andExpect(jsonPath("$.workType").value(DEFAULT_WORK_TYPE.toString()))
             .andExpect(jsonPath("$.listDate").value(DEFAULT_LIST_DATE.toString()))
-            .andExpect(jsonPath("$.fromSite").value(DEFAULT_FROM_SITE.toString()));
+            .andExpect(jsonPath("$.fromSite").value(DEFAULT_FROM_SITE.toString()))
+            .andExpect(jsonPath("$.origURL").value(DEFAULT_ORIG_URL.toString()));
     }
 
     @Test
@@ -301,7 +308,8 @@ public class JobResourceIntTest {
                 .searchWord(UPDATED_SEARCH_WORD)
                 .workType(UPDATED_WORK_TYPE)
                 .listDate(UPDATED_LIST_DATE)
-                .fromSite(UPDATED_FROM_SITE);
+                .fromSite(UPDATED_FROM_SITE)
+                .origURL(UPDATED_ORIG_URL);
 
         restJobMockMvc.perform(put("/api/jobs")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -325,6 +333,7 @@ public class JobResourceIntTest {
         assertThat(testJob.getWorkType()).isEqualTo(UPDATED_WORK_TYPE);
         assertThat(testJob.getListDate()).isEqualTo(UPDATED_LIST_DATE);
         assertThat(testJob.getFromSite()).isEqualTo(UPDATED_FROM_SITE);
+        assertThat(testJob.getOrigURL()).isEqualTo(UPDATED_ORIG_URL);
 
         // Validate the Job in ElasticSearch
         Job jobEs = jobSearchRepository.findOne(testJob.getId());
@@ -376,6 +385,7 @@ public class JobResourceIntTest {
             .andExpect(jsonPath("$.[*].searchWord").value(hasItem(DEFAULT_SEARCH_WORD.toString())))
             .andExpect(jsonPath("$.[*].workType").value(hasItem(DEFAULT_WORK_TYPE.toString())))
             .andExpect(jsonPath("$.[*].listDate").value(hasItem(DEFAULT_LIST_DATE.toString())))
-            .andExpect(jsonPath("$.[*].fromSite").value(hasItem(DEFAULT_FROM_SITE.toString())));
+            .andExpect(jsonPath("$.[*].fromSite").value(hasItem(DEFAULT_FROM_SITE.toString())))
+            .andExpect(jsonPath("$.[*].origURL").value(hasItem(DEFAULT_ORIG_URL.toString())));
     }
 }

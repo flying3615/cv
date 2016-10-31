@@ -59,6 +59,10 @@
         {
             "fieldName": "fromSite",
             "fieldType": "String"
+        },
+        {
+            "fieldName": "origURL",
+            "fieldType": "String"
         }
     ],
     "changelogDate": "20161030033438",

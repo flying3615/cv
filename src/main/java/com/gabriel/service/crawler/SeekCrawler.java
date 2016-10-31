@@ -159,10 +159,10 @@ public class SeekCrawler implements Crawler {
         Map<String,Job> jobList = new HashMap<>();
         for (int i = 0; i < jobs.length(); i++) {
             JSONObject job = (JSONObject) jobs.get(i);
-
+            String external_id = job.get("id").toString();
             Job job_domain = new Job();
             job_domain.setWorkType(job.getString("workType"));
-            job_domain.setExternalID(job.get("id").toString());
+            job_domain.setExternalID(external_id);
             job_domain.setTitle(job.get("title").toString());
             job_domain.setCompany(job.getJSONObject("advertiser").getString("description"));
             job_domain.setSalary(job.getString("salary"));
@@ -172,7 +172,8 @@ public class SeekCrawler implements Crawler {
             job_domain.setFromSite(from_site);
             job_domain.setSearchWord(searchWord);
             job_domain.setCreationTime(ZonedDateTime.now());
-            jobList.put(job.get("id").toString(),job_domain);
+            job_domain.setOrigURL(detail_url+external_id);
+            jobList.put(external_id,job_domain);
         }
         //return standard job json array format
         return jobList;

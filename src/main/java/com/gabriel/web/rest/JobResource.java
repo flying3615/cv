@@ -2,9 +2,7 @@ package com.gabriel.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.gabriel.domain.Job;
-import com.gabriel.repository.JobRepository;
 import com.gabriel.service.JobService;
-import com.gabriel.service.task.ScheduledCrawlTask;
 import com.gabriel.web.rest.util.HeaderUtil;
 import com.gabriel.web.rest.util.PaginationUtil;
 import org.slf4j.Logger;
@@ -22,7 +20,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -36,15 +33,9 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class JobResource {
 
     private final Logger log = LoggerFactory.getLogger(JobResource.class);
-
+        
     @Inject
     private JobService jobService;
-
-    @Inject
-    private JobRepository jobRepository;
-
-    @Inject
-    ScheduledCrawlTask scheduledCrawlTask;
 
     /**
      * POST  /jobs : Create a new job.
@@ -105,16 +96,6 @@ public class JobResource {
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
-    @GetMapping("/remote_jobs")
-    @Timed
-    public ResponseEntity<Set<Job>> getremoteJobs()
-        throws URISyntaxException {
-        log.debug("REST request to get a page of Jobs");
-        Set<Job> jobSet = jobRepository.findBySearchWordAndFromSite("java","SEEK");
-        HttpHeaders headers = null;
-        return new ResponseEntity<>(jobSet, headers, HttpStatus.OK);
-    }
-
     /**
      * GET  /jobs/:id : get the "id" job.
      *
@@ -151,7 +132,7 @@ public class JobResource {
      * SEARCH  /_search/jobs?query=:query : search for the job corresponding
      * to the query.
      *
-     * @param query the query of the job search
+     * @param query the query of the job search 
      * @param pageable the pagination information
      * @return the result of the search
      * @throws URISyntaxException if there is an error to generate the pagination HTTP headers
@@ -164,15 +145,6 @@ public class JobResource {
         Page<Job> page = jobService.search(query, pageable);
         HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/jobs");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-    }
-
-
-    @GetMapping("/get/jobs")
-    @Timed
-    public ResponseEntity<Void> getRemoteJobs()
-        throws URISyntaxException {
-        scheduledCrawlTask.dailyCrawl();
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("job", "OK")).build();
     }
 
 

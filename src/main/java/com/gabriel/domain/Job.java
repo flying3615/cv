@@ -40,7 +40,7 @@ public class Job implements Serializable {
     @Column(name = "location")
     private String location;
 
-    @Column(length = 10000)
+    @Column(name = "description")
     private String description;
 
     @Column(name = "keywords")
@@ -66,6 +66,9 @@ public class Job implements Serializable {
 
     @Column(name = "from_site")
     private String fromSite;
+
+    @Column(name = "orig_url")
+    private String origURL;
 
     public Long getId() {
         return id;
@@ -244,6 +247,19 @@ public class Job implements Serializable {
         this.fromSite = fromSite;
     }
 
+    public String getOrigURL() {
+        return origURL;
+    }
+
+    public Job origURL(String origURL) {
+        this.origURL = origURL;
+        return this;
+    }
+
+    public void setOrigURL(String origURL) {
+        this.origURL = origURL;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -281,6 +297,7 @@ public class Job implements Serializable {
             ", workType='" + workType + "'" +
             ", listDate='" + listDate + "'" +
             ", fromSite='" + fromSite + "'" +
+            ", origURL='" + origURL + "'" +
             '}';
     }
 }
