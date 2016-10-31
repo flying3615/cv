@@ -193,8 +193,8 @@ public class SeekCrawler implements Crawler {
                     String description = div_description.text();
 
                     job.setDescription(description);
-                    job.setContact(extractEmailAddr(description));
-                    job.setExperienceReq(extractYearExperience(description));
+                    job.setContact(extractValueByPattern(description,EMAIL));
+                    job.setExperienceReq(extractValueByPattern(description,EXPERIENCE));
 
                     jobService.save(job);
 
@@ -212,24 +212,19 @@ public class SeekCrawler implements Crawler {
 
     }
 
-    private String extractEmailAddr(String description) {
-        String email = "";
-        Matcher emailMatcher = Pattern.compile("[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+").matcher(description);
-        while (emailMatcher.find()) {
-            //email
-            email += emailMatcher.group() + " ";
+
+    final String EMAIL = "[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+";
+    final String EXPERIENCE = "(\\d+|\\w+)(\\+{0,1})\\s(Years|years|Year|year)";
+
+    private String extractValueByPattern(String description,String pattern) {
+        String result = "";
+        Matcher matcher = Pattern.compile(pattern).matcher(description);
+        if (matcher.find()) {
+            result = matcher.group();
         }
-        return email;
+        return result;
     }
 
-    private static String extractYearExperience(String description) {
-        String experience = "";
-        Matcher experienceMatcher = Pattern.compile("(\\d+|\\w+)(\\+{0,1})\\s(Years|years|Year|year)").matcher(description);
-        if (experienceMatcher.find()) {
-            experience += experienceMatcher.group() + " ";
-        }
-        return experience;
-    }
 
     public static void main(String[] args) {
         String desc1 = "bbb aaa 2 Years aaa";
@@ -237,15 +232,13 @@ public class SeekCrawler implements Crawler {
         String desc3 = "3+ year's hands-on software";
         String desc4 = "aaa two Years aaa";
         String desc5 = "two+ Years' aaa";
-        System.out.println(extractYearExperience(desc1));
-        System.out.println(extractYearExperience(desc2));
-        System.out.println(extractYearExperience(desc3));
-        System.out.println(extractYearExperience(desc4));
-        System.out.println(extractYearExperience(desc5));
+        SeekCrawler crawler = new SeekCrawler();
+        System.out.println(crawler.extractValueByPattern(desc1,crawler.EXPERIENCE));
+        System.out.println(crawler.extractValueByPattern(desc2,crawler.EXPERIENCE));
+        System.out.println(crawler.extractValueByPattern(desc3,crawler.EXPERIENCE));
+        System.out.println(crawler.extractValueByPattern(desc4,crawler.EXPERIENCE));
+        System.out.println(crawler.extractValueByPattern(desc5,crawler.EXPERIENCE));
     }
-
-
-
 
 
 }
