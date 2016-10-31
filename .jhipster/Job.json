@@ -17,26 +17,11 @@
             ]
         },
         {
-            "fieldName": "external_id",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "list_date",
-            "fieldType": "LocalDate"
-        },
-        {
             "fieldName": "salary",
             "fieldType": "String"
         },
         {
             "fieldName": "location",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "work_type",
             "fieldType": "String"
         },
         {
@@ -48,26 +33,32 @@
             "fieldType": "String"
         },
         {
-            "fieldName": "search_word",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "from_site",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
             "fieldName": "contact",
             "fieldType": "String"
         },
         {
-            "fieldName": "creation_time",
+            "fieldName": "creationTime",
             "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "externalID",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "searchWord",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "workType",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "listDate",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "fromSite",
+            "fieldType": "String"
         }
     ],
     "changelogDate": "20161030033438",

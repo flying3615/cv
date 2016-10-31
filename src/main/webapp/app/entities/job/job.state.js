@@ -97,17 +97,17 @@
                             return {
                                 title: null,
                                 company: null,
-                                external_id: null,
-                                list_date: null,
                                 salary: null,
                                 location: null,
-                                work_type: null,
                                 description: null,
                                 keywords: null,
-                                search_word: null,
-                                from_site: null,
                                 contact: null,
-                                creation_time: null,
+                                creationTime: null,
+                                externalID: null,
+                                searchWord: null,
+                                workType: null,
+                                listDate: null,
+                                fromSite: null,
                                 id: null
                             };
                         }

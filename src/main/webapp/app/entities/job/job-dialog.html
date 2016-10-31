@@ -38,28 +38,6 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label" data-translate="cvApp.job.external_id" for="field_external_id">External Id</label>
-            <input type="text" class="form-control" name="external_id" id="field_external_id"
-                    ng-model="vm.job.external_id"
-                    required />
-            <div ng-show="editForm.external_id.$invalid">
-                <p class="help-block"
-                    ng-show="editForm.external_id.$error.required">
-                    This field is required.
-                </p>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label" data-translate="cvApp.job.list_date" for="field_list_date">List Date</label>
-                <div class="input-group">
-                    <input id="field_list_date" type="text" class="form-control" name="list_date" uib-datepicker-popup="{{dateformat}}" ng-model="vm.job.list_date" is-open="vm.datePickerOpenStatus.list_date"
-                    />
-                    <span class="input-group-btn">
-                        <button type="button" class="btn btn-default" ng-click="vm.openCalendar('list_date')"><i class="glyphicon glyphicon-calendar"></i></button>
-                    </span>
-                </div>
-        </div>
-        <div class="form-group">
             <label class="control-label" for="field_salary">Salary</label>
             <input type="text" class="form-control" name="salary" id="field_salary"
                     ng-model="vm.job.salary"
@@ -69,12 +47,6 @@
             <label class="control-label" for="field_location">Location</label>
             <input type="text" class="form-control" name="location" id="field_location"
                     ng-model="vm.job.location"
-                     />
-        </div>
-        <div class="form-group">
-            <label class="control-label" data-translate="cvApp.job.work_type" for="field_work_type">Work Type</label>
-            <input type="text" class="form-control" name="work_type" id="field_work_type"
-                    ng-model="vm.job.work_type"
                      />
         </div>
         <div class="form-group">
@@ -90,44 +62,54 @@
                      />
         </div>
         <div class="form-group">
-            <label class="control-label" data-translate="cvApp.job.search_word" for="field_search_word">Search Word</label>
-            <input type="text" class="form-control" name="search_word" id="field_search_word"
-                    ng-model="vm.job.search_word"
-                    required />
-            <div ng-show="editForm.search_word.$invalid">
-                <p class="help-block"
-                    ng-show="editForm.search_word.$error.required">
-                    This field is required.
-                </p>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label" data-translate="cvApp.job.from_site" for="field_from_site">From Site</label>
-            <input type="text" class="form-control" name="from_site" id="field_from_site"
-                    ng-model="vm.job.from_site"
-                    required />
-            <div ng-show="editForm.from_site.$invalid">
-                <p class="help-block"
-                    ng-show="editForm.from_site.$error.required">
-                    This field is required.
-                </p>
-            </div>
-        </div>
-        <div class="form-group">
             <label class="control-label" for="field_contact">Contact</label>
             <input type="text" class="form-control" name="contact" id="field_contact"
                     ng-model="vm.job.contact"
                      />
         </div>
         <div class="form-group">
-            <label class="control-label" data-translate="cvApp.job.creation_time" for="field_creation_time">Creation Time</label>
+            <label class="control-label" for="field_creationTime">Creation Time</label>
                 <div class="input-group">
-                    <input id="field_creation_time" type="text" class="form-control" name="creation_time" datetime-picker="{{dateformat}}" ng-model="vm.job.creation_time" is-open="vm.datePickerOpenStatus.creation_time"
+                    <input id="field_creationTime" type="text" class="form-control" name="creationTime" datetime-picker="{{dateformat}}" ng-model="vm.job.creationTime" is-open="vm.datePickerOpenStatus.creationTime"
                       />
                     <span class="input-group-btn">
-                        <button type="button" class="btn btn-default" ng-click="vm.openCalendar('creation_time')"><i class="glyphicon glyphicon-calendar"></i></button>
+                        <button type="button" class="btn btn-default" ng-click="vm.openCalendar('creationTime')"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
                 </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_externalID">External ID</label>
+            <input type="text" class="form-control" name="externalID" id="field_externalID"
+                    ng-model="vm.job.externalID"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_searchWord">Search Word</label>
+            <input type="text" class="form-control" name="searchWord" id="field_searchWord"
+                    ng-model="vm.job.searchWord"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_workType">Work Type</label>
+            <input type="text" class="form-control" name="workType" id="field_workType"
+                    ng-model="vm.job.workType"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_listDate">List Date</label>
+                <div class="input-group">
+                    <input id="field_listDate" type="text" class="form-control" name="listDate" uib-datepicker-popup="{{dateformat}}" ng-model="vm.job.listDate" is-open="vm.datePickerOpenStatus.listDate"
+                    />
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="vm.openCalendar('listDate')"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_fromSite">From Site</label>
+            <input type="text" class="form-control" name="fromSite" id="field_fromSite"
+                    ng-model="vm.job.fromSite"
+                     />
         </div>
 
     </div>

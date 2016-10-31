@@ -29,23 +29,11 @@
                 <constraints nullable="false" />
             </column>
             
-            <column name="external_id" type="varchar(255)">
-                <constraints nullable="false" />
-            </column>
-            
-            <column name="list_date" type="date">
-                <constraints nullable="true" />
-            </column>
-            
             <column name="salary" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             
             <column name="location" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            
-            <column name="work_type" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             
@@ -57,19 +45,31 @@
                 <constraints nullable="true" />
             </column>
             
-            <column name="search_word" type="varchar(255)">
-                <constraints nullable="false" />
-            </column>
-            
-            <column name="from_site" type="varchar(255)">
-                <constraints nullable="false" />
-            </column>
-            
             <column name="contact" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             
             <column name="creation_time" type="timestamp">
+                <constraints nullable="true" />
+            </column>
+            
+            <column name="external_id" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            
+            <column name="search_word" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            
+            <column name="work_type" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            
+            <column name="list_date" type="date">
+                <constraints nullable="true" />
+            </column>
+            
+            <column name="from_site" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             

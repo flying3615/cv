@@ -3,7 +3,7 @@ package com.gabriel.service.crawler;
 import com.gabriel.domain.Job;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * Created by liuyufei on 31/10/16.
@@ -11,13 +11,14 @@ import java.util.List;
 
 @Component
 public class TreadMeCrawler implements Crawler {
+
     @Override
-    public List<Job> listJobs(String searchWord) {
+    public Set<Job> listJobs(String searchWord) {
         return null;
     }
 
     @Override
-    public Job jobDetail(String jobID) {
-        return null;
+    public void updateJobDetail(Job jobID) {
+
     }
 }

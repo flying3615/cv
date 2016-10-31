@@ -46,7 +46,7 @@ public class ScheduledCrawlTask {
 
 
             //check if job exist...
-            Set<Job> exsiting_jobs = jobRepository.findBySearch_wordAndFrom_site("java", from_site);
+            Set<Job> exsiting_jobs = jobRepository.findBySearchWordAndFromSite("java", from_site);
             Set<Job> now_jobs = crawler.listJobs("java");
 
             //only care about the latest jobs
@@ -58,13 +58,20 @@ public class ScheduledCrawlTask {
 
             );
 
-            log.info("update new coming jobs {}, {}",now_jobs.size(),now_jobs);
+
             jobRepository.save(now_jobs);
 
             //update job detail
-            now_jobs.forEach(rest_job->{
-                crawler.updateJobDetail(rest_job);
-            });
+            if(now_jobs.size()!=0){
+                log.info("update new coming jobs {}, {}",now_jobs.size(),now_jobs);
+                now_jobs.forEach(rest_job->{
+                    crawler.updateJobDetail(rest_job);
+                });
+                //send mail notify now coming jobs
+            }else{
+                log.info("No job today...");
+            }
+
 
         });
 

@@ -51,20 +51,11 @@ public class JobResourceIntTest {
     private static final String DEFAULT_COMPANY = "AAAAA";
     private static final String UPDATED_COMPANY = "BBBBB";
 
-    private static final String DEFAULT_EXTERNAL_ID = "AAAAA";
-    private static final String UPDATED_EXTERNAL_ID = "BBBBB";
-
-    private static final LocalDate DEFAULT_LIST_DATE = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_LIST_DATE = LocalDate.now(ZoneId.systemDefault());
-
     private static final String DEFAULT_SALARY = "AAAAA";
     private static final String UPDATED_SALARY = "BBBBB";
 
     private static final String DEFAULT_LOCATION = "AAAAA";
     private static final String UPDATED_LOCATION = "BBBBB";
-
-    private static final String DEFAULT_WORK_TYPE = "AAAAA";
-    private static final String UPDATED_WORK_TYPE = "BBBBB";
 
     private static final String DEFAULT_DESCRIPTION = "AAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBB";
@@ -72,18 +63,27 @@ public class JobResourceIntTest {
     private static final String DEFAULT_KEYWORDS = "AAAAA";
     private static final String UPDATED_KEYWORDS = "BBBBB";
 
-    private static final String DEFAULT_SEARCH_WORD = "AAAAA";
-    private static final String UPDATED_SEARCH_WORD = "BBBBB";
-
-    private static final String DEFAULT_FROM_SITE = "AAAAA";
-    private static final String UPDATED_FROM_SITE = "BBBBB";
-
     private static final String DEFAULT_CONTACT = "AAAAA";
     private static final String UPDATED_CONTACT = "BBBBB";
 
     private static final ZonedDateTime DEFAULT_CREATION_TIME = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneId.systemDefault());
     private static final ZonedDateTime UPDATED_CREATION_TIME = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
     private static final String DEFAULT_CREATION_TIME_STR = DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(DEFAULT_CREATION_TIME);
+
+    private static final String DEFAULT_EXTERNAL_ID = "AAAAA";
+    private static final String UPDATED_EXTERNAL_ID = "BBBBB";
+
+    private static final String DEFAULT_SEARCH_WORD = "AAAAA";
+    private static final String UPDATED_SEARCH_WORD = "BBBBB";
+
+    private static final String DEFAULT_WORK_TYPE = "AAAAA";
+    private static final String UPDATED_WORK_TYPE = "BBBBB";
+
+    private static final LocalDate DEFAULT_LIST_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_LIST_DATE = LocalDate.now(ZoneId.systemDefault());
+
+    private static final String DEFAULT_FROM_SITE = "AAAAA";
+    private static final String UPDATED_FROM_SITE = "BBBBB";
 
     @Inject
     private JobRepository jobRepository;
@@ -127,17 +127,17 @@ public class JobResourceIntTest {
         Job job = new Job()
                 .title(DEFAULT_TITLE)
                 .company(DEFAULT_COMPANY)
-                .external_id(DEFAULT_EXTERNAL_ID)
-                .list_date(DEFAULT_LIST_DATE)
                 .salary(DEFAULT_SALARY)
                 .location(DEFAULT_LOCATION)
-                .work_type(DEFAULT_WORK_TYPE)
                 .description(DEFAULT_DESCRIPTION)
                 .keywords(DEFAULT_KEYWORDS)
-                .search_word(DEFAULT_SEARCH_WORD)
-                .from_site(DEFAULT_FROM_SITE)
                 .contact(DEFAULT_CONTACT)
-                .creation_time(DEFAULT_CREATION_TIME);
+                .creationTime(DEFAULT_CREATION_TIME)
+                .externalID(DEFAULT_EXTERNAL_ID)
+                .searchWord(DEFAULT_SEARCH_WORD)
+                .workType(DEFAULT_WORK_TYPE)
+                .listDate(DEFAULT_LIST_DATE)
+                .fromSite(DEFAULT_FROM_SITE);
         return job;
     }
 
@@ -165,17 +165,17 @@ public class JobResourceIntTest {
         Job testJob = jobs.get(jobs.size() - 1);
         assertThat(testJob.getTitle()).isEqualTo(DEFAULT_TITLE);
         assertThat(testJob.getCompany()).isEqualTo(DEFAULT_COMPANY);
-        assertThat(testJob.getExternal_id()).isEqualTo(DEFAULT_EXTERNAL_ID);
-        assertThat(testJob.getList_date()).isEqualTo(DEFAULT_LIST_DATE);
         assertThat(testJob.getSalary()).isEqualTo(DEFAULT_SALARY);
         assertThat(testJob.getLocation()).isEqualTo(DEFAULT_LOCATION);
-        assertThat(testJob.getWork_type()).isEqualTo(DEFAULT_WORK_TYPE);
         assertThat(testJob.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testJob.getKeywords()).isEqualTo(DEFAULT_KEYWORDS);
-        assertThat(testJob.getSearch_word()).isEqualTo(DEFAULT_SEARCH_WORD);
-        assertThat(testJob.getFrom_site()).isEqualTo(DEFAULT_FROM_SITE);
         assertThat(testJob.getContact()).isEqualTo(DEFAULT_CONTACT);
-        assertThat(testJob.getCreation_time()).isEqualTo(DEFAULT_CREATION_TIME);
+        assertThat(testJob.getCreationTime()).isEqualTo(DEFAULT_CREATION_TIME);
+        assertThat(testJob.getExternalID()).isEqualTo(DEFAULT_EXTERNAL_ID);
+        assertThat(testJob.getSearchWord()).isEqualTo(DEFAULT_SEARCH_WORD);
+        assertThat(testJob.getWorkType()).isEqualTo(DEFAULT_WORK_TYPE);
+        assertThat(testJob.getListDate()).isEqualTo(DEFAULT_LIST_DATE);
+        assertThat(testJob.getFromSite()).isEqualTo(DEFAULT_FROM_SITE);
 
         // Validate the Job in ElasticSearch
         Job jobEs = jobSearchRepository.findOne(testJob.getId());
@@ -220,60 +220,6 @@ public class JobResourceIntTest {
 
     @Test
     @Transactional
-    public void checkExternal_idIsRequired() throws Exception {
-        int databaseSizeBeforeTest = jobRepository.findAll().size();
-        // set the field null
-        job.setExternal_id(null);
-
-        // Create the Job, which fails.
-
-        restJobMockMvc.perform(post("/api/jobs")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(job)))
-                .andExpect(status().isBadRequest());
-
-        List<Job> jobs = jobRepository.findAll();
-        assertThat(jobs).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    public void checkSearch_wordIsRequired() throws Exception {
-        int databaseSizeBeforeTest = jobRepository.findAll().size();
-        // set the field null
-        job.setSearch_word(null);
-
-        // Create the Job, which fails.
-
-        restJobMockMvc.perform(post("/api/jobs")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(job)))
-                .andExpect(status().isBadRequest());
-
-        List<Job> jobs = jobRepository.findAll();
-        assertThat(jobs).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    public void checkFrom_siteIsRequired() throws Exception {
-        int databaseSizeBeforeTest = jobRepository.findAll().size();
-        // set the field null
-        job.setFrom_site(null);
-
-        // Create the Job, which fails.
-
-        restJobMockMvc.perform(post("/api/jobs")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(job)))
-                .andExpect(status().isBadRequest());
-
-        List<Job> jobs = jobRepository.findAll();
-        assertThat(jobs).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     public void getAllJobs() throws Exception {
         // Initialize the database
         jobRepository.saveAndFlush(job);
@@ -285,17 +231,17 @@ public class JobResourceIntTest {
                 .andExpect(jsonPath("$.[*].id").value(hasItem(job.getId().intValue())))
                 .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE.toString())))
                 .andExpect(jsonPath("$.[*].company").value(hasItem(DEFAULT_COMPANY.toString())))
-                .andExpect(jsonPath("$.[*].external_id").value(hasItem(DEFAULT_EXTERNAL_ID.toString())))
-                .andExpect(jsonPath("$.[*].list_date").value(hasItem(DEFAULT_LIST_DATE.toString())))
                 .andExpect(jsonPath("$.[*].salary").value(hasItem(DEFAULT_SALARY.toString())))
                 .andExpect(jsonPath("$.[*].location").value(hasItem(DEFAULT_LOCATION.toString())))
-                .andExpect(jsonPath("$.[*].work_type").value(hasItem(DEFAULT_WORK_TYPE.toString())))
                 .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
                 .andExpect(jsonPath("$.[*].keywords").value(hasItem(DEFAULT_KEYWORDS.toString())))
-                .andExpect(jsonPath("$.[*].search_word").value(hasItem(DEFAULT_SEARCH_WORD.toString())))
-                .andExpect(jsonPath("$.[*].from_site").value(hasItem(DEFAULT_FROM_SITE.toString())))
                 .andExpect(jsonPath("$.[*].contact").value(hasItem(DEFAULT_CONTACT.toString())))
-                .andExpect(jsonPath("$.[*].creation_time").value(hasItem(DEFAULT_CREATION_TIME_STR)));
+                .andExpect(jsonPath("$.[*].creationTime").value(hasItem(DEFAULT_CREATION_TIME_STR)))
+                .andExpect(jsonPath("$.[*].externalID").value(hasItem(DEFAULT_EXTERNAL_ID.toString())))
+                .andExpect(jsonPath("$.[*].searchWord").value(hasItem(DEFAULT_SEARCH_WORD.toString())))
+                .andExpect(jsonPath("$.[*].workType").value(hasItem(DEFAULT_WORK_TYPE.toString())))
+                .andExpect(jsonPath("$.[*].listDate").value(hasItem(DEFAULT_LIST_DATE.toString())))
+                .andExpect(jsonPath("$.[*].fromSite").value(hasItem(DEFAULT_FROM_SITE.toString())));
     }
 
     @Test
@@ -311,17 +257,17 @@ public class JobResourceIntTest {
             .andExpect(jsonPath("$.id").value(job.getId().intValue()))
             .andExpect(jsonPath("$.title").value(DEFAULT_TITLE.toString()))
             .andExpect(jsonPath("$.company").value(DEFAULT_COMPANY.toString()))
-            .andExpect(jsonPath("$.external_id").value(DEFAULT_EXTERNAL_ID.toString()))
-            .andExpect(jsonPath("$.list_date").value(DEFAULT_LIST_DATE.toString()))
             .andExpect(jsonPath("$.salary").value(DEFAULT_SALARY.toString()))
             .andExpect(jsonPath("$.location").value(DEFAULT_LOCATION.toString()))
-            .andExpect(jsonPath("$.work_type").value(DEFAULT_WORK_TYPE.toString()))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()))
             .andExpect(jsonPath("$.keywords").value(DEFAULT_KEYWORDS.toString()))
-            .andExpect(jsonPath("$.search_word").value(DEFAULT_SEARCH_WORD.toString()))
-            .andExpect(jsonPath("$.from_site").value(DEFAULT_FROM_SITE.toString()))
             .andExpect(jsonPath("$.contact").value(DEFAULT_CONTACT.toString()))
-            .andExpect(jsonPath("$.creation_time").value(DEFAULT_CREATION_TIME_STR));
+            .andExpect(jsonPath("$.creationTime").value(DEFAULT_CREATION_TIME_STR))
+            .andExpect(jsonPath("$.externalID").value(DEFAULT_EXTERNAL_ID.toString()))
+            .andExpect(jsonPath("$.searchWord").value(DEFAULT_SEARCH_WORD.toString()))
+            .andExpect(jsonPath("$.workType").value(DEFAULT_WORK_TYPE.toString()))
+            .andExpect(jsonPath("$.listDate").value(DEFAULT_LIST_DATE.toString()))
+            .andExpect(jsonPath("$.fromSite").value(DEFAULT_FROM_SITE.toString()));
     }
 
     @Test
@@ -345,17 +291,17 @@ public class JobResourceIntTest {
         updatedJob
                 .title(UPDATED_TITLE)
                 .company(UPDATED_COMPANY)
-                .external_id(UPDATED_EXTERNAL_ID)
-                .list_date(UPDATED_LIST_DATE)
                 .salary(UPDATED_SALARY)
                 .location(UPDATED_LOCATION)
-                .work_type(UPDATED_WORK_TYPE)
                 .description(UPDATED_DESCRIPTION)
                 .keywords(UPDATED_KEYWORDS)
-                .search_word(UPDATED_SEARCH_WORD)
-                .from_site(UPDATED_FROM_SITE)
                 .contact(UPDATED_CONTACT)
-                .creation_time(UPDATED_CREATION_TIME);
+                .creationTime(UPDATED_CREATION_TIME)
+                .externalID(UPDATED_EXTERNAL_ID)
+                .searchWord(UPDATED_SEARCH_WORD)
+                .workType(UPDATED_WORK_TYPE)
+                .listDate(UPDATED_LIST_DATE)
+                .fromSite(UPDATED_FROM_SITE);
 
         restJobMockMvc.perform(put("/api/jobs")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -368,17 +314,17 @@ public class JobResourceIntTest {
         Job testJob = jobs.get(jobs.size() - 1);
         assertThat(testJob.getTitle()).isEqualTo(UPDATED_TITLE);
         assertThat(testJob.getCompany()).isEqualTo(UPDATED_COMPANY);
-        assertThat(testJob.getExternal_id()).isEqualTo(UPDATED_EXTERNAL_ID);
-        assertThat(testJob.getList_date()).isEqualTo(UPDATED_LIST_DATE);
         assertThat(testJob.getSalary()).isEqualTo(UPDATED_SALARY);
         assertThat(testJob.getLocation()).isEqualTo(UPDATED_LOCATION);
-        assertThat(testJob.getWork_type()).isEqualTo(UPDATED_WORK_TYPE);
         assertThat(testJob.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testJob.getKeywords()).isEqualTo(UPDATED_KEYWORDS);
-        assertThat(testJob.getSearch_word()).isEqualTo(UPDATED_SEARCH_WORD);
-        assertThat(testJob.getFrom_site()).isEqualTo(UPDATED_FROM_SITE);
         assertThat(testJob.getContact()).isEqualTo(UPDATED_CONTACT);
-        assertThat(testJob.getCreation_time()).isEqualTo(UPDATED_CREATION_TIME);
+        assertThat(testJob.getCreationTime()).isEqualTo(UPDATED_CREATION_TIME);
+        assertThat(testJob.getExternalID()).isEqualTo(UPDATED_EXTERNAL_ID);
+        assertThat(testJob.getSearchWord()).isEqualTo(UPDATED_SEARCH_WORD);
+        assertThat(testJob.getWorkType()).isEqualTo(UPDATED_WORK_TYPE);
+        assertThat(testJob.getListDate()).isEqualTo(UPDATED_LIST_DATE);
+        assertThat(testJob.getFromSite()).isEqualTo(UPDATED_FROM_SITE);
 
         // Validate the Job in ElasticSearch
         Job jobEs = jobSearchRepository.findOne(testJob.getId());
@@ -420,16 +366,16 @@ public class JobResourceIntTest {
             .andExpect(jsonPath("$.[*].id").value(hasItem(job.getId().intValue())))
             .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE.toString())))
             .andExpect(jsonPath("$.[*].company").value(hasItem(DEFAULT_COMPANY.toString())))
-            .andExpect(jsonPath("$.[*].external_id").value(hasItem(DEFAULT_EXTERNAL_ID.toString())))
-            .andExpect(jsonPath("$.[*].list_date").value(hasItem(DEFAULT_LIST_DATE.toString())))
             .andExpect(jsonPath("$.[*].salary").value(hasItem(DEFAULT_SALARY.toString())))
             .andExpect(jsonPath("$.[*].location").value(hasItem(DEFAULT_LOCATION.toString())))
-            .andExpect(jsonPath("$.[*].work_type").value(hasItem(DEFAULT_WORK_TYPE.toString())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
             .andExpect(jsonPath("$.[*].keywords").value(hasItem(DEFAULT_KEYWORDS.toString())))
-            .andExpect(jsonPath("$.[*].search_word").value(hasItem(DEFAULT_SEARCH_WORD.toString())))
-            .andExpect(jsonPath("$.[*].from_site").value(hasItem(DEFAULT_FROM_SITE.toString())))
             .andExpect(jsonPath("$.[*].contact").value(hasItem(DEFAULT_CONTACT.toString())))
-            .andExpect(jsonPath("$.[*].creation_time").value(hasItem(DEFAULT_CREATION_TIME_STR)));
+            .andExpect(jsonPath("$.[*].creationTime").value(hasItem(DEFAULT_CREATION_TIME_STR)))
+            .andExpect(jsonPath("$.[*].externalID").value(hasItem(DEFAULT_EXTERNAL_ID.toString())))
+            .andExpect(jsonPath("$.[*].searchWord").value(hasItem(DEFAULT_SEARCH_WORD.toString())))
+            .andExpect(jsonPath("$.[*].workType").value(hasItem(DEFAULT_WORK_TYPE.toString())))
+            .andExpect(jsonPath("$.[*].listDate").value(hasItem(DEFAULT_LIST_DATE.toString())))
+            .andExpect(jsonPath("$.[*].fromSite").value(hasItem(DEFAULT_FROM_SITE.toString())));
     }
 }

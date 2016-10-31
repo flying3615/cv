@@ -163,17 +163,17 @@ public class SeekCrawler implements Crawler {
             JSONObject job = (JSONObject) jobs.get(i);
 
             Job job_domain = new Job();
-            job_domain.setWork_type(job.getString("workType"));
-            job_domain.setExternal_id(job.get("id").toString());
+            job_domain.setWorkType(job.getString("workType"));
+            job_domain.setExternalID(job.get("id").toString());
             job_domain.setTitle(job.get("title").toString());
             job_domain.setCompany(job.getJSONObject("advertiser").getString("description"));
             job_domain.setSalary(job.getString("salary"));
             job_domain.setLocation(job.getString("location"));
             //"2016-10-17T05:10:54Z"
-            job_domain.setList_date(LocalDate.parse(job.getString("listingDate"), formatter));
-            job_domain.setFrom_site(from_site);
-            job_domain.setSearch_word(searchWord);
-            job_domain.setCreation_time(ZonedDateTime.now());
+            job_domain.setListDate(LocalDate.parse(job.getString("listingDate"), formatter));
+            job_domain.setFromSite(from_site);
+            job_domain.setSearchWord(searchWord);
+            job_domain.setCreationTime(ZonedDateTime.now());
             jobList.add(job_domain);
         }
         //return standard job json array format
@@ -193,7 +193,7 @@ public class SeekCrawler implements Crawler {
     public void updateJobDetail(Job job) {
         Connection.Response response;
         try {
-            response = Jsoup.connect(detail_url + job.getExternal_id())
+            response = Jsoup.connect(detail_url + job.getExternalID())
                 .header("Accept", "*/*")
                 .header("Content-Type", "application/json;charset=UTF-8")
                 .userAgent(userAgent)

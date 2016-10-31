@@ -34,21 +34,11 @@ public class Job implements Serializable {
     @Column(name = "company", nullable = false)
     private String company;
 
-    @NotNull
-    @Column(name = "external_id", nullable = false)
-    private String external_id;
-
-    @Column(name = "list_date")
-    private LocalDate list_date;
-
     @Column(name = "salary")
     private String salary;
 
     @Column(name = "location")
     private String location;
-
-    @Column(name = "work_type")
-    private String work_type;
 
     @Column(name = "description")
     private String description;
@@ -56,19 +46,26 @@ public class Job implements Serializable {
     @Column(name = "keywords")
     private String keywords;
 
-    @NotNull
-    @Column(name = "search_word", nullable = false)
-    private String search_word;
-
-    @NotNull
-    @Column(name = "from_site", nullable = false)
-    private String from_site;
-
     @Column(name = "contact")
     private String contact;
 
     @Column(name = "creation_time")
-    private ZonedDateTime creation_time;
+    private ZonedDateTime creationTime;
+
+    @Column(name = "external_id")
+    private String externalID;
+
+    @Column(name = "search_word")
+    private String searchWord;
+
+    @Column(name = "work_type")
+    private String workType;
+
+    @Column(name = "list_date")
+    private LocalDate listDate;
+
+    @Column(name = "from_site")
+    private String fromSite;
 
     public Long getId() {
         return id;
@@ -104,32 +101,6 @@ public class Job implements Serializable {
         this.company = company;
     }
 
-    public String getExternal_id() {
-        return external_id;
-    }
-
-    public Job external_id(String external_id) {
-        this.external_id = external_id;
-        return this;
-    }
-
-    public void setExternal_id(String external_id) {
-        this.external_id = external_id;
-    }
-
-    public LocalDate getList_date() {
-        return list_date;
-    }
-
-    public Job list_date(LocalDate list_date) {
-        this.list_date = list_date;
-        return this;
-    }
-
-    public void setList_date(LocalDate list_date) {
-        this.list_date = list_date;
-    }
-
     public String getSalary() {
         return salary;
     }
@@ -154,19 +125,6 @@ public class Job implements Serializable {
 
     public void setLocation(String location) {
         this.location = location;
-    }
-
-    public String getWork_type() {
-        return work_type;
-    }
-
-    public Job work_type(String work_type) {
-        this.work_type = work_type;
-        return this;
-    }
-
-    public void setWork_type(String work_type) {
-        this.work_type = work_type;
     }
 
     public String getDescription() {
@@ -195,32 +153,6 @@ public class Job implements Serializable {
         this.keywords = keywords;
     }
 
-    public String getSearch_word() {
-        return search_word;
-    }
-
-    public Job search_word(String search_word) {
-        this.search_word = search_word;
-        return this;
-    }
-
-    public void setSearch_word(String search_word) {
-        this.search_word = search_word;
-    }
-
-    public String getFrom_site() {
-        return from_site;
-    }
-
-    public Job from_site(String from_site) {
-        this.from_site = from_site;
-        return this;
-    }
-
-    public void setFrom_site(String from_site) {
-        this.from_site = from_site;
-    }
-
     public String getContact() {
         return contact;
     }
@@ -234,46 +166,102 @@ public class Job implements Serializable {
         this.contact = contact;
     }
 
-    public ZonedDateTime getCreation_time() {
-        return creation_time;
+    public ZonedDateTime getCreationTime() {
+        return creationTime;
     }
 
-    public Job creation_time(ZonedDateTime creation_time) {
-        this.creation_time = creation_time;
+    public Job creationTime(ZonedDateTime creationTime) {
+        this.creationTime = creationTime;
         return this;
     }
 
-    public void setCreation_time(ZonedDateTime creation_time) {
-        this.creation_time = creation_time;
+    public void setCreationTime(ZonedDateTime creationTime) {
+        this.creationTime = creationTime;
     }
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) {
-//            return true;
-//        }
-//        if (o == null || getClass() != o.getClass()) {
-//            return false;
-//        }
-//        Job job = (Job) o;
-//        if(job.id == null || id == null) {
-//            return false;
-//        }
-//        return Objects.equals(id, job.id);
-//    }
+    public String getExternalID() {
+        return externalID;
+    }
 
+    public Job externalID(String externalID) {
+        this.externalID = externalID;
+        return this;
+    }
+
+    public void setExternalID(String externalID) {
+        this.externalID = externalID;
+    }
+
+    public String getSearchWord() {
+        return searchWord;
+    }
+
+    public Job searchWord(String searchWord) {
+        this.searchWord = searchWord;
+        return this;
+    }
+
+    public void setSearchWord(String searchWord) {
+        this.searchWord = searchWord;
+    }
+
+    public String getWorkType() {
+        return workType;
+    }
+
+    public Job workType(String workType) {
+        this.workType = workType;
+        return this;
+    }
+
+    public void setWorkType(String workType) {
+        this.workType = workType;
+    }
+
+    public LocalDate getListDate() {
+        return listDate;
+    }
+
+    public Job listDate(LocalDate listDate) {
+        this.listDate = listDate;
+        return this;
+    }
+
+    public void setListDate(LocalDate listDate) {
+        this.listDate = listDate;
+    }
+
+    public String getFromSite() {
+        return fromSite;
+    }
+
+    public Job fromSite(String fromSite) {
+        this.fromSite = fromSite;
+        return this;
+    }
+
+    public void setFromSite(String fromSite) {
+        this.fromSite = fromSite;
+    }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Job job = (Job) o;
-        return external_id.equals(job.external_id);
+        if(job.id == null || id == null) {
+            return false;
+        }
+        return Objects.equals(id, job.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(external_id);
+        return Objects.hashCode(id);
     }
 
     @Override
@@ -282,17 +270,17 @@ public class Job implements Serializable {
             "id=" + id +
             ", title='" + title + "'" +
             ", company='" + company + "'" +
-            ", external_id='" + external_id + "'" +
-            ", list_date='" + list_date + "'" +
             ", salary='" + salary + "'" +
             ", location='" + location + "'" +
-            ", work_type='" + work_type + "'" +
             ", description='" + description + "'" +
             ", keywords='" + keywords + "'" +
-            ", search_word='" + search_word + "'" +
-            ", from_site='" + from_site + "'" +
             ", contact='" + contact + "'" +
-            ", creation_time='" + creation_time + "'" +
+            ", creationTime='" + creationTime + "'" +
+            ", externalID='" + externalID + "'" +
+            ", searchWord='" + searchWord + "'" +
+            ", workType='" + workType + "'" +
+            ", listDate='" + listDate + "'" +
+            ", fromSite='" + fromSite + "'" +
             '}';
     }
 }
