@@ -209,7 +209,7 @@ public class SeekCrawler implements Crawler {
                     Matcher emailMatcher = Pattern.compile("[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+").matcher(description);
                     while (emailMatcher.find()) {
                         //email
-                        email += emailMatcher.group() + ", ";
+                        email += emailMatcher.group() + " ";
                     }
                     job.setDescription(description);
                     job.setContact(email);

@@ -66,7 +66,7 @@ public class ScheduledCrawlTask {
             //update job detail
             if(now_jobs.size()!=0){
                 log.info("update new coming jobs {}, {}",now_jobs.size(),now_jobs);
-                now_jobs.values().forEach(rest_job->{
+                now_jobs.values().parallelStream().forEach(rest_job->{
                     crawler.updateJobDetail(rest_job);
                 });
                 //send mail notify now coming jobs
