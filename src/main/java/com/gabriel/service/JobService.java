@@ -3,6 +3,7 @@ package com.gabriel.service;
 import com.gabriel.domain.Job;
 import com.gabriel.domain.JobLog;
 import com.gabriel.domain.enumeration.JobLogType;
+import com.gabriel.repository.JobLogRepository;
 import com.gabriel.repository.JobRepository;
 import com.gabriel.repository.search.JobLogSearchRepository;
 import com.gabriel.repository.search.JobSearchRepository;
@@ -40,17 +41,22 @@ public class JobService {
     @Inject
     private JobLogSearchRepository jobLogSearchRepository;
 
+    @Inject
+    private JobLogRepository jobLogRepository;
+
     /**
      * Save a job.
      *
      * @param job the entity to save
      * @return the persisted entity
      */
+    @Transactional
     public Job save(Job job) {
         log.debug("Request to save Job : {}", job);
         Job result = jobRepository.save(job);
-        jobLogSearchRepository.save(new JobLog(JobLogType.ADD,LocalDate.now(),job));
+        JobLog jobLog = jobLogRepository.save(new JobLog(JobLogType.ADD,LocalDate.now(),result));
         jobSearchRepository.save(result);
+        jobLogSearchRepository.save(jobLog);
         return result;
     }
 
@@ -112,6 +118,7 @@ public class JobService {
 
 
 
+    @Transactional
     public void saveVanishedJob(Job job) {
         log.debug("Request to save VanishedJob job : {}", job);
         jobLogSearchRepository.save(new JobLog(JobLogType.REMOVE, LocalDate.now(),job));

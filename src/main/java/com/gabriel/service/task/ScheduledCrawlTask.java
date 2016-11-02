@@ -36,7 +36,7 @@ public class ScheduledCrawlTask {
 //    @Scheduled(cron = "0 */5 * * * *") //every ten minutes for test
     public void dailyCrawl() {
 
-        String searchKeyword = "java";
+        String searchKeyword = "ruby";
 
 
         log.info("crawl task start @ {}", LocalDateTime.now());
@@ -49,7 +49,7 @@ public class ScheduledCrawlTask {
 
             //check if job exist...
             Set<Job> exciting_jobs = jobService.findBySearchWordAndFromSite(searchKeyword, crawler.getFromSite());
-            Map<String, Job> now_jobs = crawler.listJobs(searchKeyword);
+            Map<String, Job> today_jobs = crawler.listJobs(searchKeyword);
 
 
             log.info("existing jobs size {}", exciting_jobs.size());
@@ -57,8 +57,8 @@ public class ScheduledCrawlTask {
             Set<Job> ready_to_remove = new HashSet<>();
             //only care about the latest jobs
             exciting_jobs.forEach(existing_job -> {
-                    if (now_jobs.containsKey(existing_job.getExternalID())) {
-                        now_jobs.remove(existing_job.getExternalID());
+                    if (today_jobs.containsKey(existing_job.getExternalID())) {
+                        today_jobs.remove(existing_job.getExternalID());
                         ready_to_remove.add(existing_job);
                     }
                 }
@@ -66,16 +66,13 @@ public class ScheduledCrawlTask {
             );
 
             //save new jobs
-            now_jobs.values().forEach(jobService::save);
-            //save gone jobs
-            exciting_jobs.removeAll(ready_to_remove);
-            exciting_jobs.forEach(jobService::saveVanishedJob);
+            today_jobs.values().forEach(jobService::save);
 
             //update job detail
-            if (now_jobs.size() != 0) {
-                log.info("update new coming jobs {}", now_jobs.size());
+            if (today_jobs.size() != 0) {
+                log.info("update new coming jobs {}", today_jobs.size());
                 List<Job> sortedList = new ArrayList<>();
-                now_jobs.values().parallelStream().forEach(job -> sortedList.add(crawler.updateJobDetail(job)));
+                today_jobs.values().parallelStream().forEach(job -> sortedList.add(crawler.updateJobDetail(job)));
                 //send mail notify now coming jobs
 
                 //sort by date now_jobs.values()
@@ -85,6 +82,10 @@ public class ScheduledCrawlTask {
             } else {
                 log.info("No job today...");
             }
+
+            //save gone jobs
+            exciting_jobs.removeAll(ready_to_remove);
+            exciting_jobs.forEach(jobService::saveVanishedJob);
 
         });
 
