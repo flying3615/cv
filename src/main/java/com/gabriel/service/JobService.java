@@ -50,14 +50,20 @@ public class JobService {
      * @param job the entity to save
      * @return the persisted entity
      */
-    @Transactional
     public Job save(Job job) {
         log.debug("Request to save Job : {}", job);
         Job result = jobRepository.save(job);
-        JobLog jobLog = jobLogRepository.save(new JobLog(JobLogType.ADD,LocalDate.now(),result));
         jobSearchRepository.save(result);
-        jobLogSearchRepository.save(jobLog);
         return result;
+    }
+
+
+    public JobLog saveJobLog(Job job) {
+        log.debug("Request to save JobLog : {}", job);
+        JobLog jobLog = jobLogRepository.save(new JobLog(JobLogType.ADD, LocalDate.now(), job));
+        jobLogSearchRepository.save(jobLog);
+        return jobLog;
+
     }
 
     /**
@@ -117,10 +123,8 @@ public class JobService {
     }
 
 
-
-    @Transactional
     public void saveVanishedJob(Job job) {
         log.debug("Request to save VanishedJob job : {}", job);
-        jobLogSearchRepository.save(new JobLog(JobLogType.REMOVE, LocalDate.now(),job));
+        jobLogSearchRepository.save(new JobLog(JobLogType.REMOVE, LocalDate.now(), job));
     }
 }

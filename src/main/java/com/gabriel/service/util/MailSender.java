@@ -8,8 +8,7 @@ import org.springframework.stereotype.Component;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.util.Collection;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * Created by liuyufei on 31/10/16.
@@ -20,7 +19,20 @@ public class MailSender {
     private final Logger log = LoggerFactory.getLogger(MailSender.class);
 
 
+    //sort by date
+    private List<Job> sortJobs(Collection<Job> jobs){
+        List<Job> sortedList = new ArrayList<>();
+        sortedList.addAll(jobs);
+        Collections.sort(sortedList,(a, b)->b.getListDate().compareTo(a.getListDate()));
+        return sortedList;
+    }
+
+
     public void sendMail(Collection<Job> jobs) {
+
+
+        List<Job> sort_jobs = sortJobs(jobs);
+
         // Recipient's email ID needs to be mentioned.
         String to = "flying3615@163.com";//change accordingly
 
@@ -64,7 +76,7 @@ public class MailSender {
 
             // Now set the actual message
             StringBuffer sb = new StringBuffer();
-            jobs.forEach(job -> {
+            sort_jobs.forEach(job -> {
 
                 sb.append(job.getTitle() + "\n");
                 sb.append(job.getListDate() + "\n");

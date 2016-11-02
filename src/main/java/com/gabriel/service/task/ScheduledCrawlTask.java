@@ -66,19 +66,23 @@ public class ScheduledCrawlTask {
             );
 
             //save new jobs
-            today_jobs.values().forEach(jobService::save);
+            today_jobs.values().forEach(today_job -> {
+                    jobService.save(today_job);
+                    jobService.saveJobLog(today_job);
+                }
+            );
 
             //update job detail
             if (today_jobs.size() != 0) {
                 log.info("update new coming jobs {}", today_jobs.size());
-                List<Job> sortedList = new ArrayList<>();
-                today_jobs.values().parallelStream().forEach(job -> sortedList.add(crawler.updateJobDetail(job)));
+
+                today_jobs.values().parallelStream().forEach(job -> {
+                    Job updated_job = crawler.updateJobDetail(job);
+                    jobService.save(updated_job);
+                });
+
                 //send mail notify now coming jobs
-
-                //sort by date now_jobs.values()
-                Collections.sort(sortedList,(a,b)->b.getListDate().compareTo(a.getListDate()));
-
-//                mailSender.sendMail(sortedList);
+                mailSender.sendMail(today_jobs.values());
             } else {
                 log.info("No job today...");
             }

@@ -85,7 +85,6 @@ public class SeekCrawler implements Crawler {
                 }
             });
 
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -178,11 +177,6 @@ public class SeekCrawler implements Crawler {
     }
 
 
-
-
-
-
-
     @Override
     public Job updateJobDetail(Job job) {
         Connection.Response response;
@@ -205,8 +199,6 @@ public class SeekCrawler implements Crawler {
                     job.setDescription(description);
                     job.setContact(getNullIfEmptyStr(extractValueByPattern(description,EMAIL)));
                     job.setExperienceReq(getNullIfEmptyStr(extractValueByPattern(description,EXPERIENCE)));
-
-                    jobService.save(job);
 
                 }else{
                     log.error("Job detail not found in <div class=templatetext>");
