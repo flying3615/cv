@@ -29,15 +29,16 @@ public class ScheduledCrawlTask {
     @Inject
     MailSender mailSender;
 
-    @Value("${crawler.seek.fromSite}")
-    String from_site;
-
     @Inject
     JobService jobService;
 
     @Scheduled(cron = "0 0 6 * * *")  //@ 6:00:00 am every day
 //    @Scheduled(cron = "0 */5 * * * *") //every ten minutes for test
     public void dailyCrawl() {
+
+        String searchKeyword = "java";
+
+
         log.info("crawl task start @ {}", LocalDateTime.now());
         Set<Map.Entry<String, Crawler>> crawlerSet = crawlerStrategy.entrySet();
         crawlerSet.stream().forEach(crawlerEntry -> {
@@ -47,17 +48,18 @@ public class ScheduledCrawlTask {
             Crawler crawler = crawlerEntry.getValue();
 
             //check if job exist...
-            Set<Job> exciting_jobs = jobService.findBySearchWordAndFromSite("java", from_site);
-            Map<String, Job> now_jobs = crawler.listJobs("java");
+            Set<Job> exciting_jobs = jobService.findBySearchWordAndFromSite(searchKeyword, crawler.getFromSite());
+            Map<String, Job> now_jobs = crawler.listJobs(searchKeyword);
 
 
-            log.info("existing jobs {}, {}", exciting_jobs.size(), exciting_jobs);
+            log.info("existing jobs size {}", exciting_jobs.size());
 
+            Set<Job> ready_to_remove = new HashSet<>();
             //only care about the latest jobs
             exciting_jobs.forEach(existing_job -> {
                     if (now_jobs.containsKey(existing_job.getExternalID())) {
                         now_jobs.remove(existing_job.getExternalID());
-                        exciting_jobs.remove(existing_job);
+                        ready_to_remove.add(existing_job);
                     }
                 }
 
@@ -66,19 +68,20 @@ public class ScheduledCrawlTask {
             //save new jobs
             now_jobs.values().forEach(jobService::save);
             //save gone jobs
+            exciting_jobs.removeAll(ready_to_remove);
             exciting_jobs.forEach(jobService::saveVanishedJob);
 
             //update job detail
             if (now_jobs.size() != 0) {
-                log.info("update new coming jobs {}, {}", now_jobs.size(), now_jobs);
-                List<Job> sortedList = new ArrayList<Job>();
+                log.info("update new coming jobs {}", now_jobs.size());
+                List<Job> sortedList = new ArrayList<>();
                 now_jobs.values().parallelStream().forEach(job -> sortedList.add(crawler.updateJobDetail(job)));
                 //send mail notify now coming jobs
 
                 //sort by date now_jobs.values()
                 Collections.sort(sortedList,(a,b)->b.getListDate().compareTo(a.getListDate()));
 
-                mailSender.sendMail(sortedList);
+//                mailSender.sendMail(sortedList);
             } else {
                 log.info("No job today...");
             }

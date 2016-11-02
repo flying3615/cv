@@ -66,6 +66,11 @@ public class SeekCrawler implements Crawler {
 
 
     @Override
+    public String getFromSite() {
+        return "SEEK";
+    }
+
+    @Override
     public Map<String,Job> listJobs(String searchWord) {
         this.searchWord = searchWord;
         Map<String,Job> all_jobs = new HashMap<>();

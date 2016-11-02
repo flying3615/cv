@@ -16,6 +16,11 @@ import java.util.Set;
 public class TreadMeCrawler implements Crawler {
 
     @Override
+    public String getFromSite() {
+        return "TREADME";
+    }
+
+    @Override
     public Map<String,Job> listJobs(String searchWord) {
         return new HashMap<>();
     }

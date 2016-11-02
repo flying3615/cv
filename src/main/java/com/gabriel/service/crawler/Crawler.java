@@ -12,6 +12,7 @@ import java.util.Set;
  */
 public interface Crawler {
 
+    String getFromSite();
 
     Map<String,Job> listJobs(String searchWord);
 
