@@ -61,6 +61,7 @@ public class JobService {
     public JobLog saveJobLog(Job job) {
         log.debug("Request to save JobLog : {}", job);
         JobLog jobLog = jobLogRepository.save(new JobLog(JobLogType.ADD, LocalDate.now(), job));
+        log.debug("Request to save JobLog to elasticsearch: {}", jobLog);
         jobLogSearchRepository.save(jobLog);
         return jobLog;
 
@@ -126,5 +127,10 @@ public class JobService {
     public void saveVanishedJob(Job job) {
         log.debug("Request to save VanishedJob job : {}", job);
         jobLogSearchRepository.save(new JobLog(JobLogType.REMOVE, LocalDate.now(), job));
+    }
+
+
+    public void findJobsNotBelongs2HR(){
+
     }
 }
