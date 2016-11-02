@@ -21,7 +21,7 @@ public class TreadMeCrawler implements Crawler {
     }
 
     @Override
-    public void updateJobDetail(Job jobID) {
-
+    public Job updateJobDetail(Job job) {
+        return job;
     }
 }

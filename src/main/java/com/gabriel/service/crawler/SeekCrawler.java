@@ -25,6 +25,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 
+import static com.gabriel.service.util.ElasticSearchUtil.getNullIfEmptyStr;
+
 /**
  * Created by liuyufei on 31/10/16.
  */
@@ -151,11 +153,11 @@ public class SeekCrawler implements Crawler {
             JSONObject job = (JSONObject) jobs.get(i);
             String external_id = job.get("id").toString();
             Job job_domain = new Job();
-            job_domain.setWorkType(job.getString("workType"));
+            job_domain.setWorkType(getNullIfEmptyStr(job.getString("workType")));
             job_domain.setExternalID(external_id);
             job_domain.setTitle(job.get("title").toString());
             job_domain.setCompany(job.getJSONObject("advertiser").getString("description"));
-            job_domain.setSalary(job.getString("salary"));
+            job_domain.setSalary(getNullIfEmptyStr(job.getString("salary")));
             job_domain.setLocation(job.getString("location"));
             //"2016-10-17T05:10:54Z"
             job_domain.setListDate(LocalDate.parse(job.getString("listingDate"), formatter));
@@ -169,6 +171,9 @@ public class SeekCrawler implements Crawler {
         return jobList;
 
     }
+
+
+
 
 
 
@@ -193,8 +198,8 @@ public class SeekCrawler implements Crawler {
                     String description = div_description.text();
 
                     job.setDescription(description);
-                    job.setContact(extractValueByPattern(description,EMAIL));
-                    job.setExperienceReq(extractValueByPattern(description,EXPERIENCE));
+                    job.setContact(getNullIfEmptyStr(extractValueByPattern(description,EMAIL)));
+                    job.setExperienceReq(getNullIfEmptyStr(extractValueByPattern(description,EXPERIENCE)));
 
                     jobService.save(job);
 
