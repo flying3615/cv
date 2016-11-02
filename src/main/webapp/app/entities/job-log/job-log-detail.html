@@ -1,0 +1,31 @@
+
+<div>
+    <h2><span>Job Log</span> {{vm.jobLog.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="dl-horizontal jh-entity-details">
+        <dt><span>Type</span></dt>
+        <dd>
+            <span>{{vm.jobLog.type}}</span>
+        </dd>
+        <dt><span>Log Date</span></dt>
+        <dd>
+            <span>{{vm.jobLog.logDate | date:'mediumDate'}}</span>
+        </dd>
+        <dt><span>Job</span></dt>
+        <dd>
+            <a ui-sref="job-detail({id:vm.jobLog.job.id})">{{vm.jobLog.job.title}}</a>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            ui-sref="{{ vm.previousState }}"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button type="button" ui-sref="job-log-detail.edit({id:vm.jobLog.id})" class="btn btn-primary">
+        <span class="glyphicon glyphicon-pencil"></span>
+        <span class="hidden-xs hidden-sm"> Edit</span>
+    </button>
+</div>

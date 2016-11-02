@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 import javax.inject.Inject;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Created by liuyufei on 31/10/16.
@@ -58,8 +57,7 @@ public class ScheduledCrawlTask {
             exciting_jobs.forEach(existing_job -> {
                     if (now_jobs.containsKey(existing_job.getExternalID())) {
                         now_jobs.remove(existing_job.getExternalID());
-                    } else {
-                        //means job has been removed from website...
+                        exciting_jobs.remove(existing_job);
                     }
                 }
 
@@ -67,6 +65,8 @@ public class ScheduledCrawlTask {
 
             //save new jobs
             now_jobs.values().forEach(jobService::save);
+            //save gone jobs
+            exciting_jobs.forEach(jobService::saveVanishedJob);
 
             //update job detail
             if (now_jobs.size() != 0) {
