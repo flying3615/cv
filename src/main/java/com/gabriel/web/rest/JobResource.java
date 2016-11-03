@@ -4,6 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.gabriel.domain.Job;
 import com.gabriel.service.JobService;
 import com.gabriel.service.task.ScheduledCrawlTask;
+import com.gabriel.web.rest.DTO.JobCountDTO;
 import com.gabriel.web.rest.util.HeaderUtil;
 import com.gabriel.web.rest.util.PaginationUtil;
 import org.slf4j.Logger;
@@ -19,8 +20,7 @@ import javax.inject.Inject;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -97,6 +97,24 @@ public class JobResource {
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
+
+    @GetMapping("/jobs_count_word")
+    @Timed
+    public ResponseEntity<List<JobCountDTO>> getJobsByWord()
+        throws URISyntaxException {
+        log.debug("REST request to get a page of Jobs");
+
+        List<JobCountDTO> jobCountList = new ArrayList<>();
+
+        jobCountList.add(new JobCountDTO("Java",jobService.countByWord("Java")));
+        jobCountList.add(new JobCountDTO(".Net",jobService.countByWord(".Net")));
+        jobCountList.add(new JobCountDTO("Python",jobService.countByWord("Python")));
+        jobCountList.add(new JobCountDTO("Ruby",jobService.countByWord("Ruby")));
+        jobCountList.add(new JobCountDTO("JavaScript",jobService.countByWord("JavaScript")));
+
+        return new ResponseEntity<>(jobCountList,HttpStatus.OK);
+    }
+
     /**
      * GET  /jobs/:id : get the "id" job.
      *
@@ -156,7 +174,16 @@ public class JobResource {
     @Timed
     public ResponseEntity<Void> schedule()
         throws URISyntaxException {
-        scheduledCrawlTask.dailyCrawl();
+        List<String> keywords = new ArrayList<>();
+
+        keywords.add("Java");
+        keywords.add(".Net");
+        keywords.add("Python");
+        keywords.add("Ruby");
+        keywords.add("JavaScript");
+
+        keywords.forEach(scheduledCrawlTask::crawlByWord);
+
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("job", "")).build();
     }
 

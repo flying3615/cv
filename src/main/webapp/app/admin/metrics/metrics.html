@@ -22,37 +22,37 @@
             </uib-progressbar>
         </div>
         <div class="col-md-4">
-            <b>Threads</b> (Total: {{vm.metrics.gauges['jvm.threads.count'].value}}) <a class="hand" ng-click="vm.refreshThreadDumpData()" data-toggle="modal" data-target="#threadDump"><i class="glyphicon glyphicon-eye-open"></i></a>
-            <p><span>Runnable</span> {{vm.metrics.gauges['jvm.threads.runnable.count'].value}}</p>
-            <uib-progressbar min="0" value="vm.metrics.gauges['jvm.threads.runnable.count'].value" max="vm.metrics.gauges['jvm.threads.count'].value" class="progress-striped active" type="success">
-                <span>{{vm.metrics.gauges['jvm.threads.runnable.count'].value * 100 / vm.metrics.gauges['jvm.threads.count'].value  | number:0}}%</span>
+            <b>Threads</b> (Total: {{vm.metrics.gauges['jvm.threads.value'].value}}) <a class="hand" ng-click="vm.refreshThreadDumpData()" data-toggle="modal" data-target="#threadDump"><i class="glyphicon glyphicon-eye-open"></i></a>
+            <p><span>Runnable</span> {{vm.metrics.gauges['jvm.threads.runnable.value'].value}}</p>
+            <uib-progressbar min="0" value="vm.metrics.gauges['jvm.threads.runnable.value'].value" max="vm.metrics.gauges['jvm.threads.value'].value" class="progress-striped active" type="success">
+                <span>{{vm.metrics.gauges['jvm.threads.runnable.value'].value * 100 / vm.metrics.gauges['jvm.threads.value'].value  | number:0}}%</span>
             </uib-progressbar>
-            <p><span>Timed Waiting</span> ({{vm.metrics.gauges['jvm.threads.timed_waiting.count'].value}})</p>
-            <uib-progressbar min="0" value="vm.metrics.gauges['jvm.threads.timed_waiting.count'].value" max="vm.metrics.gauges['jvm.threads.count'].value" class="progress-striped active" type="warning">
-                <span>{{vm.metrics.gauges['jvm.threads.timed_waiting.count'].value * 100 / vm.metrics.gauges['jvm.threads.count'].value  | number:0}}%</span>
+            <p><span>Timed Waiting</span> ({{vm.metrics.gauges['jvm.threads.timed_waiting.value'].value}})</p>
+            <uib-progressbar min="0" value="vm.metrics.gauges['jvm.threads.timed_waiting.value'].value" max="vm.metrics.gauges['jvm.threads.value'].value" class="progress-striped active" type="warning">
+                <span>{{vm.metrics.gauges['jvm.threads.timed_waiting.value'].value * 100 / vm.metrics.gauges['jvm.threads.value'].value  | number:0}}%</span>
             </uib-progressbar>
-            <p><span>Waiting</span> ({{vm.metrics.gauges['jvm.threads.waiting.count'].value}})</p>
-            <uib-progressbar min="0" value="vm.metrics.gauges['jvm.threads.waiting.count'].value" max="vm.metrics.gauges['jvm.threads.count'].value" class="progress-striped active" type="warning">
-                <span>{{vm.metrics.gauges['jvm.threads.waiting.count'].value * 100 / vm.metrics.gauges['jvm.threads.count'].value  | number:0}}%</span>
+            <p><span>Waiting</span> ({{vm.metrics.gauges['jvm.threads.waiting.value'].value}})</p>
+            <uib-progressbar min="0" value="vm.metrics.gauges['jvm.threads.waiting.value'].value" max="vm.metrics.gauges['jvm.threads.value'].value" class="progress-striped active" type="warning">
+                <span>{{vm.metrics.gauges['jvm.threads.waiting.value'].value * 100 / vm.metrics.gauges['jvm.threads.value'].value  | number:0}}%</span>
             </uib-progressbar>
-            <p><span>Blocked</span> ({{vm.metrics.gauges['jvm.threads.blocked.count'].value}})</p>
-            <uib-progressbar min="0" value="vm.metrics.gauges['jvm.threads.blocked.count'].value" max="vm.metrics.gauges['jvm.threads.count'].value" class="progress-striped active" type="success">
-                <span>{{vm.metrics.gauges['jvm.threads.blocked.count'].value * 100 / vm.metrics.gauges['jvm.threads.count'].value  | number:0}}%</span>
+            <p><span>Blocked</span> ({{vm.metrics.gauges['jvm.threads.blocked.value'].value}})</p>
+            <uib-progressbar min="0" value="vm.metrics.gauges['jvm.threads.blocked.value'].value" max="vm.metrics.gauges['jvm.threads.value'].value" class="progress-striped active" type="success">
+                <span>{{vm.metrics.gauges['jvm.threads.blocked.value'].value * 100 / vm.metrics.gauges['jvm.threads.value'].value  | number:0}}%</span>
             </uib-progressbar>
         </div>
         <div class="col-md-4">
             <b>Garbage collections</b>
             <div class="row">
-                <div class="col-md-9">Mark Sweep count</div>
-                <div class="col-md-3 text-right">{{vm.metrics.gauges['jvm.garbage.PS-MarkSweep.count'].value}}</div>
+                <div class="col-md-9">Mark Sweep value</div>
+                <div class="col-md-3 text-right">{{vm.metrics.gauges['jvm.garbage.PS-MarkSweep.value'].value}}</div>
             </div>
             <div class="row">
                 <div class="col-md-9">Mark Sweep time</div>
                 <div class="col-md-3 text-right">{{vm.metrics.gauges['jvm.garbage.PS-MarkSweep.time'].value}}ms</div>
             </div>
             <div class="row">
-                <div class="col-md-9">Scavenge count</div>
-                <div class="col-md-3 text-right">{{vm.metrics.gauges['jvm.garbage.PS-Scavenge.count'].value}}</div>
+                <div class="col-md-9">Scavenge value</div>
+                <div class="col-md-3 text-right">{{vm.metrics.gauges['jvm.garbage.PS-Scavenge.value'].value}}</div>
             </div>
             <div class="row">
                 <div class="col-md-9">Scavenge time</div>
@@ -63,7 +63,7 @@
     <div class="well well-lg" ng-show="vm.updatingMetrics">Updating...</div>
 
     <h3>HTTP requests (events per second)</h3>
-        <p><span>Active requests</span> <b>{{vm.metrics.counters['com.codahale.metrics.servlet.InstrumentedFilter.activeRequests'].count | number:0}}</b> - <span>Total requests</span> <b>{{vm.metrics.timers['com.codahale.metrics.servlet.InstrumentedFilter.requests'].count | number:0}}</b></p>
+        <p><span>Active requests</span> <b>{{vm.metrics.counters['com.codahale.metrics.servlet.InstrumentedFilter.activeRequests'].value | number:0}}</b> - <span>Total requests</span> <b>{{vm.metrics.timers['com.codahale.metrics.servlet.InstrumentedFilter.requests'].value | number:0}}</b></p>
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
@@ -80,8 +80,8 @@
             <tr>
                 <td>OK</td>
                 <td>
-                    <uib-progressbar min="0" max="vm.metrics.timers['com.codahale.metrics.servlet.InstrumentedFilter.requests'].count" value="vm.metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].count" class="progress-striped active" type="success">
-                        <span>{{vm.metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].count}}</span>
+                    <uib-progressbar min="0" max="vm.metrics.timers['com.codahale.metrics.servlet.InstrumentedFilter.requests'].value" value="vm.metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].value" class="progress-striped active" type="success">
+                        <span>{{vm.metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].value}}</span>
                     </uib-progressbar>
                 </td>
                 <td class="text-right">
@@ -98,8 +98,8 @@
             <tr>
                 <td>Not Found</td>
                 <td>
-                    <uib-progressbar min="0" max="vm.metrics.timers['com.codahale.metrics.servlet.InstrumentedFilter.requests'].count" value="vm.metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].count" class="progress-striped active" type="success">
-                        <span>{{vm.metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].count}}</span>
+                    <uib-progressbar min="0" max="vm.metrics.timers['com.codahale.metrics.servlet.InstrumentedFilter.requests'].value" value="vm.metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].value" class="progress-striped active" type="success">
+                        <span>{{vm.metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].value}}</span>
                     </uib-progressbar>
                 </td>
                 <td class="text-right">
@@ -118,8 +118,8 @@
             <tr>
                 <td>Server error</td>
                 <td>
-                    <uib-progressbar min="0" max="vm.metrics.timers['com.codahale.metrics.servlet.InstrumentedFilter.requests'].count" value="vm.metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].count" class="progress-striped active" type="success">
-                        <span>{{vm.metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].count}}</span>
+                    <uib-progressbar min="0" max="vm.metrics.timers['com.codahale.metrics.servlet.InstrumentedFilter.requests'].value" value="vm.metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].value" class="progress-striped active" type="success">
+                        <span>{{vm.metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].value}}</span>
                     </uib-progressbar>
                 </td>
                 <td class="text-right">
@@ -158,7 +158,7 @@
             <tbody>
             <tr ng-repeat="(k, v) in vm.servicesStats">
                 <td>{{k}}</td>
-                <td class="text-right">{{v.count}}</td>
+                <td class="text-right">{{v.value}}</td>
                 <td class="text-right">{{v.mean * 1000 | number:0}}</td>
                 <td class="text-right">{{v.min * 1000 | number:0}}</td>
                 <td class="text-right">{{v.p50 * 1000 | number:0}}</td>
@@ -170,7 +170,7 @@
             </tbody>
         </table>
     </div>
-    
+
     <h3>Ehcache statistics</h3>
     <div class="table-responsive">
         <table class="table table-striped">
@@ -180,7 +180,7 @@
                 <th class="text-right">Objects</th>
                 <th class="text-right">Hits</th>
                 <th class="text-right">Misses</th>
-                <th class="text-right">Eviction count</th>
+                <th class="text-right">Eviction value</th>
             </tr>
             </thead>
             <tbody>
@@ -189,12 +189,12 @@
                 <td class="text-right">{{vm.metrics.gauges[k + '.objects'].value}}</td>
                 <td class="text-right">{{vm.metrics.gauges[k + '.hits'].value}}</td>
                 <td class="text-right">{{vm.metrics.gauges[k + '.misses'].value}}</td>
-                <td class="text-right">{{vm.metrics.gauges[k + '.eviction-count'].value}}</td>
+                <td class="text-right">{{vm.metrics.gauges[k + '.eviction-value'].value}}</td>
             </tr>
             </tbody>
         </table>
     </div>
-    
+
     <h3 ng-show="vm.metrics.gauges['HikariPool-1.pool.TotalConnections'].value > 0">DataSource statistics (time in millisecond)</h3>
     <div class="table-responsive" ng-show="vm.metrics.gauges['HikariPool-1.pool.TotalConnections'].value > 0">
         <table class="table table-striped">
@@ -220,7 +220,7 @@
                             </uib-progressbar>
                         </div>
                     </td>
-                    <td class="text-right">{{vm.metrics.histograms['HikariPool-1.pool.Usage'].count}}</td>
+                    <td class="text-right">{{vm.metrics.histograms['HikariPool-1.pool.Usage'].value}}</td>
                     <td class="text-right">{{vm.metrics.histograms['HikariPool-1.pool.Usage'].mean | number:2}}</td>
                     <td class="text-right">{{vm.metrics.histograms['HikariPool-1.pool.Usage'].min | number:2}}</td>
                     <td class="text-right">{{vm.metrics.histograms['HikariPool-1.pool.Usage'].p50 | number:2}}</td>

@@ -37,9 +37,9 @@
   -webkit-animation-delay: @delay;
           animation-delay: @delay;
 }
-.animation-iteration-count(@iteration-count) {
-  -webkit-animation-iteration-count: @iteration-count;
-          animation-iteration-count: @iteration-count;
+.animation-iteration-value(@iteration-value) {
+  -webkit-animation-iteration-value: @iteration-value;
+          animation-iteration-value: @iteration-value;
 }
 .animation-direction(@direction) {
   -webkit-animation-direction: @direction;
@@ -78,10 +78,10 @@
 }
 
 // CSS3 Content Columns
-.content-columns(@column-count; @column-gap: @grid-gutter-width) {
-  -webkit-column-count: @column-count;
-     -moz-column-count: @column-count;
-          column-count: @column-count;
+.content-columns(@column-value; @column-gap: @grid-gutter-width) {
+  -webkit-column-value: @column-value;
+     -moz-column-value: @column-value;
+          column-value: @column-value;
   -webkit-column-gap: @column-gap;
      -moz-column-gap: @column-gap;
           column-gap: @column-gap;

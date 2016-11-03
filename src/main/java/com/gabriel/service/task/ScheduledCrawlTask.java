@@ -38,7 +38,13 @@ public class ScheduledCrawlTask {
 
         String searchKeyword = "ruby";
 
+        this.crawlByWord(searchKeyword);
 
+
+    }
+
+
+    public void crawlByWord(String searchKeyword){
         log.info("crawl task start @ {}", LocalDateTime.now());
         Set<Map.Entry<String, Crawler>> crawlerSet = crawlerStrategy.entrySet();
         crawlerSet.stream().forEach(crawlerEntry -> {
@@ -92,6 +98,5 @@ public class ScheduledCrawlTask {
             exciting_jobs.forEach(jobService::saveVanishedJob);
 
         });
-
     }
 }

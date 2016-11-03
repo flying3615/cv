@@ -80,6 +80,12 @@ public class JobService {
         return result;
     }
 
+
+    @Transactional(readOnly = true)
+    public Long countByWord(String word) {
+        return jobRepository.countBySearchWord(word);
+    }
+
     /**
      * Get one job by id.
      *

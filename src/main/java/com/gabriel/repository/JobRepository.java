@@ -14,4 +14,8 @@ import java.util.Set;
 public interface JobRepository extends JpaRepository<Job,Long> {
 
     Set<Job> findBySearchWordAndFromSite(String java, String from_site);
+
+    Long countBySearchWord(String searchword);
+
+
 }

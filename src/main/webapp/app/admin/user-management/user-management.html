@@ -33,7 +33,7 @@
                     <span class="label label-success" ng-click="vm.setActive(user, false)" ng-show="user.activated"
                           style="cursor: pointer;">Activated</span>
                 </td>
-                
+
                 <td>
                     <div ng-repeat="authority in user.authorities">
                         <span class="label label-info">{{ authority }}</span>
@@ -69,7 +69,7 @@
         </table>
     </div>
     <div class="text-center">
-        <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
+        <jhi-item-value page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-value>
         <uib-pagination class="pagination-sm" total-items="vm.totalItems" ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>
     </div>
 </div>

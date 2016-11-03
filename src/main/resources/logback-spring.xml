@@ -22,7 +22,8 @@
     </appender>
 -->
 
-    <logger name="com.gabriel" level="#logback.loglevel#"/>
+    <!--<logger name="com.gabriel" level="#logback.loglevel#"/>-->
+    <logger name="com.gabriel" level="INFO"/>
 
     <logger name="javax.activation" level="WARN"/>
     <logger name="javax.mail" level="WARN"/>
