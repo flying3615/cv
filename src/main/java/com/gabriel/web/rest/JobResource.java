@@ -102,10 +102,9 @@ public class JobResource {
     @Timed
     public ResponseEntity<List<JobCountDTO>> getJobsByWord()
         throws URISyntaxException {
-        log.debug("REST request to get a page of Jobs");
 
         List<JobCountDTO> jobCountList = new ArrayList<>();
-
+        //TODO by date, need to join log and job table
         jobCountList.add(new JobCountDTO("Java",jobService.countByWord("Java")));
         jobCountList.add(new JobCountDTO(".Net",jobService.countByWord(".Net")));
         jobCountList.add(new JobCountDTO("Python",jobService.countByWord("Python")));
