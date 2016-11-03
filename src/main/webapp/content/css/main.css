@@ -330,5 +330,12 @@ ui bootstrap tweaks
 }
 
 
+/*echarts css*/
+.echarts{
+    padding: 0px;
+    height: 300px;
+    border: dashed 1px darkblue;
+}
+
 
 /* jhipster-needle-css-add-main JHipster will add new css style */

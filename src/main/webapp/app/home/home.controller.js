@@ -47,7 +47,7 @@
 
         $scope.lineOption1 = {
             title : {
-                text: '未来一周气温变化(5秒后自动轮询)',
+                text: '气温',
                 subtext: '纯属虚构'
             },
             tooltip : {
@@ -125,7 +125,7 @@
                 color: '#cdd0d5'
             }]),
             title: {
-                text: '1990 与 2015 年各国家人均寿命与 GDP'
+                text: 'GDP'
             },
             legend: {
                 right: 10,
