@@ -230,19 +230,19 @@ public class SeekCrawler implements Crawler {
     }
 
 
-    public static void main(String[] args) {
-        String desc1 = "bbb aaa 2 Years aaa";
-        String desc2 = "bbb aaa 3+ year's aaa";
-        String desc3 = "3+ year's hands-on software";
-        String desc4 = "aaa two Years aaa";
-        String desc5 = "two+ Years' aaa";
-        SeekCrawler crawler = new SeekCrawler();
-        System.out.println(crawler.extractValueByPattern(desc1,crawler.EXPERIENCE));
-        System.out.println(crawler.extractValueByPattern(desc2,crawler.EXPERIENCE));
-        System.out.println(crawler.extractValueByPattern(desc3,crawler.EXPERIENCE));
-        System.out.println(crawler.extractValueByPattern(desc4,crawler.EXPERIENCE));
-        System.out.println(crawler.extractValueByPattern(desc5,crawler.EXPERIENCE));
-    }
+//    public static void main(String[] args) {
+//        String desc1 = "bbb aaa 2 Years aaa";
+//        String desc2 = "bbb aaa 3+ year's aaa";
+//        String desc3 = "3+ year's hands-on software";
+//        String desc4 = "aaa two Years aaa";
+//        String desc5 = "two+ Years' aaa";
+//        SeekCrawler crawler = new SeekCrawler();
+//        System.out.println(crawler.extractValueByPattern(desc1,crawler.EXPERIENCE));
+//        System.out.println(crawler.extractValueByPattern(desc2,crawler.EXPERIENCE));
+//        System.out.println(crawler.extractValueByPattern(desc3,crawler.EXPERIENCE));
+//        System.out.println(crawler.extractValueByPattern(desc4,crawler.EXPERIENCE));
+//        System.out.println(crawler.extractValueByPattern(desc5,crawler.EXPERIENCE));
+//    }
 
 
 }

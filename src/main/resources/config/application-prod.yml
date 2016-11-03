@@ -10,6 +10,8 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
+#build skip tests
+#./mvnw -Pprod package -Dmaven.test.skip=true
 
 spring:
     devtools:
@@ -22,7 +24,7 @@ spring:
         url: jdbc:mysql://localhost:3306/cv?useUnicode=true&characterEncoding=utf8&useSSL=false
         name:
         username: root
-        password:
+        password: 0987654321
         hikari:
             data-source-properties:
                 cachePrepStmts: true
@@ -41,7 +43,13 @@ spring:
     data:
         elasticsearch:
             cluster-name:
-            cluster-nodes: localhost:9300
+#            I don't have a powerful server not es avaliable
+#            cluster-nodes: localhost:9300
+            cluster-nodes:
+            properties:
+                path:
+                    logs: ./elasticsearch/log
+                    data: ./elasticsearch/data
     mail:
         host: localhost
         port: 25

@@ -5,9 +5,9 @@
         .module('cvApp')
         .controller('HomeController', HomeController);
 
-    HomeController.$inject = ['$scope', 'Principal', 'LoginService', '$state', 'JobSearch', '$http', 'ParseLinks', 'AlertService'];
+    HomeController.$inject = ['$scope', 'Principal', 'LoginService', '$state', 'NgMap', '$http', 'ParseLinks', 'AlertService'];
 
-    function HomeController($scope, Principal, LoginService, $state, JobSearch, $http, ParseLinks, AlertService) {
+    function HomeController($scope, Principal, LoginService, $state, NgMap, $http, ParseLinks, AlertService) {
         var vm = this;
 
         vm.account = null;
@@ -32,8 +32,9 @@
         }
 
         function onClick(params) {
-            //go to job list
             console.log(params);
+            //go to job list
+            $state.go('job.new');
         };
 
 
@@ -271,16 +272,21 @@
             }]
         };
 
+        // google map show
+        NgMap.getMap().then(function (map) {
 
-        // var mapData = GeoJson
-        // $scope.mapOpt = {
-        //     series: [{
-        //         type: 'map',
-        //         map: 'beijing'
-        //     }]
-        // }
-        //
-        // echarts.registerMap('beijing', mapData);
+            var marker=new google.maps.Marker({
+                position:new google.maps.LatLng(-41.28664,174.77557),
+                map: map,
+                opacity: 0.7,
+                label:'22'
+            });
+            marker.addListener('click', function() {
+                map.setZoom(8);
+                map.setCenter(marker.getPosition());
+            });
+
+        });
 
 
     }
