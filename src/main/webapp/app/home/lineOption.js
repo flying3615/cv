@@ -167,6 +167,6 @@
 
         }
 
-        return asyncGreet('api/jobs_count_word')
+        return asyncGreet('api/jobs_trend')
     }
 })();
