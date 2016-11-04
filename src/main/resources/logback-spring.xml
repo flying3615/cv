@@ -23,12 +23,13 @@
 -->
 
     <!--<logger name="com.gabriel" level="#logback.loglevel#"/>-->
-    <logger name="com.gabriel" level="INFO"/>
+    <logger name="com.gabriel" level="DEBUG"/>
 
     <logger name="javax.activation" level="WARN"/>
     <logger name="javax.mail" level="WARN"/>
     <logger name="javax.xml.bind" level="WARN"/>
     <logger name="ch.qos.logback" level="WARN"/>
+    <logger name="s.n.www.protocol.http.HttpURLConnection" level="WARN"/>
     <logger name="com.codahale.metrics" level="WARN"/>
     <logger name="com.ryantenney" level="WARN"/>
     <logger name="com.sun" level="WARN"/>

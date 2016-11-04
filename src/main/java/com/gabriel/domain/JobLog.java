@@ -33,7 +33,7 @@ public class JobLog implements Serializable {
     @Column(name = "log_date")
     private LocalDate logDate;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Job job;
 
     public Long getId() {

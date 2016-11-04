@@ -82,8 +82,9 @@ public class JobService {
 
 
     @Transactional(readOnly = true)
-    public Long countByWord(String word) {
-        return jobRepository.countBySearchWord(word);
+    public Long countByWordCurrent(String word,Pageable pageable) {
+        Page<Job> jobs = jobRepository.countBySearchWord(word,pageable);
+        return jobs.getTotalElements();
     }
 
     /**
@@ -131,8 +132,9 @@ public class JobService {
 
 
     public void saveVanishedJob(Job job) {
-        log.debug("Request to save VanishedJob job : {}", job);
-        jobLogSearchRepository.save(new JobLog(JobLogType.REMOVE, LocalDate.now(), job));
+        log.info("Request to save VanishedJob job externalID: {}", job.getExternalID());
+//        jobLogSearchRepository.save(new JobLog(JobLogType.REMOVE, LocalDate.now(), job));
+        jobLogRepository.save(new JobLog(JobLogType.REMOVE, LocalDate.now(), job));
     }
 
 

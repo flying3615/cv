@@ -21,10 +21,6 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Job.
@@ -100,16 +96,17 @@ public class JobResource {
 
     @GetMapping("/jobs_count_word")
     @Timed
-    public ResponseEntity<List<JobCountDTO>> getJobsByWord()
+    public ResponseEntity<List<JobCountDTO>> getJobsByWord(Pageable pageable)
         throws URISyntaxException {
 
         List<JobCountDTO> jobCountList = new ArrayList<>();
         //TODO by date, need to join log and job table
-        jobCountList.add(new JobCountDTO("Java",jobService.countByWord("Java")));
-        jobCountList.add(new JobCountDTO(".Net",jobService.countByWord(".Net")));
-        jobCountList.add(new JobCountDTO("Python",jobService.countByWord("Python")));
-        jobCountList.add(new JobCountDTO("Ruby",jobService.countByWord("Ruby")));
-        jobCountList.add(new JobCountDTO("JavaScript",jobService.countByWord("JavaScript")));
+        //find jobs which status is not remove in joblog table
+        jobCountList.add(new JobCountDTO("Java",jobService.countByWordCurrent("Java",pageable)));
+        jobCountList.add(new JobCountDTO(".Net",jobService.countByWordCurrent(".Net",pageable)));
+        jobCountList.add(new JobCountDTO("Python",jobService.countByWordCurrent("Python",pageable)));
+        jobCountList.add(new JobCountDTO("Ruby",jobService.countByWordCurrent("Ruby",pageable)));
+        jobCountList.add(new JobCountDTO("JavaScript",jobService.countByWordCurrent("JavaScript",pageable)));
 
         return new ResponseEntity<>(jobCountList,HttpStatus.OK);
     }

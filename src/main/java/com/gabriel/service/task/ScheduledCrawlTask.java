@@ -35,12 +35,15 @@ public class ScheduledCrawlTask {
     @Scheduled(cron = "0 0 6 * * *")  //@ 6:00:00 am every day
 //    @Scheduled(cron = "0 */5 * * * *") //every ten minutes for test
     public void dailyCrawl() {
-
         String searchKeyword = "ruby";
-
         this.crawlByWord(searchKeyword);
 
+    }
 
+
+    @Scheduled(cron = "0 0 10 * * *")  //@ 10:00:00 am every day
+    public void GarbageCollector(){
+        //TODO clean Database invalid job records
     }
 
 
@@ -58,13 +61,14 @@ public class ScheduledCrawlTask {
             Map<String, Job> today_jobs = crawler.listJobs(searchKeyword);
 
 
-            log.info("existing jobs size {}", exciting_jobs.size());
+            log.info("existing jobs size {} for search word {}", exciting_jobs.size(),searchKeyword);
 
             Set<Job> ready_to_remove = new HashSet<>();
             //only care about the latest jobs
             exciting_jobs.forEach(existing_job -> {
                     if (today_jobs.containsKey(existing_job.getExternalID())) {
                         today_jobs.remove(existing_job.getExternalID());
+                        log.debug("duplicate jobs external id={}",existing_job.getExternalID());
                         ready_to_remove.add(existing_job);
                     }
                 }
@@ -88,7 +92,7 @@ public class ScheduledCrawlTask {
                 });
 
                 //send mail notify now coming jobs
-                mailSender.sendMail(today_jobs.values());
+//                mailSender.sendMail(today_jobs.values());
             } else {
                 log.info("No job today...");
             }
