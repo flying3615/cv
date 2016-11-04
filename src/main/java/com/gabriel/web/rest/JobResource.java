@@ -5,6 +5,7 @@ import com.gabriel.domain.Job;
 import com.gabriel.service.JobService;
 import com.gabriel.service.task.ScheduledCrawlTask;
 import com.gabriel.web.rest.DTO.JobCountDTO;
+import com.gabriel.web.rest.DTO.JobTrendDTO;
 import com.gabriel.web.rest.util.HeaderUtil;
 import com.gabriel.web.rest.util.PaginationUtil;
 import org.slf4j.Logger;
@@ -115,19 +116,19 @@ public class JobResource {
 
     @GetMapping("/jobs_trend")
     @Timed
-    public ResponseEntity<List<JobCountDTO>> getJobsTrendByWord(Pageable pageable)
+    public ResponseEntity<Map<String,JobTrendDTO>> getJobsTrendByWord(Pageable pageable)
         throws URISyntaxException {
 
-        List<JobCountDTO> jobCountList = new ArrayList<>();
+        Map<String,JobTrendDTO> jobTrendList = new HashMap<>();
 //        //TODO get jobs by all date, need to join log and job table
-//        //find jobs which status is not remove in joblog table
-//        jobCountList.add(new JobCountDTO("Java",jobService.countByWordCurrent("Java",pageable)));
+
+        jobTrendList.put("Java",jobService.getJobTrendByWord("Java",pageable));
 //        jobCountList.add(new JobCountDTO(".Net",jobService.countByWordCurrent(".Net",pageable)));
 //        jobCountList.add(new JobCountDTO("Python",jobService.countByWordCurrent("Python",pageable)));
 //        jobCountList.add(new JobCountDTO("Ruby",jobService.countByWordCurrent("Ruby",pageable)));
 //        jobCountList.add(new JobCountDTO("JavaScript",jobService.countByWordCurrent("JavaScript",pageable)));
 
-        return new ResponseEntity<>(jobCountList,HttpStatus.OK);
+        return new ResponseEntity<>(jobTrendList,HttpStatus.OK);
     }
 
     /**

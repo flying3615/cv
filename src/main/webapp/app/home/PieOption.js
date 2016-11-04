@@ -15,7 +15,6 @@
             var deferred = $q.defer();
             $http.get(url).then(function (response) {
                 // deferred.notify('About to greet ' + name + '.');
-                console.log('PieOption', response.data);
                 response.data.forEach(function (entry) {
                     wordArray.push(entry.name);
                 })

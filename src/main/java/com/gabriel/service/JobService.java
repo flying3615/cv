@@ -7,6 +7,7 @@ import com.gabriel.repository.JobLogRepository;
 import com.gabriel.repository.JobRepository;
 import com.gabriel.repository.search.JobLogSearchRepository;
 import com.gabriel.repository.search.JobSearchRepository;
+import com.gabriel.web.rest.DTO.JobTrendDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -16,7 +17,9 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -139,6 +142,12 @@ public class JobService {
 
 
     public void findJobsNotBelongs2HR(){
+
+    }
+
+    public JobTrendDTO getJobTrendByWord(String String, Pageable pageable) {
+
+        return null;
 
     }
 }

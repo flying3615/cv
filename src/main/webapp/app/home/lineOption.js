@@ -146,13 +146,12 @@
             ]
         };
 
-
         function asyncGreet(url) {
             var deferred = $q.defer();
             $http.get(url).then(function (response) {
                 // deferred.notify('About to greet ' + name + '.');
 
-                console.log('LineOption',response);
+                console.log('LineOption',response.data);
                 var data = response.data;
 
                 if (1==1) {
