@@ -7,9 +7,9 @@
         .module('cvApp')
         .factory('LineOption', LineOption);
 
-    LineOption.$inject = ['$resource', 'DateUtils','$q','$http'];
+    LineOption.$inject = ['DateUtils','$q','$http'];
 
-    function LineOption ($resource, DateUtils,$q,$http) {
+    function LineOption (DateUtils,$q,$http) {
         var option =  {
             title: {
                 text: 'Trend',
@@ -150,13 +150,16 @@
         function asyncGreet(url) {
             var deferred = $q.defer();
             $http.get(url).then(function (response) {
-                deferred.notify('About to greet ' + name + '.');
+                // deferred.notify('About to greet ' + name + '.');
+
+                console.log('LineOption',response);
+                var data = response.data;
 
                 if (1==1) {
                     //build response based on response
                     deferred.resolve(option);
                 } else {
-                    deferred.reject('Greeting ' + name + ' is not allowed.');
+                    deferred.reject('no data');
                 }
             });
 
