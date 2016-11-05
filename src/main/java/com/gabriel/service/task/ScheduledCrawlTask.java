@@ -57,6 +57,7 @@ public class ScheduledCrawlTask {
             Crawler crawler = crawlerEntry.getValue();
 
             //check if job exist...
+            //TODO should escape searchKey here
             Set<Job> exciting_jobs = jobService.findBySearchWordAndFromSite(searchKeyword, crawler.getFromSite());
             Map<String, Job> today_jobs = crawler.listJobs(searchKeyword);
 

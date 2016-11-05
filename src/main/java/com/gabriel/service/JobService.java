@@ -153,14 +153,21 @@ public class JobService {
 
     public List<GoogleLocation> getMapDataByWord(String keyword){
         List<GoogleLocation> convertedResult = new ArrayList<>();
-        Object[] result = jobRepository.getMapDataByWord(keyword);
+        Object[] result;
+        if("All".equals(keyword)){
+            result = jobRepository.getMapDataAll();
+
+        }else{
+            result = jobRepository.getMapDataByWord(keyword);
+        }
+
         for(Object o:result){
             Object[] item = (Object[])o;
             String location = (String) item[0];
             BigInteger count = (BigInteger) item[1];
             convertedResult.add(new GoogleLocation(location,keyword,count.longValue()));
         }
-        log.info("Google location count = {}",convertedResult);
+
         return convertedResult;
 
     }

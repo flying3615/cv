@@ -44,4 +44,18 @@ public interface JobRepository extends JpaRepository<Job, Long> {
         nativeQuery = true
     )
     Object[] getMapDataByWord(String keyword);
+
+
+
+    @Query(value="select area, count(*) as job_count " +
+        "from job j,job_log jl " +
+        "where area in (SELECT distinct area FROM JOB where area<>null or area<>'') and j.id=jl.id and jl.type<>'REMOVE' " +
+        "group by area " +
+        "union " +
+        "select location as area, count(*) as job_count " +
+        "from job j,job_log jl " +
+        "where location in (SELECT distinct location FROM JOB where area=null or area='') and j.id=jl.id and jl.type<>'REMOVE' and area='' " +
+        "group by area",
+    nativeQuery = true)
+    Object[] getMapDataAll();
 }

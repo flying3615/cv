@@ -75,6 +75,54 @@
             $scope.keyword_pie = option;
         });
 
+        $scope.PieConfig = {
+            theme: 'macarons',
+            event: [{click: searchByKey}],
+            dataLoaded: true
+        };
+
+        var markers = [];
+
+        function searchByKey(params) {
+            console.log("searchByKey",params)
+            NgMap.getMap().then(function (map) {
+
+                //fucking stupid solution!!!!
+                //springMVC will drop params with special char
+                if('.Net'==params.name){
+                    params.name = 'Net'
+                }
+
+                $http.get(encodeURI('/api/jobs_map/'+params.name)).then(function (response) {
+                    console.log(response.data)
+                    markers.forEach(function(m){m.setMap(null)});
+                    markers.lenght=0;
+                    response.data.forEach(function(data){
+                        var marker=new google.maps.Marker({
+                            position:new google.maps.LatLng(data.lat,data.lon),
+                            animation: google.maps.Animation.DROP,
+                            map: map,
+                            opacity: 0.7,
+                        });
+
+                        markers.push(marker);
+
+                        var infowindow = new google.maps.InfoWindow({
+                            content: data.job_count+" "+data.search_word+" jobs @"+data.location
+                        });
+
+                        marker.addListener('click', function() {
+                            map.setZoom(10);
+                            map.setCenter(marker.getPosition());
+                            infowindow.open(map,marker);
+                        });
+                    });
+
+                });
+
+            });
+        }
+
 
 
 
@@ -177,9 +225,10 @@
 
         // google map show
         NgMap.getMap().then(function (map) {
-
-            $http.get('/api/jobs_map').then(function (response) {
+            $http.get('/api/jobs_map/All').then(function (response) {
                 console.log(response.data)
+                markers.forEach(function(m){m.setMap(null)});
+                markers.lenght=0;
                 response.data.forEach(function(data){
                     var marker=new google.maps.Marker({
                         position:new google.maps.LatLng(data.lat,data.lon),
@@ -187,12 +236,14 @@
                         opacity: 0.7,
                     });
 
+                    markers.push(marker);
+
                     var infowindow = new google.maps.InfoWindow({
                         content: data.job_count+" "+data.search_word+" jobs @"+data.location
                     });
 
                     marker.addListener('click', function() {
-                        map.setZoom(8);
+                        map.setZoom(10);
                         map.setCenter(marker.getPosition());
                         infowindow.open(map,marker);
                     });

@@ -113,11 +113,20 @@ public class JobResource {
         return new ResponseEntity<>(jobCountList, HttpStatus.OK);
     }
 
-    @GetMapping("/jobs_map")
+    @GetMapping("/jobs_map/{searchword}")
     @Timed
-    public ResponseEntity<List<GoogleLocation>> getJobsMapByWord(Pageable pageable)
+    public ResponseEntity<List<GoogleLocation>> getJobsMapByWord(@PathVariable String searchword)
         throws URISyntaxException {
-        List<GoogleLocation> jobCountList = jobService.getMapDataByWord("Java");
+        log.debug("REST request to getJobsMapByWord searchword : {}", searchword);
+
+        //fucking stupid solution!!!!
+        //springMVC will drop params with special char
+        if ("Net".equals(searchword)) {
+            searchword = ".Net";
+        }
+
+        List<GoogleLocation> jobCountList = jobService.getMapDataByWord(searchword);
+
         return new ResponseEntity<>(jobCountList, HttpStatus.OK);
     }
 
