@@ -31,10 +31,8 @@ public class GeoUtil {
         location+=" New Zealand";
 
         if (googleLocationHashMap.containsKey(location)) {
-            log.debug("{} return cache", location);
             return googleLocationHashMap.get(location);
         } else {
-            log.debug("{} request Google map API", location);
             RestTemplate restTemplate = new RestTemplate();
             try {
                 String result = restTemplate.getForObject("https://maps.googleapis.com/maps/api/geocode/json?address=" + location, String.class);
