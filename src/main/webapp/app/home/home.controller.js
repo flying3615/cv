@@ -177,16 +177,26 @@
 
         // google map show
         NgMap.getMap().then(function (map) {
-            var marker=new google.maps.Marker({
-                //TODO get city and job count
-                position:new google.maps.LatLng(-41.28664,174.77557),
-                map: map,
-                opacity: 0.7,
-                label:'22'
-            });
-            marker.addListener('click', function() {
-                map.setZoom(8);
-                map.setCenter(marker.getPosition());
+
+            $http.get('/api/jobs_map').then(function (response) {
+                response.data.forEach(function(data){
+                    var marker=new google.maps.Marker({
+                        position:new google.maps.LatLng(data.lat,data.lon),
+                        map: map,
+                        opacity: 0.7,
+                    });
+
+                    var infowindow = new google.maps.InfoWindow({
+                        content: data.job_count+" "+data.search_word+" jobs @"+data.location
+                    });
+
+                    marker.addListener('click', function() {
+                        map.setZoom(8);
+                        map.setCenter(marker.getPosition());
+                        infowindow.open(map,marker);
+                    });
+                });
+
             });
 
         });

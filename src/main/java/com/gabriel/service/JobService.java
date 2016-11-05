@@ -7,6 +7,7 @@ import com.gabriel.repository.JobLogRepository;
 import com.gabriel.repository.JobRepository;
 import com.gabriel.repository.search.JobLogSearchRepository;
 import com.gabriel.repository.search.JobSearchRepository;
+import com.gabriel.web.rest.DTO.GoogleLocation;
 import com.gabriel.web.rest.DTO.JobTrendDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,11 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.math.BigInteger;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -142,12 +141,27 @@ public class JobService {
 
 
     public void findJobsNotBelongs2HR(){
+//        TODO
+    }
+
+    public JobTrendDTO getJobTrendByWord(String keyword, Pageable pageable) {
+
+        return null;
 
     }
 
-    public JobTrendDTO getJobTrendByWord(String String, Pageable pageable) {
 
-        return null;
+    public List<GoogleLocation> getMapDataByWord(String keyword){
+        List<GoogleLocation> convertedResult = new ArrayList<>();
+        Object[] result = jobRepository.getMapDataByWord(keyword);
+        for(Object o:result){
+            Object[] item = (Object[])o;
+            String location = (String) item[0];
+            BigInteger count = (BigInteger) item[1];
+            convertedResult.add(new GoogleLocation(location,keyword,count.longValue()));
+        }
+        log.info("Google location count = {}",convertedResult);
+        return convertedResult;
 
     }
 }

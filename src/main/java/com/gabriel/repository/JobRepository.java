@@ -3,11 +3,15 @@ package com.gabriel.repository;
 import com.gabriel.domain.Job;
 
 import com.gabriel.domain.User;
+import com.gabriel.web.rest.DTO.GoogleLocation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 
+import javax.persistence.ColumnResult;
+import javax.persistence.ConstructorResult;
+import javax.persistence.SqlResultSetMapping;
 import java.util.List;
 import java.util.Set;
 
@@ -26,4 +30,13 @@ public interface JobRepository extends JpaRepository<Job, Long> {
     Page<Job> countBySearchWord(String searchword, Pageable pageable);
 
 
+
+
+    @Query(value = "select location, count(*) as job_count,search_word " +
+        "from job j,job_log jl " +
+        "where location in (SELECT distinct location FROM JOB) and search_word= ?1 and j.id=jl.id and jl.type<>'REMOVE'" +
+        " group by location",
+        nativeQuery = true
+    )
+    Object[] getMapDataByWord(String keyword);
 }

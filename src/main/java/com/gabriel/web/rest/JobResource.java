@@ -4,6 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.gabriel.domain.Job;
 import com.gabriel.service.JobService;
 import com.gabriel.service.task.ScheduledCrawlTask;
+import com.gabriel.web.rest.DTO.GoogleLocation;
 import com.gabriel.web.rest.DTO.JobCountDTO;
 import com.gabriel.web.rest.DTO.JobTrendDTO;
 import com.gabriel.web.rest.util.HeaderUtil;
@@ -103,32 +104,39 @@ public class JobResource {
         List<JobCountDTO> jobCountList = new ArrayList<>();
         //TODO by date, need to join log and job table
         //find jobs which status is not remove in joblog table
-        jobCountList.add(new JobCountDTO("Java",jobService.countByWordCurrent("Java",pageable)));
-        jobCountList.add(new JobCountDTO(".Net",jobService.countByWordCurrent(".Net",pageable)));
-        jobCountList.add(new JobCountDTO("Python",jobService.countByWordCurrent("Python",pageable)));
-        jobCountList.add(new JobCountDTO("Ruby",jobService.countByWordCurrent("Ruby",pageable)));
-        jobCountList.add(new JobCountDTO("JavaScript",jobService.countByWordCurrent("JavaScript",pageable)));
+        jobCountList.add(new JobCountDTO("Java", jobService.countByWordCurrent("Java", pageable)));
+        jobCountList.add(new JobCountDTO(".Net", jobService.countByWordCurrent(".Net", pageable)));
+        jobCountList.add(new JobCountDTO("Python", jobService.countByWordCurrent("Python", pageable)));
+        jobCountList.add(new JobCountDTO("Ruby", jobService.countByWordCurrent("Ruby", pageable)));
+        jobCountList.add(new JobCountDTO("JavaScript", jobService.countByWordCurrent("JavaScript", pageable)));
 
-        return new ResponseEntity<>(jobCountList,HttpStatus.OK);
+        return new ResponseEntity<>(jobCountList, HttpStatus.OK);
     }
 
+    @GetMapping("/jobs_map")
+    @Timed
+    public ResponseEntity<List<GoogleLocation>> getJobsMapByWord(Pageable pageable)
+        throws URISyntaxException {
+        List<GoogleLocation> jobCountList = jobService.getMapDataByWord("Java");
+        return new ResponseEntity<>(jobCountList, HttpStatus.OK);
+    }
 
 
     @GetMapping("/jobs_trend")
     @Timed
-    public ResponseEntity<Map<String,JobTrendDTO>> getJobsTrendByWord(Pageable pageable)
+    public ResponseEntity<Map<String, JobTrendDTO>> getJobsTrendByWord(Pageable pageable)
         throws URISyntaxException {
 
-        Map<String,JobTrendDTO> jobTrendList = new HashMap<>();
+        Map<String, JobTrendDTO> jobTrendList = new HashMap<>();
 //        //TODO get jobs by all date, need to join log and job table
 
-        jobTrendList.put("Java",jobService.getJobTrendByWord("Java",pageable));
+        jobTrendList.put("Java", jobService.getJobTrendByWord("Java", pageable));
 //        jobCountList.add(new JobCountDTO(".Net",jobService.countByWordCurrent(".Net",pageable)));
 //        jobCountList.add(new JobCountDTO("Python",jobService.countByWordCurrent("Python",pageable)));
 //        jobCountList.add(new JobCountDTO("Ruby",jobService.countByWordCurrent("Ruby",pageable)));
 //        jobCountList.add(new JobCountDTO("JavaScript",jobService.countByWordCurrent("JavaScript",pageable)));
 
-        return new ResponseEntity<>(jobTrendList,HttpStatus.OK);
+        return new ResponseEntity<>(jobTrendList, HttpStatus.OK);
     }
 
     /**
@@ -167,7 +175,7 @@ public class JobResource {
      * SEARCH  /_search/jobs?query=:query : search for the job corresponding
      * to the query.
      *
-     * @param query the query of the job search
+     * @param query    the query of the job search
      * @param pageable the pagination information
      * @return the result of the search
      * @throws URISyntaxException if there is an error to generate the pagination HTTP headers

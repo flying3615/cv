@@ -33,29 +33,29 @@ public class RestClient {
     private HttpHeaders headers;
     private HttpStatus status;
 
-    public RestClient() throws Exception {
-        KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-        keyStore.load(new FileInputStream(new File("/Users/liuyufei/Desktop/seek.jks")), "123456".toCharArray());
-
-        SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(
-            new SSLContextBuilder()
-                .loadTrustMaterial(null, new TrustSelfSignedStrategy())
-                .loadKeyMaterial(keyStore, "123456".toCharArray())
-                .build(),
-            NoopHostnameVerifier.INSTANCE);
-
-        CloseableHttpClient httpClient = HttpClients.custom().setSSLSocketFactory(socketFactory).build();
-
-        ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
-        this.rest = new RestTemplate(requestFactory);
-
+//    public RestClient() throws Exception {
+//        KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+//        keyStore.load(new FileInputStream(new File("/Users/liuyufei/Desktop/seek.jks")), "123456".toCharArray());
+//
+//        SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(
+//            new SSLContextBuilder()
+//                .loadTrustMaterial(null, new TrustSelfSignedStrategy())
+//                .loadKeyMaterial(keyStore, "123456".toCharArray())
+//                .build(),
+//            NoopHostnameVerifier.INSTANCE);
+//
+//        CloseableHttpClient httpClient = HttpClients.custom().setSSLSocketFactory(socketFactory).build();
+//
+//        ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
 //        this.rest = new RestTemplate(requestFactory);
-//        this.rest = new RestTemplate();
-        this.headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json; charset=utf-16");
-        headers.add("Accept", "*/*");
-
-    }
+//
+////        this.rest = new RestTemplate(requestFactory);
+////        this.rest = new RestTemplate();
+//        this.headers = new HttpHeaders();
+//        headers.add("Content-Type", "application/json; charset=utf-16");
+//        headers.add("Accept", "*/*");
+//
+//    }
 
     public String get(String uri) {
         HttpEntity<String> requestEntity = new HttpEntity<String>("", headers);

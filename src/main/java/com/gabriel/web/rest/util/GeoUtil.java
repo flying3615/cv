@@ -1,5 +1,6 @@
 package com.gabriel.web.rest.util;
 
+import com.gabriel.web.rest.DTO.GoogleLocation;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -7,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -18,34 +20,35 @@ import java.util.Optional;
 public class GeoUtil {
 
     private static final Logger log = LoggerFactory.getLogger(GeoUtil.class);
-    Map<String, Optional<GoogleLocation>> googleLocationHashMap = new HashMap<>();
+    static Map<String, double []> googleLocationHashMap = new HashMap<>();
 
 
     //    https://maps.googleapis.com/maps/api/geocode/json?address=Auckland
 
-    public Optional<GoogleLocation> getLatLonByAddress(String address) {
+    public static double[] getLatLonByAddress(String location) {
 
-        if (googleLocationHashMap.containsKey(address)) {
-            log.debug("{} return cache", address);
-            return googleLocationHashMap.get(address);
+        double[] lanLong = new double[2];
+        if (googleLocationHashMap.containsKey(location)) {
+            log.debug("{} return cache", location);
+            return googleLocationHashMap.get(location);
         } else {
-            log.debug("{} request Google map API", address);
-            GoogleLocation googleLocation = null;
+            log.debug("{} request Google map API", location);
             RestTemplate restTemplate = new RestTemplate();
-            String result = restTemplate.getForObject("https://maps.googleapis.com/maps/api/geocode/json?address=" + address, String.class);
+            String result = restTemplate.getForObject("https://maps.googleapis.com/maps/api/geocode/json?address=" + location, String.class);
             try {
                 JSONObject jsonObject = new JSONObject(result);
                 JSONArray results = jsonObject.getJSONArray("results");
                 JSONObject single_result = results.getJSONObject(0);
                 if (single_result != null) {
-                    JSONObject location = single_result.getJSONObject("geometry").getJSONObject("location");
-                    googleLocation = new GoogleLocation(address, location.getDouble("lat"), location.getDouble("lng"));
-                    googleLocationHashMap.put(address,Optional.of(googleLocation));
+                    JSONObject locationJSONObj = single_result.getJSONObject("geometry").getJSONObject("location");
+                    lanLong[0] = locationJSONObj.getDouble("lat");
+                    lanLong[1] = locationJSONObj.getDouble("lng");
+                    googleLocationHashMap.put(location,lanLong);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            return Optional.ofNullable(googleLocation);
+            return lanLong;
         }
 
 
@@ -53,9 +56,20 @@ public class GeoUtil {
 
     public static void main(String[] args) {
         GeoUtil geoUtil = new GeoUtil();
-        geoUtil.getLatLonByAddress("Auckland").ifPresent(System.out::println);
-        geoUtil.getLatLonByAddress("Wellington").ifPresent(System.out::println);
-        geoUtil.getLatLonByAddress("Auckland").ifPresent(System.out::println);
+        double[] auckland = geoUtil.getLatLonByAddress("Auckland");
+        for(double l:auckland){
+            System.out.println(l);
+        }
+
+        double[] wellingtons = geoUtil.getLatLonByAddress("Wellington");
+        for(double l:wellingtons){
+            System.out.println(l);
+        }
+
+        auckland = geoUtil.getLatLonByAddress("Auckland");
+        for(double l:auckland){
+            System.out.println(l);
+        }
 
     }
 
@@ -63,47 +77,4 @@ public class GeoUtil {
 }
 
 
-class GoogleLocation {
-    private String addName;
-    private double lat;
-    private double lon;
 
-    public GoogleLocation(String addName, double lat, double lon) {
-        this.addName = addName;
-        this.lat = lat;
-        this.lon = lon;
-    }
-
-    public String getAddName() {
-        return addName;
-    }
-
-    public void setAddName(String addName) {
-        this.addName = addName;
-    }
-
-    public double getLat() {
-        return lat;
-    }
-
-    public void setLat(double lat) {
-        this.lat = lat;
-    }
-
-    public double getLon() {
-        return lon;
-    }
-
-    public void setLon(double lon) {
-        this.lon = lon;
-    }
-
-    @Override
-    public String toString() {
-        return "GoogleLocation{" +
-            "addName='" + addName + '\'' +
-            ", lat=" + lat +
-            ", lon=" + lon +
-            '}';
-    }
-}
