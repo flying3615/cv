@@ -1,0 +1,414 @@
+{
+    "title":"Java Jobs",
+    "totalCount":190,
+    "data":[
+        {
+            "id":31996793,
+            "listingDate":"2016-10-07T07:47:56Z",
+            "title":"Environments Engineer",
+            "teaser":"Workday has an open position for an Environments Engineer role, based in Auckland, New Zealand.",
+            "bulletPoints":[
+
+            ],
+            "advertiser":{
+                "id":"32751234",
+                "description":"Workday"
+            },
+            "logo":{
+                "id":"",
+                "description":null
+            },
+            "isPremium":false,
+            "isStandOut":false,
+            "location":"Auckland",
+            "area":"Auckland Central",
+            "workType":"Full Time",
+            "classification":{
+                "id":"6281",
+                "description":"Information & Communication Technology"
+            },
+            "subClassification":{
+                "id":"6289",
+                "description":"Engineering - Network"
+            },
+            "salary":"",
+            "companyProfileStructuredDataId":19469,
+            "locationWhereValue":"All Auckland NZ",
+            "areaWhereValue":"Auckland Central Auckland NZ",
+            "suburbWhereValue":"Auckland CBD Auckland NZ",
+            "automaticInclusion":false,
+            "displayType":"standard",
+            "tracking":"ewogICJ0b2tlbiI6ICIxNzViM2UyNC1iNmQ2LTQzNTAtYTlmNS1iMmY0YzMzNjFkZGVfMSIKfQ=="
+        },
+        {
+            "id":31993583,
+            "listingDate":"2016-10-07T04:38:40Z",
+            "title":"Android Mobile Developer",
+            "teaser":"Write beautiful code, delight our customers, and grow & learn with a bunch of people who love code and care about quality.",
+            "bulletPoints":[
+                "Join more than 80 awesome developers, designers, testers and product owners",
+                "We value collaboration and knowledge sharing",
+                "Be part of an awesome team where you deliver great results and build each other"
+            ],
+            "advertiser":{
+                "id":"27976807",
+                "description":"Powershop"
+            },
+            "logo":{
+                "id":"421886",
+                "description":"421886.gif"
+            },
+            "isPremium":false,
+            "isStandOut":true,
+            "location":"Wellington",
+            "area":"Wellington Central",
+            "workType":"Full Time",
+            "classification":{
+                "id":"6281",
+                "description":"Information & Communication Technology"
+            },
+            "subClassification":{
+                "id":"6287",
+                "description":"Developers/Programmers"
+            },
+            "salary":"",
+            "companyProfileStructuredDataId":19875,
+            "locationWhereValue":"All Wellington NZ",
+            "areaWhereValue":"Wellington Central Wellington NZ",
+            "suburbWhereValue":"Wellington CBD Wellington NZ",
+            "automaticInclusion":false,
+            "displayType":"standout",
+            "tracking":"ewogICJ0b2tlbiI6ICIxNzViM2UyNC1iNmQ2LTQzNTAtYTlmNS1iMmY0YzMzNjFkZGVfMiIKfQ=="
+        },
+        {
+            "id":31993582,
+            "listingDate":"2016-10-07T04:38:39Z",
+            "title":"Senior Software Developer",
+            "teaser":"Right now we need seniors who’ve already made a _lot_ of mistakes and learned lessons that they want to share.",
+            "bulletPoints":[
+                "Join more than 80 awesome developers, designers, testers and product owners",
+                "We value collaboration and knowledge sharing",
+                "Be part of an awesome team where you deliver great results and build each other"
+            ],
+            "advertiser":{
+                "id":"27976807",
+                "description":"Powershop"
+            },
+            "logo":{
+                "id":"421886",
+                "description":"421886.gif"
+            },
+            "isPremium":false,
+            "isStandOut":true,
+            "location":"Wellington",
+            "area":"Wellington Central",
+            "workType":"Full Time",
+            "classification":{
+                "id":"6281",
+                "description":"Information & Communication Technology"
+            },
+            "subClassification":{
+                "id":"6287",
+                "description":"Developers/Programmers"
+            },
+            "salary":"",
+            "companyProfileStructuredDataId":19875,
+            "locationWhereValue":"All Wellington NZ",
+            "areaWhereValue":"Wellington Central Wellington NZ",
+            "suburbWhereValue":"Wellington CBD Wellington NZ",
+            "automaticInclusion":false,
+            "displayType":"standout",
+            "tracking":"ewogICJ0b2tlbiI6ICIxNzViM2UyNC1iNmQ2LTQzNTAtYTlmNS1iMmY0YzMzNjFkZGVfMyIKfQ=="
+        },
+        {
+            "id":31988289,
+            "listingDate":"2016-10-06T22:09:48Z",
+            "title":"Senior Mobile Developer",
+            "teaser":"An exciting opportunity in the marine industry for a highly motivated Mobile Developer based on the North Shore, ability to lead!!",
+            "bulletPoints":[
+                "An opportunity for growth here - Step up to a leadership role",
+                "Professional and Fun Environemnt",
+                "Albany based, IOS & Android Experience"
+            ],
+            "advertiser":{
+                "id":"20667029",
+                "description":"Radius Recruitment NZ Ltd"
+            },
+            "logo":{
+                "id":"418504",
+                "description":"418504.bmp"
+            },
+            "isPremium":false,
+            "isStandOut":true,
+            "location":"Auckland",
+            "area":"Rodney & North Shore",
+            "workType":"Full Time",
+            "classification":{
+                "id":"6281",
+                "description":"Information & Communication Technology"
+            },
+            "subClassification":{
+                "id":"6287",
+                "description":"Developers/Programmers"
+            },
+            "salary":"",
+            "companyProfileStructuredDataId":0,
+            "locationWhereValue":"All Auckland NZ",
+            "areaWhereValue":"Rodney & North Shore Auckland NZ",
+            "suburbWhereValue":"Albany Auckland NZ",
+            "automaticInclusion":false,
+            "displayType":"standout",
+            "tracking":"ewogICJ0b2tlbiI6ICIxNzViM2UyNC1iNmQ2LTQzNTAtYTlmNS1iMmY0YzMzNjFkZGVfNCIKfQ=="
+        },
+        {
+            "id":31981650,
+            "listingDate":"2016-10-06T02:27:44Z",
+            "title":"Node.js Engineer",
+            "teaser":"New node.js project, new development, new business eco-system - contact us now for a start in the CBD",
+            "bulletPoints":[
+                "Contract - immediate start",
+                "Growing Business Solutions Provider",
+                "Development and delivery of node.js project"
+            ],
+            "advertiser":{
+                "id":"28547171",
+                "description":"Global Attract"
+            },
+            "logo":{
+                "id":"388328",
+                "description":"388328.jpg"
+            },
+            "isPremium":false,
+            "isStandOut":true,
+            "location":"Auckland",
+            "area":"Auckland Central",
+            "workType":"Contract/Temp",
+            "classification":{
+                "id":"6281",
+                "description":"Information & Communication Technology"
+            },
+            "subClassification":{
+                "id":"6287",
+                "description":"Developers/Programmers"
+            },
+            "salary":"$85.00 p.h.",
+            "companyProfileStructuredDataId":0,
+            "locationWhereValue":"All Auckland NZ",
+            "areaWhereValue":"Auckland Central Auckland NZ",
+            "suburbWhereValue":"Auckland CBD Auckland NZ",
+            "automaticInclusion":false,
+            "displayType":"standout",
+            "tracking":"ewogICJ0b2tlbiI6ICIxNzViM2UyNC1iNmQ2LTQzNTAtYTlmNS1iMmY0YzMzNjFkZGVfNSIKfQ=="
+        },
+        {
+            "id":31979408,
+            "listingDate":"2016-10-05T23:41:59Z",
+            "title":"Security Engineer- Digital Services",
+            "teaser":"Opportunity to get stuck in and influence how things are done. An environment and culture focused on innovation and doing things right, the first time",
+            "bulletPoints":[
+
+            ],
+            "advertiser":{
+                "id":"30563842",
+                "description":"Hays Talent Solutions"
+            },
+            "logo":{
+                "id":"455390",
+                "description":"455390.jpg"
+            },
+            "isPremium":false,
+            "isStandOut":true,
+            "location":"Auckland",
+            "area":"Auckland Central",
+            "workType":"Full Time",
+            "classification":{
+                "id":"6281",
+                "description":"Information & Communication Technology"
+            },
+            "subClassification":{
+                "id":"6297",
+                "description":"Security"
+            },
+            "salary":"",
+            "companyProfileStructuredDataId":4679,
+            "locationWhereValue":"All Auckland NZ",
+            "areaWhereValue":"Auckland Central Auckland NZ",
+            "suburbWhereValue":"Auckland CBD Auckland NZ",
+            "automaticInclusion":false,
+            "displayType":"standout",
+            "tracking":"ewogICJ0b2tlbiI6ICIxNzViM2UyNC1iNmQ2LTQzNTAtYTlmNS1iMmY0YzMzNjFkZGVfNiIKfQ=="
+        },
+        {
+            "id":31774248,
+            "listingDate":"2016-09-27T06:51:11Z",
+            "title":"Front End Developer | Auckland",
+            "teaser":"Expanding start-up looking for the next hire ..Web focussed developer to work on a suite of web apps",
+            "bulletPoints":[
+
+            ],
+            "advertiser":{
+                "id":"27276426",
+                "description":"Talent Magnet"
+            },
+            "logo":{
+                "id":"",
+                "description":null
+            },
+            "isPremium":false,
+            "isStandOut":false,
+            "location":"Auckland",
+            "area":"Auckland Central",
+            "workType":"Full Time",
+            "classification":{
+                "id":"6281",
+                "description":"Information & Communication Technology"
+            },
+            "subClassification":{
+                "id":"6287",
+                "description":"Developers/Programmers"
+            },
+            "salary":"",
+            "companyProfileStructuredDataId":0,
+            "locationWhereValue":"All Auckland NZ",
+            "areaWhereValue":"Auckland Central Auckland NZ",
+            "suburbWhereValue":"Auckland CBD Auckland NZ",
+            "automaticInclusion":false,
+            "displayType":"standard",
+            "tracking":"ewogICJ0b2tlbiI6ICIxNzViM2UyNC1iNmQ2LTQzNTAtYTlmNS1iMmY0YzMzNjFkZGVfNyIKfQ=="
+        },
+        {
+            "id":32059625,
+            "listingDate":"2016-10-16T13:17:00Z",
+            "title":"19748 .NET Developer - Landcare Research",
+            "teaser":"This is an excellent opportunity to join Landcare Research's Informatics Team at a time of significant growth and development....",
+            "bulletPoints":[
+
+            ],
+            "advertiser":{
+                "id":"34901058",
+                "description":"Science New Zealand"
+            },
+            "logo":{
+                "id":"",
+                "description":null
+            },
+            "isPremium":false,
+            "isStandOut":false,
+            "location":"Canterbury",
+            "area":"Christchurch",
+            "workType":"Full Time",
+            "classification":{
+                "id":"6281",
+                "description":"Information & Communication Technology"
+            },
+            "subClassification":{
+                "id":"6287",
+                "description":"Developers/Programmers"
+            },
+            "salary":"",
+            "companyProfileStructuredDataId":0,
+            "locationWhereValue":"All Canterbury NZ",
+            "areaWhereValue":"Christchurch Canterbury NZ",
+            "automaticInclusion":true,
+            "displayType":"standard",
+            "tracking":"ewogICJ0b2tlbiI6ICIxNzViM2UyNC1iNmQ2LTQzNTAtYTlmNS1iMmY0YzMzNjFkZGVfOCIKfQ=="
+        },
+        {
+            "id":32037800,
+            "listingDate":"2016-10-11T19:13:00Z",
+            "title":"Technology Architect",
+            "teaser":"Purpose of the Role: The PEGA Architect will be responsible for PRPC architecture for one or more project/s at the assigned client. Location :...",
+            "bulletPoints":[
+
+            ],
+            "advertiser":{
+                "id":"35332594",
+                "description":"Infosys"
+            },
+            "logo":{
+                "id":"",
+                "description":null
+            },
+            "isPremium":false,
+            "isStandOut":false,
+            "location":"Auckland",
+            "area":"Auckland Central",
+            "workType":"Full Time",
+            "classification":{
+                "id":"6281",
+                "description":"Information & Communication Technology"
+            },
+            "subClassification":{
+                "id":"6282",
+                "description":"Architects"
+            },
+            "salary":"",
+            "companyProfileStructuredDataId":0,
+            "locationWhereValue":"All Auckland NZ",
+            "areaWhereValue":"Auckland Central Auckland NZ",
+            "suburbWhereValue":"Auckland CBD Auckland NZ",
+            "automaticInclusion":true,
+            "displayType":"standard",
+            "tracking":"ewogICJ0b2tlbiI6ICIxNzViM2UyNC1iNmQ2LTQzNTAtYTlmNS1iMmY0YzMzNjFkZGVfOSIKfQ=="
+        },
+        {
+            "id":32088579,
+            "listingDate":"2016-10-19T22:37:00Z",
+            "title":"<b>Java</b> Developer",
+            "teaser":"We are currently working to assist one of our clients to build their <b>Java</b> capability within the financial sector. We have an exciting new...",
+            "bulletPoints":[
+
+            ],
+            "advertiser":{
+                "id":"35080464",
+                "description":"Fronde"
+            },
+            "logo":{
+                "id":"",
+                "description":null
+            },
+            "isPremium":false,
+            "isStandOut":false,
+            "location":"Wellington",
+            "area":"Wellington Central",
+            "workType":"Full Time",
+            "classification":{
+                "id":"6281",
+                "description":"Information & Communication Technology"
+            },
+            "subClassification":{
+                "id":"6287",
+                "description":"Developers/Programmers"
+            },
+            "salary":"",
+            "companyProfileStructuredDataId":0,
+            "locationWhereValue":"All Wellington NZ",
+            "areaWhereValue":"Wellington Central Wellington NZ",
+            "suburbWhereValue":"Wellington CBD Wellington NZ",
+            "automaticInclusion":true,
+            "displayType":"standard",
+            "tracking":"ewogICJ0b2tlbiI6ICIxNzViM2UyNC1iNmQ2LTQzNTAtYTlmNS1iMmY0YzMzNjFkZGVfMTAiCn0="
+        }
+    ],
+    "paginationParameters":{
+        "hadPremiumListings":false,
+        "seekSelectAllPages":true
+    },
+    "info":{
+        "timeTaken":72,
+        "source":"JobSearch-CV"
+    },
+    "userQueryId":"API7154104536905012378",
+    "sortMode":[
+        {
+            "name":"Relevance",
+            "value":"KeywordRelevance",
+            "isActive":true
+        },
+        {
+            "name":"Date",
+            "value":"ListedDate",
+            "isActive":false
+        }
+    ]
+}

@@ -163,6 +163,9 @@ public class SeekCrawler implements Crawler {
             job_domain.setCompany(job.getJSONObject("advertiser").getString("description"));
             job_domain.setSalary(getNullIfEmptyStr(job.getString("salary")));
             job_domain.setLocation(job.getString("location"));
+            //accurate place
+            job_domain.setArea(getNullIfEmptyStr(job.getString("area")));
+
             //"2016-10-17T05:10:54Z"
             job_domain.setListDate(LocalDate.parse(job.getString("listingDate"), formatter));
             job_domain.setFromSite(from_site);

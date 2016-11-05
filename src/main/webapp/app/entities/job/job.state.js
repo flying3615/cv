@@ -110,6 +110,7 @@
                                 fromSite: null,
                                 origURL: null,
                                 experienceReq: null,
+                                area: null,
                                 id: null
                             };
                         }

@@ -67,6 +67,10 @@
         {
             "fieldName": "experienceReq",
             "fieldType": "String"
+        },
+        {
+            "fieldName": "area",
+            "fieldType": "String"
         }
     ],
     "changelogDate": "20161030033438",

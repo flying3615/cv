@@ -3,8 +3,6 @@ package com.gabriel.domain;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.elasticsearch.annotations.Document;
-import org.springframework.data.elasticsearch.annotations.Field;
-import org.springframework.data.elasticsearch.annotations.FieldIndex;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -74,6 +72,9 @@ public class Job implements Serializable {
 
     @Column(name = "experience_req")
     private String experienceReq;
+
+    @Column(name = "area")
+    private String area;
 
     public Long getId() {
         return id;
@@ -278,6 +279,19 @@ public class Job implements Serializable {
         this.experienceReq = experienceReq;
     }
 
+    public String getArea() {
+        return area;
+    }
+
+    public Job area(String area) {
+        this.area = area;
+        return this;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -317,6 +331,7 @@ public class Job implements Serializable {
             ", fromSite='" + fromSite + "'" +
             ", origURL='" + origURL + "'" +
             ", experienceReq='" + experienceReq + "'" +
+            ", area='" + area + "'" +
             '}';
     }
 }

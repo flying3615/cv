@@ -179,6 +179,7 @@
         NgMap.getMap().then(function (map) {
 
             $http.get('/api/jobs_map').then(function (response) {
+                console.log(response.data)
                 response.data.forEach(function(data){
                     var marker=new google.maps.Marker({
                         position:new google.maps.LatLng(data.lat,data.lon),
