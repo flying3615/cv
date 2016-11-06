@@ -1,6 +1,7 @@
 package com.gabriel.service;
 
 import com.gabriel.config.JHipsterProperties;
+import com.gabriel.domain.Job;
 import com.gabriel.domain.User;
 
 import org.apache.commons.lang3.CharEncoding;
@@ -17,7 +18,7 @@ import org.thymeleaf.spring4.SpringTemplateEngine;
 
 import javax.inject.Inject;
 import javax.mail.internet.MimeMessage;
-import java.util.Locale;
+import java.util.*;
 
 /**
  * Service for sending e-mails.
@@ -99,5 +100,30 @@ public class MailService {
         String content = templateEngine.process("passwordResetEmail", context);
         String subject = messageSource.getMessage("email.reset.title", null, locale);
         sendEmail(user.getEmail(), subject, content, false, true);
+    }
+
+    @Async
+    public void sendNewJobMail(Collection<Job> jobs) {
+        int size = jobs.size();
+        log.debug("Sending {} new jobs mail ", size);
+
+        List<Job> jobInDateOrder = this.sortJobs(jobs);
+//        Locale locale = Locale.forLanguageTag(user.getLangKey());
+//        Context context = new Context(locale);
+        Context context = new Context();
+        context.setVariable("jobs", jobInDateOrder);
+        context.setVariable("size", size);
+        String content = templateEngine.process("newJobsArrived", context);
+        String subject = size+ " new jobs arrived";
+        sendEmail("flying3615@163.com", subject, content, false, true);
+
+    }
+
+    //sort by date
+    private List<Job> sortJobs(Collection<Job> jobs){
+        List<Job> sortedList = new ArrayList<>();
+        sortedList.addAll(jobs);
+        Collections.sort(sortedList,(a, b)->b.getListDate().compareTo(a.getListDate()));
+        return sortedList;
     }
 }

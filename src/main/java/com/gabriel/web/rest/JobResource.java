@@ -3,6 +3,7 @@ package com.gabriel.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import com.gabriel.domain.Job;
 import com.gabriel.service.JobService;
+import com.gabriel.service.MailService;
 import com.gabriel.service.task.ScheduledCrawlTask;
 import com.gabriel.web.rest.DTO.GoogleLocation;
 import com.gabriel.web.rest.DTO.JobCountDTO;
@@ -22,6 +23,7 @@ import javax.inject.Inject;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDate;
 import java.util.*;
 
 /**
@@ -35,6 +37,9 @@ public class JobResource {
 
     @Inject
     private JobService jobService;
+
+    @Inject
+    private MailService mailService;
 
     /**
      * POST  /jobs : Create a new job.
@@ -218,6 +223,28 @@ public class JobResource {
         keywords.add("PHP");
 
         keywords.forEach(scheduledCrawlTask::crawlByWord);
+
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("job", "")).build();
+    }
+
+    @GetMapping("/mails")
+    @Timed
+    public ResponseEntity<Void> testmail()
+        throws URISyntaxException {
+        List<Job> jobs = new ArrayList<>();
+        Job job1 = new Job();
+        job1.setTitle("test1");
+        job1.setListDate(LocalDate.now());
+        job1.setOrigURL("http://abc");
+
+        Job job2 = new Job();
+        job2.setTitle("test2");
+        job2.setListDate(LocalDate.now());
+        job2.setOrigURL("http://efg");
+
+        jobs.add(job1);
+        jobs.add(job2);
+        mailService.sendNewJobMail(jobs);
 
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("job", "")).build();
     }

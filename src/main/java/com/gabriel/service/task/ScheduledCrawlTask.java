@@ -2,6 +2,7 @@ package com.gabriel.service.task;
 
 import com.gabriel.domain.Job;
 import com.gabriel.service.JobService;
+import com.gabriel.service.MailService;
 import com.gabriel.service.crawler.Crawler;
 import com.gabriel.service.util.MailSender;
 import org.slf4j.Logger;
@@ -26,8 +27,11 @@ public class ScheduledCrawlTask {
     @Inject
     Map<String, Crawler> crawlerStrategy = new HashMap<>();
 
+//    @Inject
+//    MailSender mailSender;
+
     @Inject
-    MailSender mailSender;
+    MailService mailService;
 
     @Inject
     JobService jobService;
@@ -86,14 +90,12 @@ public class ScheduledCrawlTask {
             //update job detail
             if (today_jobs.size() != 0) {
                 log.info("update new coming jobs {}", today_jobs.size());
-
                 today_jobs.values().parallelStream().forEach(job -> {
                     Job updated_job = crawler.updateJobDetail(job);
                     jobService.save(updated_job);
                 });
-
                 //send mail notify now coming jobs
-//                mailSender.sendMail(today_jobs.values());
+                mailService.sendNewJobMail(today_jobs.values());
             } else {
                 log.info("No job today...");
             }
