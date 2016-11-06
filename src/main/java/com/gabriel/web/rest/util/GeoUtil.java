@@ -55,34 +55,34 @@ public class GeoUtil {
 
     }
 
-    public static void main(String[] args) {
-        GeoUtil geoUtil = new GeoUtil();
-        double[] auckland = geoUtil.getLatLonByAddress("Auckland");
-        for(double l:auckland){
-            System.out.println(l);
-        }
-
-        double[] aucklandC = geoUtil.getLatLonByAddress("Auckland Central");
-        for(double l:aucklandC){
-            System.out.println(l);
-        }
-
-        double[] wellingtons = geoUtil.getLatLonByAddress("Wellington");
-        for(double l:wellingtons){
-            System.out.println(l);
-        }
-
-        double[] wellingtonsC = geoUtil.getLatLonByAddress("Wellington Central");
-        for(double l:wellingtonsC){
-            System.out.println(l);
-        }
-
-        auckland = geoUtil.getLatLonByAddress("Auckland");
-        for(double l:auckland){
-            System.out.println(l);
-        }
-
-    }
+//    public static void main(String[] args) {
+//        GeoUtil geoUtil = new GeoUtil();
+//        double[] auckland = geoUtil.getLatLonByAddress("Auckland");
+//        for(double l:auckland){
+//            System.out.println(l);
+//        }
+//
+//        double[] aucklandC = geoUtil.getLatLonByAddress("Auckland Central");
+//        for(double l:aucklandC){
+//            System.out.println(l);
+//        }
+//
+//        double[] wellingtons = geoUtil.getLatLonByAddress("Wellington");
+//        for(double l:wellingtons){
+//            System.out.println(l);
+//        }
+//
+//        double[] wellingtonsC = geoUtil.getLatLonByAddress("Wellington Central");
+//        for(double l:wellingtonsC){
+//            System.out.println(l);
+//        }
+//
+//        auckland = geoUtil.getLatLonByAddress("Auckland");
+//        for(double l:auckland){
+//            System.out.println(l);
+//        }
+//
+//    }
 
 
 }

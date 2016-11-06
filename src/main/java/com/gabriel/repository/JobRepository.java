@@ -37,10 +37,10 @@ public interface JobRepository extends JpaRepository<Job, Long> {
         "where area in (SELECT distinct area FROM JOB where area<>null or area<>'') and search_word= ?1 and j.id=jl.id and jl.type<>'REMOVE' " +
         "group by area " +
         "union " +
-        "select location as area, count(*) as job_count,search_word " +
+        "select j.location as area, count(*) as job_count,search_word " +
         "from job j,job_log jl " +
         "where location in (SELECT distinct location FROM JOB where area=null or area='') and search_word= ?1 and j.id=jl.id and jl.type<>'REMOVE' and (area='' or area=null) " +
-        "group by area",
+        "group by j.location",
         nativeQuery = true
     )
     Object[] getMapDataByWord(String keyword);
@@ -52,10 +52,10 @@ public interface JobRepository extends JpaRepository<Job, Long> {
         "where area in (SELECT distinct area FROM JOB where area<>null or area<>'') and j.id=jl.id and jl.type<>'REMOVE' " +
         "group by area " +
         "union " +
-        "select location as area, count(*) as job_count " +
+        "select j.location as area, count(*) as job_count " +
         "from job j,job_log jl " +
         "where location in (SELECT distinct location FROM JOB where area=null or area='') and j.id=jl.id and jl.type<>'REMOVE' and area='' " +
-        "group by area",
+        "group by j.location",
     nativeQuery = true)
     Object[] getMapDataAll();
 }
