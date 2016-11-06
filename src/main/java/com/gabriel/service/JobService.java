@@ -9,21 +9,29 @@ import com.gabriel.repository.search.JobLogSearchRepository;
 import com.gabriel.repository.search.JobSearchRepository;
 import com.gabriel.web.rest.DTO.GoogleLocation;
 import com.gabriel.web.rest.DTO.JobTrendDTO;
+import jdk.nashorn.internal.scripts.JO;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.aggregations.bucket.histogram.DateHistogramInterval;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.math.BigInteger;
 import java.time.LocalDate;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
-import static org.elasticsearch.index.query.QueryBuilders.*;
+import static org.elasticsearch.index.query.QueryBuilders.matchAllQuery;
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 
 /**
  * Service Implementation for managing Job.
@@ -113,6 +121,9 @@ public class JobService {
         jobSearchRepository.delete(id);
     }
 
+    @Inject
+    ElasticsearchTemplate elasticsearchTemplate;
+
     /**
      * Search for the job corresponding to the query.
      *
@@ -123,12 +134,24 @@ public class JobService {
     public Page<Job> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of Jobs for query {}", query);
         Page<Job> result = jobSearchRepository.search(queryStringQuery(query), pageable);
+
         return result;
     }
 
     @Transactional(readOnly = true)
+    public Page<Job> searchCustom(){
+        SearchQuery searchQuery = new NativeSearchQueryBuilder()
+            .withQuery(matchAllQuery())
+            .build();
+        Page<Job> jobs = elasticsearchTemplate.queryForPage(searchQuery, Job.class);
+        return jobs;
+    }
+
+
+    @Transactional(readOnly = true)
     public Set<Job> findBySearchWordAndFromSite(String keyword, String from_site) {
         log.debug("Request to find jobs by search word {} and from site {}", keyword, from_site);
+
         return jobRepository.findBySearchWordAndFromSite(keyword, from_site);
     }
 
