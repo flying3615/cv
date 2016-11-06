@@ -109,6 +109,7 @@ public class JobResource {
         jobCountList.add(new JobCountDTO("Python", jobService.countByWordCurrent("Python", pageable)));
         jobCountList.add(new JobCountDTO("Ruby", jobService.countByWordCurrent("Ruby", pageable)));
         jobCountList.add(new JobCountDTO("JavaScript", jobService.countByWordCurrent("JavaScript", pageable)));
+        jobCountList.add(new JobCountDTO("PHP", jobService.countByWordCurrent("PHP", pageable)));
 
         return new ResponseEntity<>(jobCountList, HttpStatus.OK);
     }
@@ -214,6 +215,7 @@ public class JobResource {
         keywords.add("Python");
         keywords.add("Ruby");
         keywords.add("JavaScript");
+        keywords.add("PHP");
 
         keywords.forEach(scheduledCrawlTask::crawlByWord);
 

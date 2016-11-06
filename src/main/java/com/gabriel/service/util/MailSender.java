@@ -14,6 +14,7 @@ import java.util.*;
  * Created by liuyufei on 31/10/16.
  */
 
+//duplicate class with com.gabriel.service.MailService
 public class MailSender {
 
     private final Logger log = LoggerFactory.getLogger(MailSender.class);

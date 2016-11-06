@@ -1,15 +1,18 @@
 <div ng-cloak>
     <div class="row">
-        <ng-echarts class="col-md-6 echarts" ec-config="lineConfig" ec-option="lineOption"></ng-echarts>
-        <ng-echarts class="col-md-6 echarts" ec-config="PieConfig" ec-option="keyword_pie"></ng-echarts>
+        <!--use inner div to show margin-->
+            <ng-echarts class="col-sm-6 echarts" ec-config="lineConfig" ec-option="lineOption"></ng-echarts>
+            <ng-echarts class="col-sm-6 echarts" style="border-left: dashed 1px darkblue;" ec-config="PieConfig" ec-option="keyword_pie"></ng-echarts>
     </div>
-    <div class="row">
-        <div  class="col-md-6 echarts" map-lazy-load="https://maps.google.com/maps/api/js">
-            <ng-map style="display: block; height: 350px;" center="-41,174" zoom="5">
+    <div class="row" style="margin-top: 5px">
+        <div class="col-sm-6 echarts2" map-lazy-load="https://maps.google.com/maps/api/js">
+            <ng-map style="display: block; height: 500px;" center="-41,174" zoom="5">
             </ng-map>
         </div>
-        <ng-echarts class="col-md-6 echarts" ec-config="lineConfig" ec-option="bubbleOption"></ng-echarts>
+        <ng-echarts class="col-sm-6 echarts2" style="border-left: dashed 1px darkblue;" ec-config="lineConfig" ec-option="wordOption"></ng-echarts>
     </div>
-</div>
+    <div class="row" style="margin-top: 5px">
+        <ng-echarts class="col-sm-12 echarts" ec-config="lineConfig" ec-option="lineOption"></ng-echarts>
+    </div>
 </div>
 

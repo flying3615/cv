@@ -44,7 +44,8 @@ spring:
         elasticsearch:
             cluster-name:
 #            docker run -d -p 9200:9200 -p 9300:9300 elasticsearch
-            cluster-nodes: localhost:9300
+#            cluster-nodes: localhost:9300
+            cluster-nodes:
             properties:
                 path:
                   logs: target/elasticsearch/log
@@ -52,8 +53,13 @@ spring:
     mail:
         host: smtp.gmail.com
         port: 587
-        username: gabriel.liu3615@gmail.com
-        password: LYFses149
+        username: 'cvhelper2016@gmail.com'
+        password: '!QAZxsw2#EDC'
+        tls: true
+        properties.mail.smtp:
+                    auth: true
+                    starttls.enable: true
+                    ssl.trust: smtp.gmail.com
     messages:
         cache-seconds: 1
     thymeleaf:

@@ -332,9 +332,17 @@ ui bootstrap tweaks
 
 /*echarts css*/
 .echarts{
+    background-color: white !important;
     padding: 0px;
     height: 350px;
-    border: dashed 1px darkblue;
+    /*border: dashed 1px darkblue;*/
+}
+
+.echarts2{
+    background-color: white !important;
+    padding: 0px;
+    height: 500px;
+    /*border: dashed 1px darkblue;*/
 }
 
 
