@@ -16,7 +16,7 @@ services:
         extends:
             file: mysql.yml
             service: cv-mysql
-    cv-elasticsearch:
-        extends:
-            file: elasticsearch.yml
-            service: cv-elasticsearch
+#    cv-elasticsearch:
+#        extends:
+#            file: elasticsearch.yml
+#            service: cv-elasticsearch

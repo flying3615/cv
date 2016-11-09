@@ -139,13 +139,13 @@ public class JobResource {
 
     @GetMapping("/jobs_trend")
     @Timed
-    public ResponseEntity<Map<String, JobTrendDTO>> getJobsTrendByWord(Pageable pageable)
+    public ResponseEntity<Map<String, JobTrendDTO>> getJobsTrendByWord()
         throws URISyntaxException {
 
         Map<String, JobTrendDTO> jobTrendList = new HashMap<>();
 //        //TODO get jobs by all date, need to join log and job table
 
-        jobTrendList.put("Java", jobService.getJobTrendByWord("Java", pageable));
+        jobTrendList.put("Java", jobService.getJobTrendByWord("Java"));
 //        jobCountList.add(new JobCountDTO(".Net",jobService.countByWordCurrent(".Net",pageable)));
 //        jobCountList.add(new JobCountDTO("Python",jobService.countByWordCurrent("Python",pageable)));
 //        jobCountList.add(new JobCountDTO("Ruby",jobService.countByWordCurrent("Ruby",pageable)));

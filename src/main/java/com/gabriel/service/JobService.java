@@ -167,10 +167,9 @@ public class JobService {
 //        TODO
     }
 
-    public JobTrendDTO getJobTrendByWord(String keyword, Pageable pageable) {
+    public JobTrendDTO getJobTrendByWord(String keyword) {
 
         return null;
-
     }
 
 
