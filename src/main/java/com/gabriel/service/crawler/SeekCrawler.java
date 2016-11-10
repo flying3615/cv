@@ -129,6 +129,7 @@ public class SeekCrawler implements Crawler {
                 .userAgent(userAgent)
                 .method(Connection.Method.GET)
                 .ignoreContentType(true)
+                .timeout(10*1000) //sets timeout to 10 s
                 .execute();
 
             if (response.statusCode() == 200) {
@@ -190,6 +191,7 @@ public class SeekCrawler implements Crawler {
                 .userAgent(userAgent)
                 .method(Connection.Method.GET)
                 .ignoreContentType(true)
+                .timeout(10*1000) //sets timeout to 10 s
                 .execute();
 
             if (response.statusCode() == 200) {
