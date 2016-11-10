@@ -7,6 +7,7 @@ import com.gabriel.repository.JobLogRepository;
 import com.gabriel.repository.JobRepository;
 import com.gabriel.repository.search.JobLogSearchRepository;
 import com.gabriel.repository.search.JobSearchRepository;
+import com.gabriel.service.task.ScheduledCrawlTask;
 import com.gabriel.web.rest.DTO.GoogleLocation;
 import com.gabriel.web.rest.DTO.JobTrendDTO;
 import jdk.nashorn.internal.scripts.JO;
@@ -20,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -157,7 +159,7 @@ public class JobService {
 
 
     public void saveVanishedJob(Job job) {
-        log.info("Request to save VanishedJob job externalID: {}", job.getExternalID());
+        log.debug("Request to save VanishedJob job externalID: {}", job.getExternalID());
 //        jobLogSearchRepository.save(new JobLog(JobLogType.REMOVE, LocalDate.now(), job));
         jobLogRepository.save(new JobLog(JobLogType.REMOVE, LocalDate.now(), job));
     }
@@ -193,4 +195,6 @@ public class JobService {
         return convertedResult;
 
     }
+
+
 }

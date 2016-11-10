@@ -8,6 +8,7 @@ import com.gabriel.service.util.MailSender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -51,12 +52,13 @@ public class ScheduledCrawlTask {
     }
 
 
+    @Async
     public void crawlByWord(String searchKeyword){
         log.info("crawl task start @ {}", LocalDateTime.now());
         Set<Map.Entry<String, Crawler>> crawlerSet = crawlerStrategy.entrySet();
         crawlerSet.stream().forEach(crawlerEntry -> {
 
-            log.info("{} ready to GO!!!", crawlerEntry.getKey());
+            log.info("{} for {} ready to GO!!!", crawlerEntry.getKey(),searchKeyword);
 
             Crawler crawler = crawlerEntry.getValue();
 
@@ -100,7 +102,7 @@ public class ScheduledCrawlTask {
                 log.info("No job today...");
             }
 
-            //save gone jobs
+            //save gone jobs, trigger many times!!!!
             exciting_jobs.removeAll(ready_to_remove);
             exciting_jobs.forEach(jobService::saveVanishedJob);
 
