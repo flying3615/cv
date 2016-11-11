@@ -27,10 +27,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.math.BigInteger;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.elasticsearch.index.query.QueryBuilders.matchAllQuery;
 import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
@@ -171,7 +170,24 @@ public class JobService {
 
     public JobTrendDTO getJobTrendByWord(String keyword) {
 
-        return null;
+        log.debug("Request to get {} job trend", keyword);
+
+        Object[] result = jobRepository.getJobTrend(keyword);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM");
+
+        List<String> dates = new ArrayList<>();
+        List<Long> jobNum = new ArrayList<>();
+
+        Map<String,Long> trendMap = new HashMap<>();
+        for(Object o:result){
+            Object[] item = (Object[])o;
+            Date date = (Date) item[0];
+            BigInteger count = (BigInteger) item[2];
+            dates.add(sdf.format(date));
+            jobNum.add(count.longValue());
+        }
+        JobTrendDTO jobTrendDTO = new JobTrendDTO(keyword,dates,jobNum);
+        return jobTrendDTO;
     }
 
 

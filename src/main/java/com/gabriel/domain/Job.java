@@ -50,7 +50,7 @@ public class Job implements Serializable {
     private String contact;
 
     @Column(name = "creation_time")
-    private ZonedDateTime creationTime;
+    private LocalDate creationTime;
 
     @Column(name = "external_id")
     private String externalID;
@@ -175,16 +175,16 @@ public class Job implements Serializable {
         this.contact = contact;
     }
 
-    public ZonedDateTime getCreationTime() {
+    public LocalDate getCreationTime() {
         return creationTime;
     }
 
-    public Job creationTime(ZonedDateTime creationTime) {
+    public Job creationTime(LocalDate creationTime) {
         this.creationTime = creationTime;
         return this;
     }
 
-    public void setCreationTime(ZonedDateTime creationTime) {
+    public void setCreationTime(LocalDate creationTime) {
         this.creationTime = creationTime;
     }
 

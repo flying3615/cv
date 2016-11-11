@@ -66,8 +66,8 @@ public class JobResourceIntTest {
     private static final String DEFAULT_CONTACT = "AAAAA";
     private static final String UPDATED_CONTACT = "BBBBB";
 
-    private static final ZonedDateTime DEFAULT_CREATION_TIME = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneId.systemDefault());
-    private static final ZonedDateTime UPDATED_CREATION_TIME = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
+    private static final LocalDate DEFAULT_CREATION_TIME = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_CREATION_TIME = LocalDate.now(ZoneId.systemDefault());
     private static final String DEFAULT_CREATION_TIME_STR = DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(DEFAULT_CREATION_TIME);
 
     private static final String DEFAULT_EXTERNAL_ID = "AAAAA";

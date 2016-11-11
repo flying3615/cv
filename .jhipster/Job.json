@@ -38,7 +38,7 @@
         },
         {
             "fieldName": "creationTime",
-            "fieldType": "ZonedDateTime"
+            "fieldType": "LocalDate"
         },
         {
             "fieldName": "externalID",

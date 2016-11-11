@@ -62,7 +62,6 @@ public class SeekCrawler implements Crawler {
     JobService jobService;
 
 
-    private String searchWord;
 
 
     @Override
@@ -72,7 +71,6 @@ public class SeekCrawler implements Crawler {
 
     @Override
     public Map<String,Job> listJobs(String searchWord) {
-        this.searchWord = searchWord;
         Map<String,Job> all_jobs = new HashMap<>();
         try {
             int total_pages = this.getTotalPage(searchWord);
@@ -94,7 +92,7 @@ public class SeekCrawler implements Crawler {
 
     private Map<String,Job> listJobsByPage(String searchWord, int pageNum) throws Exception {
         String job_raw = this.getRawResponse(searchWord, pageNum);
-        return this.parseTextToJson(job_raw);
+        return this.parseTextToJson(job_raw,searchWord);
     }
 
     private int getTotalPage(String searchWord) throws Exception {
@@ -145,7 +143,7 @@ public class SeekCrawler implements Crawler {
     }
 
 
-    private Map<String,Job> parseTextToJson(String rawStr) throws JSONException {
+    private Map<String,Job> parseTextToJson(String rawStr,String searchWord) throws JSONException {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
         String tmp = rawStr.split(callback + "\\(")[1];
         String rawJSON = tmp.substring(0, tmp.length() - 2);
@@ -171,7 +169,7 @@ public class SeekCrawler implements Crawler {
             job_domain.setListDate(LocalDate.parse(job.getString("listingDate"), formatter));
             job_domain.setFromSite(from_site);
             job_domain.setSearchWord(searchWord);
-            job_domain.setCreationTime(ZonedDateTime.now());
+            job_domain.setCreationTime(LocalDate.now());
             job_domain.setOrigURL(detail_url+external_id);
             jobList.put(external_id,job_domain);
         }

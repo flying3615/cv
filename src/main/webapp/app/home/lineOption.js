@@ -7,9 +7,9 @@
         .module('cvApp')
         .factory('LineOption', LineOption);
 
-    LineOption.$inject = ['DateUtils','$q','$http'];
+    LineOption.$inject = ['$q','$http'];
 
-    function LineOption (DateUtils,$q,$http) {
+    function LineOption ($q,$http) {
         var option =  {
             title: {
                 text: 'Trend',
@@ -19,7 +19,7 @@
                 trigger: 'axis'
             },
             legend: {
-                data: ['Java', '.Net', 'Ruby', 'Python','JavaScript']
+                data: []
             },
             toolbox: {
                 show: true,
@@ -51,7 +51,7 @@
                 {
                     type: 'category',
                     boundaryGap: false,
-                    data: ['29/10', '30/10', '31/10', '1/11', '2/11', '3/11', '4/11']
+                    data: []
                 }
             ],
             yAxis: [
@@ -62,100 +62,51 @@
                     }
                 }
             ],
-            series: [
-                {
-                    name: 'Java',
-                    type: 'line',
-                    data: [199, 220, 165, 180, 240, 138, 167],
-                    markPoint: {
-                        data: [
-                            {type: 'max', name: '最大值'},
-                            {type: 'min', name: '最小值'}
-                        ]
-                    },
-                    markLine: {
-                        data: [
-                            {type: 'average', name: '平均值'}
-                        ]
-                    }
-                },
-                {
-                    name: '.Net',
-                    type: 'line',
-                    data: [269, 220, 253, 267, 299, 276, 284],
-                    markPoint: {
-                        data: [
-                            {type: 'max', name: '最大值'},
-                            {type: 'min', name: '最小值'}
-                        ]
-                    },
-                    markLine: {
-                        data: [
-                            {type: 'average', name: '平均值'}
-                        ]
-                    }
-                },
-                {
-                    name: '.JavaScript',
-                    type: 'line',
-                    data: [362, 319, 299, 276, 343, 310, 267],
-                    markPoint: {
-                        data: [
-                            {type: 'max', name: '最大值'},
-                            {type: 'min', name: '最小值'}
-                        ]
-                    },
-                    markLine: {
-                        data: [
-                            {type: 'average', name: '平均值'}
-                        ]
-                    }
-                },
-                {
-                    name: 'Ruby',
-                    type: 'line',
-                    data: [44, 41, 38, 46, 49, 52, 39],
-                    markPoint: {
-                        data: [
-                            {type: 'max', name: '最大值'},
-                            {type: 'min', name: '最小值'}
-                        ]
-                    },
-                    markLine: {
-                        data: [
-                            {type: 'average', name: '平均值'}
-                        ]
-                    }
-                },
-                {
-                    name: 'Python',
-                    type: 'line',
-                    data: [94, 92, 90, 100, 103, 89, 94],
-                    markPoint: {
-                        data: [
-                            {type: 'max', name: '最大值'},
-                            {type: 'min', name: '最小值'}
-                        ]
-                    },
-                    markLine: {
-                        data: [
-                            {type: 'average', name: '平均值'}
-                        ]
-                    }
-                }
-            ]
+            series: []
         };
 
         function asyncGreet(url) {
             var deferred = $q.defer();
             $http.get(url).then(function (response) {
                 // deferred.notify('About to greet ' + name + '.');
+                var legend_data=[];
+                var dates = [];
+                var series = [];
+                response.data.forEach(function(server_data){
+                    legend_data.push(server_data.name)
+                    dates = server_data.date;
+                    series.push( {
+                        name: server_data.name,
+                        type: 'line',
+                        data: server_data.jobNum,
+                        markPoint: {
+                            data: [
+                                {type: 'max', name: '最大值'},
+                                {type: 'min', name: '最小值'}
+                            ]
+                        },
+                        markLine: {
+                            data: [
+                                {type: 'average', name: '平均值'}
+                            ]
+                        }
+                    })
 
-                console.log('LineOption',response.data);
-                var data = response.data;
+                });
 
                 if (1==1) {
                     //build response based on response
+                    console.log('legend_data',legend_data);
+
+                    option.legend.date= legend_data;
+                    option.xAxis = [
+                        {
+                            type: 'category',
+                            boundaryGap: false,
+                            data: dates
+                        }
+                    ]
+                    option.series = series;
                     deferred.resolve(option);
                 } else {
                     deferred.reject('no data');

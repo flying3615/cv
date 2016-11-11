@@ -1,6 +1,7 @@
 package com.gabriel.web.rest.DTO;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -10,27 +11,25 @@ public class JobTrendDTO {
 
     private String name;
 
-    private Map<Date,Long> trend;
+    private List<String> date;
 
+    private List<Long> jobNum;
 
-    public JobTrendDTO(String name, Map<Date, Long> trend) {
+    public JobTrendDTO(String name, List<String> date, List<Long> jobNum) {
         this.name = name;
-        this.trend = trend;
+        this.date = date;
+        this.jobNum = jobNum;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public List<String> getDate() {
+        return date;
     }
 
-    public Map<Date, Long> getTrend() {
-        return trend;
-    }
-
-    public void setTrend(Map<Date, Long> trend) {
-        this.trend = trend;
+    public List<Long> getJobNum() {
+        return jobNum;
     }
 }

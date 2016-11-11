@@ -38,8 +38,6 @@ public class JobResource {
     @Inject
     private JobService jobService;
 
-    @Inject
-    private MailService mailService;
 
     /**
      * POST  /jobs : Create a new job.
@@ -139,17 +137,17 @@ public class JobResource {
 
     @GetMapping("/jobs_trend")
     @Timed
-    public ResponseEntity<Map<String, JobTrendDTO>> getJobsTrendByWord()
+    public ResponseEntity<List<JobTrendDTO>> getJobsTrendByWord()
         throws URISyntaxException {
 
-        Map<String, JobTrendDTO> jobTrendList = new HashMap<>();
-//        //TODO get jobs by all date, need to join log and job table
+        List<JobTrendDTO> jobTrendList = new ArrayList<>();
 
-        jobTrendList.put("Java", jobService.getJobTrendByWord("Java"));
-//        jobCountList.add(new JobCountDTO(".Net",jobService.countByWordCurrent(".Net",pageable)));
-//        jobCountList.add(new JobCountDTO("Python",jobService.countByWordCurrent("Python",pageable)));
-//        jobCountList.add(new JobCountDTO("Ruby",jobService.countByWordCurrent("Ruby",pageable)));
-//        jobCountList.add(new JobCountDTO("JavaScript",jobService.countByWordCurrent("JavaScript",pageable)));
+        jobTrendList.add(jobService.getJobTrendByWord("Java"));
+        jobTrendList.add(jobService.getJobTrendByWord(".Net"));
+        jobTrendList.add(jobService.getJobTrendByWord("Python"));
+        jobTrendList.add(jobService.getJobTrendByWord("Ruby"));
+        jobTrendList.add(jobService.getJobTrendByWord("PHP"));
+        jobTrendList.add(jobService.getJobTrendByWord("JavaScript"));
 
         return new ResponseEntity<>(jobTrendList, HttpStatus.OK);
     }
@@ -227,26 +225,5 @@ public class JobResource {
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("job", "")).build();
     }
 
-    @GetMapping("/mails")
-    @Timed
-    public ResponseEntity<Void> testmail()
-        throws URISyntaxException {
-        List<Job> jobs = new ArrayList<>();
-        Job job1 = new Job();
-        job1.setTitle("test1");
-        job1.setListDate(LocalDate.now());
-        job1.setOrigURL("http://abc");
-
-        Job job2 = new Job();
-        job2.setTitle("test2");
-        job2.setListDate(LocalDate.now());
-        job2.setOrigURL("http://efg");
-
-        jobs.add(job1);
-        jobs.add(job2);
-        mailService.sendNewJobMail(jobs);
-
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("job", "")).build();
-    }
 
 }

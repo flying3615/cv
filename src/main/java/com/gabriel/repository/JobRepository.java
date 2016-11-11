@@ -58,4 +58,10 @@ public interface JobRepository extends JpaRepository<Job, Long> {
         "group by j.location",
     nativeQuery = true)
     Object[] getMapDataAll();
+
+
+    @Query(value="select creation_time,search_word, count(*) from job  where search_word= ?1 group by search_word, creation_time",
+        nativeQuery = true)
+    Object[] getJobTrend(String keyword);
+
 }

@@ -40,42 +40,57 @@ public class ScheduledCrawlTask {
     @Scheduled(cron = "0 0 6 * * *")  //@ 6:00:00 am every day
 //    @Scheduled(cron = "0 */5 * * * *") //every ten minutes for test
     public void dailyCrawl() {
-        String searchKeyword = "ruby";
-        this.crawlByWord(searchKeyword);
+
+        this.cleanCache();
+
+        List<String> keywords = new ArrayList<>();
+
+        keywords.add("Java");
+        keywords.add(".Net");
+        keywords.add("Python");
+        keywords.add("Ruby");
+        keywords.add("JavaScript");
+        keywords.add("PHP");
+
+        keywords.forEach(this::crawlByWord);
 
     }
 
 
     @Scheduled(cron = "0 0 10 * * *")  //@ 10:00:00 am every day
-    public void GarbageCollector(){
+    public void GarbageCollector() {
         //TODO clean Database invalid job records
     }
 
+    private void cleanCache() {
+        //TODO clean guava cache...
+    }
 
-    @Async
-    public void crawlByWord(String searchKeyword){
+
+//    @Async
+    public void crawlByWord(String searchKeyword) {
         log.info("crawl task start @ {}", LocalDateTime.now());
         Set<Map.Entry<String, Crawler>> crawlerSet = crawlerStrategy.entrySet();
         crawlerSet.stream().forEach(crawlerEntry -> {
 
-            log.info("{} for {} ready to GO!!!", crawlerEntry.getKey(),searchKeyword);
+            log.info("{} for {} ready to GO!!!", crawlerEntry.getKey(), searchKeyword);
 
             Crawler crawler = crawlerEntry.getValue();
 
             //check if job exist...
             //TODO should escape searchKey here
             Set<Job> exciting_jobs = jobService.findBySearchWordAndFromSite(searchKeyword, crawler.getFromSite());
+
             Map<String, Job> today_jobs = crawler.listJobs(searchKeyword);
 
-
-            log.info("existing jobs size {} for search word {}", exciting_jobs.size(),searchKeyword);
+            log.info("existing jobs size {} for search word {}", exciting_jobs.size(), searchKeyword);
 
             Set<Job> ready_to_remove = new HashSet<>();
             //only care about the latest jobs
             exciting_jobs.forEach(existing_job -> {
                     if (today_jobs.containsKey(existing_job.getExternalID())) {
                         today_jobs.remove(existing_job.getExternalID());
-                        log.debug("duplicate jobs external id={}",existing_job.getExternalID());
+                        log.debug("duplicate jobs external id={}", existing_job.getExternalID());
                         ready_to_remove.add(existing_job);
                     }
                 }
@@ -97,7 +112,7 @@ public class ScheduledCrawlTask {
                     jobService.save(updated_job);
                 });
                 //send mail notify now coming jobs
-                mailService.sendNewJobMail(today_jobs.values());
+//                mailService.sendNewJobMail(today_jobs.values());
             } else {
                 log.info("No job today...");
             }
