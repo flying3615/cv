@@ -219,7 +219,6 @@ public class JobResource {
         keywords.add("Ruby");
         keywords.add("JavaScript");
         keywords.add("PHP");
-
         keywords.forEach(scheduledCrawlTask::crawlByWord);
 
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("job", "")).build();

@@ -18,7 +18,7 @@ public class GoogleLocation {
     private long job_count;
 
 
-    public GoogleLocation(String location, String search_word, long job_count) throws JSONException {
+    public GoogleLocation(String location, String search_word, long job_count) {
         this.location = location;
         this.search_word = search_word;
         this.job_count = job_count;
@@ -47,7 +47,7 @@ public class GoogleLocation {
         return location;
     }
 
-    public void setLocation(String location) throws JSONException {
+    public void setLocation(String location) {
         this.location = location;
         double[] latlon = GeoUtil.getLatLonByAddress(location);
         setLat(latlon[0]);

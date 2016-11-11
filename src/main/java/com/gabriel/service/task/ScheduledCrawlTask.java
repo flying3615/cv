@@ -54,6 +54,7 @@ public class ScheduledCrawlTask {
 
         keywords.forEach(this::crawlByWord);
 
+        log.info("dailyCrawl job done!!!");
     }
 
 

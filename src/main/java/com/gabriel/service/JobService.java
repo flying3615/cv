@@ -94,8 +94,8 @@ public class JobService {
 
 
     @Transactional(readOnly = true)
-    public Long countByWordCurrent(String word,Pageable pageable) {
-        Page<Job> jobs = jobRepository.countBySearchWord(word,pageable);
+    public Long countByWordCurrent(String word, Pageable pageable) {
+        Page<Job> jobs = jobRepository.countBySearchWord(word, pageable);
         return jobs.getTotalElements();
     }
 
@@ -141,7 +141,7 @@ public class JobService {
     }
 
     @Transactional(readOnly = true)
-    public Page<Job> searchCustom(){
+    public Page<Job> searchCustom() {
         SearchQuery searchQuery = new NativeSearchQueryBuilder()
             .withQuery(matchAllQuery())
             .build();
@@ -165,7 +165,7 @@ public class JobService {
     }
 
 
-    public void findJobsNotBelongs2HR(){
+    public void findJobsNotBelongs2HR() {
 //        TODO
     }
 
@@ -179,39 +179,35 @@ public class JobService {
         List<String> dates = new ArrayList<>();
         List<Long> jobNum = new ArrayList<>();
 
-        Map<String,Long> trendMap = new HashMap<>();
-        for(Object o:result){
-            Object[] item = (Object[])o;
+        Map<String, Long> trendMap = new HashMap<>();
+        for (Object o : result) {
+            Object[] item = (Object[]) o;
             Date date = (Date) item[0];
             BigInteger count = (BigInteger) item[2];
             dates.add(sdf.format(date));
             jobNum.add(count.longValue());
         }
-        JobTrendDTO jobTrendDTO = new JobTrendDTO(keyword,dates,jobNum);
+        JobTrendDTO jobTrendDTO = new JobTrendDTO(keyword, dates, jobNum);
         return jobTrendDTO;
     }
 
 
-    public List<GoogleLocation> getMapDataByWord(String keyword){
+    public List<GoogleLocation> getMapDataByWord(String keyword) {
         List<GoogleLocation> convertedResult = new ArrayList<>();
         Object[] result;
-        if("All".equals(keyword)){
+        if ("All".equals(keyword)) {
             result = jobRepository.getMapDataAll();
 
-        }else{
+        } else {
             result = jobRepository.getMapDataByWord(keyword);
         }
 
-        for(Object o:result){
-            Object[] item = (Object[])o;
+        for (Object o : result) {
+            Object[] item = (Object[]) o;
             String location = (String) item[0];
             BigInteger count = (BigInteger) item[1];
-            try {
-                convertedResult.add(new GoogleLocation(location,keyword,count.longValue()));
-            } catch (JSONException e) {
-                e.printStackTrace();
-                continue;
-            }
+            convertedResult.add(new GoogleLocation(location, keyword, count.longValue()));
+
         }
 
         return convertedResult;

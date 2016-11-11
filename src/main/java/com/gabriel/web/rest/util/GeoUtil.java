@@ -23,7 +23,7 @@ public class GeoUtil {
 
     //    https://maps.googleapis.com/maps/api/geocode/json?address=Auckland
 
-    public static double[] getLatLonByAddress(String location) throws JSONException {
+    public static double[] getLatLonByAddress(String location) {
 
         double[] lanLong = new double[2];
 
@@ -48,10 +48,8 @@ public class GeoUtil {
                 }
             } catch (JSONException e) {
                 log.error(result+"cannot be parased"+e.getMessage());
-                throw e;
             } catch (HttpClientErrorException e) {
                 log.error("Cannot to access google map API");
-                throw e;
             }
             return lanLong;
         }

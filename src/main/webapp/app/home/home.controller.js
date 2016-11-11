@@ -95,6 +95,7 @@
                 if('.Net'==word){
                     word = 'Net'
                 }
+                map.setZoom(5);
                 $http.get('/api/jobs_map/'+word).then(function (response) {
                     console.log(response.data)
                     markers.forEach(function(m){m.setMap(null)});
@@ -108,8 +109,10 @@
 
                         markers.push(marker);
 
+                        var contentString = '<div id="content"><a href="#"><b>'+data.job_count+'</b> '+data.search_word+' jobs @'+data.location+'</div>'
+
                         var infowindow = new google.maps.InfoWindow({
-                            content: data.job_count+" "+data.search_word+" jobs @"+data.location
+                            content: contentString
                         });
 
                         marker.addListener('click', function() {

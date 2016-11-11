@@ -81,13 +81,13 @@
                         data: server_data.jobNum,
                         markPoint: {
                             data: [
-                                {type: 'max', name: '最大值'},
-                                {type: 'min', name: '最小值'}
+                                {type: 'max', name: 'max'},
+                                {type: 'min', name: 'min'}
                             ]
                         },
                         markLine: {
                             data: [
-                                {type: 'average', name: '平均值'}
+                                {type: 'average', name: 'average'}
                             ]
                         }
                     })
