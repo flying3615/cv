@@ -14,6 +14,7 @@ import jdk.nashorn.internal.scripts.JO;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.histogram.DateHistogramInterval;
+import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -205,7 +206,12 @@ public class JobService {
             Object[] item = (Object[])o;
             String location = (String) item[0];
             BigInteger count = (BigInteger) item[1];
-            convertedResult.add(new GoogleLocation(location,keyword,count.longValue()));
+            try {
+                convertedResult.add(new GoogleLocation(location,keyword,count.longValue()));
+            } catch (JSONException e) {
+                e.printStackTrace();
+                continue;
+            }
         }
 
         return convertedResult;

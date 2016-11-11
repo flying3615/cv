@@ -23,7 +23,7 @@ public class GeoUtil {
 
     //    https://maps.googleapis.com/maps/api/geocode/json?address=Auckland
 
-    public static double[] getLatLonByAddress(String location) {
+    public static double[] getLatLonByAddress(String location) throws JSONException {
 
         double[] lanLong = new double[2];
 
@@ -34,8 +34,9 @@ public class GeoUtil {
             return googleLocationHashMap.get(location);
         } else {
             RestTemplate restTemplate = new RestTemplate();
+            String result = "";
             try {
-                String result = restTemplate.getForObject("https://maps.googleapis.com/maps/api/geocode/json?address=" + location, String.class);
+                result = restTemplate.getForObject("https://maps.googleapis.com/maps/api/geocode/json?address=" + location, String.class);
                 JSONObject jsonObject = new JSONObject(result);
                 JSONArray results = jsonObject.getJSONArray("results");
                 JSONObject single_result = results.getJSONObject(0);
@@ -46,9 +47,11 @@ public class GeoUtil {
                     googleLocationHashMap.put(location,lanLong);
                 }
             } catch (JSONException e) {
-                e.printStackTrace();
+                log.error(result+"cannot be parased"+e.getMessage());
+                throw e;
             } catch (HttpClientErrorException e) {
                 log.error("Cannot to access google map API");
+                throw e;
             }
             return lanLong;
         }

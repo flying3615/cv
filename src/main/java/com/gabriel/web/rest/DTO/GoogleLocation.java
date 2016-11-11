@@ -1,6 +1,7 @@
 package com.gabriel.web.rest.DTO;
 
 import com.gabriel.web.rest.util.GeoUtil;
+import org.json.JSONException;
 
 import javax.persistence.ColumnResult;
 import javax.persistence.ConstructorResult;
@@ -17,7 +18,7 @@ public class GoogleLocation {
     private long job_count;
 
 
-    public GoogleLocation(String location, String search_word, long job_count) {
+    public GoogleLocation(String location, String search_word, long job_count) throws JSONException {
         this.location = location;
         this.search_word = search_word;
         this.job_count = job_count;
@@ -46,7 +47,7 @@ public class GoogleLocation {
         return location;
     }
 
-    public void setLocation(String location) {
+    public void setLocation(String location) throws JSONException {
         this.location = location;
         double[] latlon = GeoUtil.getLatLonByAddress(location);
         setLat(latlon[0]);
