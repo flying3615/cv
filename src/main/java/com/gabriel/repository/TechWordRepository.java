@@ -15,4 +15,5 @@ public interface TechWordRepository extends JpaRepository<TechWord,Long> {
     @Query("select techWord from TechWord techWord where techWord.user.login = ?#{principal.username}")
     List<TechWord> findByUserIsCurrentUser();
 
+//    List<TechWord> findByLanguage(String java);
 }

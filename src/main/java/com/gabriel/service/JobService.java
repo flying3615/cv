@@ -10,6 +10,9 @@ import com.gabriel.repository.search.JobSearchRepository;
 import com.gabriel.web.rest.DTO.GoogleLocation;
 import com.gabriel.web.rest.DTO.JobTrendDTO;
 import com.gabriel.web.rest.DTO.StateDTO;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.MatchQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
@@ -137,7 +140,7 @@ public class JobService {
     }
 
     @Transactional(readOnly = true)
-    public void searchSuitableJob(){
+    public Page<Job> searchSuitableJob(List<String> techWords,String searchWord,String percentage) {
         //multi match....
 //        {
 //            "query":{
@@ -158,6 +161,23 @@ public class JobService {
 //            }
 //        }
 //        }
+
+        if(techWords.isEmpty()){
+            log.info("searchSuitableJob by no tech words....");
+        }
+
+
+        BoolQueryBuilder boolQueryBuilder =boolQuery().must(matchQuery("searchWord", searchWord));
+        techWords.forEach(word->boolQueryBuilder.should(matchQuery("description", word)));
+        SearchQuery searchQuery = new NativeSearchQueryBuilder()
+            .withQuery(boolQueryBuilder
+                .minimumShouldMatch(percentage))
+            .build();
+
+        log.info("searchJobAgg by ES query = {}", searchQuery.getQuery());
+
+        Page<Job> jobPage = elasticsearchTemplate.queryForPage(searchQuery,Job.class);
+        return jobPage;
     }
 
 
@@ -166,16 +186,16 @@ public class JobService {
 
         SearchQuery searchQuery = new NativeSearchQueryBuilder()
             .withQuery(boolQuery()
-                .must(matchQuery("description",techWord))
-                .must(matchQuery("searchWord",searchWord))
-            ).addAggregation(AggregationBuilders.terms("by_"+groupByField).field(groupByField))
+                .must(matchQuery("description", techWord))
+                .must(matchQuery("searchWord", searchWord))
+            ).addAggregation(AggregationBuilders.terms("by_" + groupByField).field(groupByField))
             .build();
 
-        log.info("searchJobAgg by ES query = {}",searchQuery.getQuery());
+        log.info("searchJobAgg by ES query = {}", searchQuery.getQuery());
         Optional<StateDTO> result = elasticsearchTemplate.query(searchQuery, response -> {
             List<Long> jobIDList = new ArrayList<>();
-            for(SearchHit searchHit : response.getHits()){
-                if(response.getHits().getHits().length <= 0) {
+            for (SearchHit searchHit : response.getHits()) {
+                if (response.getHits().getHits().length <= 0) {
                     return Optional.ofNullable(null);
                 }
 
@@ -184,17 +204,17 @@ public class JobService {
                 String title = (String) searchHit.getSource().get("title");
                 float score = searchHit.getScore();
 
-                log.info("find {} in for {} id={} title={} score={} ",techWord,searchWord, id,title,score);
+                log.info("find {} in for {} id={} title={} score={} ", techWord, searchWord, id, title, score);
 
             }
 
-            Terms agg = response.getAggregations().get("by_"+groupByField);
-            Map<String,String> bucketMap = new HashMap<>();
-            for(Terms.Bucket entry:agg.getBuckets()){
-                bucketMap.put(entry.getKey().toString(),String.valueOf(entry.getDocCount()));
+            Terms agg = response.getAggregations().get("by_" + groupByField);
+            Map<String, String> bucketMap = new HashMap<>();
+            for (Terms.Bucket entry : agg.getBuckets()) {
+                bucketMap.put(entry.getKey().toString(), String.valueOf(entry.getDocCount()));
             }
 
-            StateDTO stateDTO = new StateDTO(techWord,jobIDList,response.getHits().totalHits(),bucketMap);
+            StateDTO stateDTO = new StateDTO(techWord, jobIDList, response.getHits().totalHits(), bucketMap);
             return Optional.of(stateDTO);
         });
         return result;

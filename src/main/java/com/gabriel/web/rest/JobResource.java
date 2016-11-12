@@ -26,6 +26,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**
@@ -232,14 +233,25 @@ public class JobResource {
 
     @GetMapping("/custom/query")
     @Timed
-    public ResponseEntity<List<StateDTO>> customQuery()
+    public ResponseEntity<List<StateDTO>> keywordJobByLocation()
         throws URISyntaxException {
-        List<TechWord> techWords = techWordRepository.findByLanguage("Java");
+        List<TechWord> techWords = techWordRepository.findByUserIsCurrentUser();
         List<StateDTO> result = techWords.stream()
             .map(word->jobService.searchJobAgg(word.getName(),"Java","location").get())
             .collect(Collectors.toList());
         return new ResponseEntity<>(result, HttpStatus.OK);
 
+    }
+
+    @GetMapping("/like/query")
+    @Timed
+    public ResponseEntity<List<Job>> findLikelyJobs()
+        throws URISyntaxException {
+        List<TechWord> techWords = techWordRepository.findByUserIsCurrentUser();
+        List<String> twStr = techWords.stream().map(TechWord::getName).collect(Collectors.toList());
+        Page<Job> jobPage = jobService.searchSuitableJob(twStr,"Java","70%");
+        log.info("find {} @ 70%",jobPage.getTotalElements());
+        return new ResponseEntity<>(jobPage.getContent(), HttpStatus.OK);
     }
 
 
