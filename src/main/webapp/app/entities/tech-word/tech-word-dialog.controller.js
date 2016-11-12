@@ -5,14 +5,15 @@
         .module('cvApp')
         .controller('TechWordDialogController', TechWordDialogController);
 
-    TechWordDialogController.$inject = ['$timeout', '$scope', '$stateParams', '$uibModalInstance', 'entity', 'TechWord'];
+    TechWordDialogController.$inject = ['$timeout', '$scope', '$stateParams', '$uibModalInstance', 'entity', 'TechWord', 'User'];
 
-    function TechWordDialogController ($timeout, $scope, $stateParams, $uibModalInstance, entity, TechWord) {
+    function TechWordDialogController ($timeout, $scope, $stateParams, $uibModalInstance, entity, TechWord, User) {
         var vm = this;
 
         vm.techWord = entity;
         vm.clear = clear;
         vm.save = save;
+        vm.users = User.query();
 
         $timeout(function (){
             angular.element('.form-group:eq(1)>input').focus();

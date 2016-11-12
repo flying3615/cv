@@ -4,7 +4,7 @@ describe('Controller Tests', function() {
 
     describe('TechWord Management Detail Controller', function() {
         var $scope, $rootScope;
-        var MockEntity, MockPreviousState, MockTechWord;
+        var MockEntity, MockPreviousState, MockTechWord, MockUser;
         var createController;
 
         beforeEach(inject(function($injector) {
@@ -13,6 +13,7 @@ describe('Controller Tests', function() {
             MockEntity = jasmine.createSpy('MockEntity');
             MockPreviousState = jasmine.createSpy('MockPreviousState');
             MockTechWord = jasmine.createSpy('MockTechWord');
+            MockUser = jasmine.createSpy('MockUser');
             
 
             var locals = {
@@ -20,7 +21,8 @@ describe('Controller Tests', function() {
                 '$rootScope': $rootScope,
                 'entity': MockEntity,
                 'previousState': MockPreviousState,
-                'TechWord': MockTechWord
+                'TechWord': MockTechWord,
+                'User': MockUser
             };
             createController = function() {
                 $injector.get('$controller')("TechWordDetailController", locals);

@@ -29,6 +29,9 @@ public class TechWord implements Serializable {
     @Column(name = "language")
     private String language;
 
+    @ManyToOne
+    private User user;
+
     public Long getId() {
         return id;
     }
@@ -61,6 +64,19 @@ public class TechWord implements Serializable {
 
     public void setLanguage(String language) {
         this.language = language;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public TechWord user(User user) {
+        this.user = user;
+        return this;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override

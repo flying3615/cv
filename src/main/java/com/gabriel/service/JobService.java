@@ -136,11 +136,29 @@ public class JobService {
         return result;
     }
 
-
-//    public void setES(){
-//        SynonymTokenFilterFactory
-//        elasticsearchTemplate.getClient().admin().indices()
-//    }
+    @Transactional(readOnly = true)
+    public void searchSuitableJob(){
+        //multi match....
+//        {
+//            "query":{
+//            "bool":{
+//                "must":{"match":{"searchWord":"Java"}},
+//                "should":[
+//                {"match":{"description":"Elasticsearch"}},
+//                {"match":{"description":"Spring"}},
+//                {"match":{"description":"Groovy"}},
+//                {"match":{"description":"Angular"}},
+//                {"match":{"description":"Jenkins"}},
+//                {"match":{"description":"Git"}},
+//                {"match":{"description":"DevOps"}},
+//                {"match":{"description":"Linux"}},
+//                {"match":{"description":"Docker"}}
+//         ],
+//                "minimum_should_match": "60%"
+//            }
+//        }
+//        }
+    }
 
 
     @Transactional(readOnly = true)

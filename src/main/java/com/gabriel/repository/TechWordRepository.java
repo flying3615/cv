@@ -12,5 +12,7 @@ import java.util.List;
 @SuppressWarnings("unused")
 public interface TechWordRepository extends JpaRepository<TechWord,Long> {
 
-    List<TechWord> findByLanguage(String language);
+    @Query("select techWord from TechWord techWord where techWord.user.login = ?#{principal.username}")
+    List<TechWord> findByUserIsCurrentUser();
+
 }
