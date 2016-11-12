@@ -224,5 +224,14 @@ public class JobResource {
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("job", "")).build();
     }
 
+    @GetMapping("/custom/query")
+    @Timed
+    public ResponseEntity<String> customQuery()
+        throws URISyntaxException {
+        String result = jobService.searchCustom("CSS","Java","listDate");
+        return new ResponseEntity<>(result, HttpStatus.OK);
+
+    }
+
 
 }

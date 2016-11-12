@@ -7,14 +7,13 @@ import com.gabriel.repository.JobLogRepository;
 import com.gabriel.repository.JobRepository;
 import com.gabriel.repository.search.JobLogSearchRepository;
 import com.gabriel.repository.search.JobSearchRepository;
-import com.gabriel.service.task.ScheduledCrawlTask;
 import com.gabriel.web.rest.DTO.GoogleLocation;
 import com.gabriel.web.rest.DTO.JobTrendDTO;
-import jdk.nashorn.internal.scripts.JO;
-import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.index.analysis.SynonymTokenFilterFactory;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
-import org.elasticsearch.search.aggregations.bucket.histogram.DateHistogramInterval;
-import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -22,7 +21,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,8 +30,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
 
-import static org.elasticsearch.index.query.QueryBuilders.matchAllQuery;
-import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * Service Implementation for managing Job.
@@ -140,13 +137,41 @@ public class JobService {
         return result;
     }
 
+
+//    public void setES(){
+//        SynonymTokenFilterFactory
+//        elasticsearchTemplate.getClient().admin().indices()
+//    }
+
+
     @Transactional(readOnly = true)
-    public Page<Job> searchCustom() {
+    public String searchCustom(String techWord,String searchWord,String groupByField) {
+
         SearchQuery searchQuery = new NativeSearchQueryBuilder()
-            .withQuery(matchAllQuery())
+            .withQuery(boolQuery()
+                .must(matchQuery("description",techWord))
+                .must(matchQuery("searchWord",searchWord))
+            ).addAggregation(AggregationBuilders.terms("by_"+groupByField).field(groupByField))
             .build();
-        Page<Job> jobs = elasticsearchTemplate.queryForPage(searchQuery, Job.class);
-        return jobs;
+
+        log.debug("searchCustom by ES query string = {}",searchQuery.getQuery());
+        String result = elasticsearchTemplate.query(searchQuery, response -> {
+//            response.getAggregations().
+
+            for(SearchHit searchHit : response.getHits()){
+                if(response.getHits().getHits().length <= 0) {
+                    return null;
+                }
+
+                long id = Long.parseLong(searchHit.getId());
+                String title = (String) searchHit.getSource().get("title");
+                float score = searchHit.getScore();
+                log.info("find for java {} title={} score={}",id,title,score);
+
+            }
+            return response.toString();
+        });
+        return result;
     }
 
 

@@ -4,6 +4,8 @@ import com.gabriel.domain.Job;
 
 import com.gabriel.domain.User;
 import com.gabriel.web.rest.DTO.GoogleLocation;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
@@ -27,6 +29,7 @@ public interface JobRepository extends JpaRepository<Job, Long> {
         value = "SELECT j from Job j, JobLog jl where  j.id=jl.job.id and jl.type <> 'REMOVE' and j.searchWord= ?1",
         countQuery = "SELECT count(j) from Job j, JobLog jl where  j.id=jl.job.id and jl.type <> 'REMOVE' and j.searchWord= ?1"
     )
+//    @Cacheable("SearchWord")
     Page<Job> countBySearchWord(String searchword, Pageable pageable);
 
 

@@ -21,6 +21,19 @@
                     controllerAs: 'vm'
                 }
             }
+        }).state('slides', {
+            parent: 'app',
+            url: '/slides',
+            data: {
+                authorities: []
+            },
+            views: {
+                'content@': {
+                    templateUrl: 'app/home/slides.html',
+                    // controller: 'HomeController',
+                    // controllerAs: 'vm'
+                }
+            }
         });
     }
 })();

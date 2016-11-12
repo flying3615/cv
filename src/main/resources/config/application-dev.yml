@@ -44,8 +44,7 @@ spring:
         elasticsearch:
             cluster-name:
 #            docker run -d -p 9200:9200 -p 9300:9300 elasticsearch
-#            cluster-nodes: localhost:9300
-            cluster-nodes:
+            cluster-nodes: localhost:9300
             properties:
                 path:
                   logs: target/elasticsearch/log
