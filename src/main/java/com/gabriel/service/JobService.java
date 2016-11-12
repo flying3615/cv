@@ -9,11 +9,10 @@ import com.gabriel.repository.search.JobLogSearchRepository;
 import com.gabriel.repository.search.JobSearchRepository;
 import com.gabriel.web.rest.DTO.GoogleLocation;
 import com.gabriel.web.rest.DTO.JobTrendDTO;
-import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.index.analysis.SynonymTokenFilterFactory;
-import org.elasticsearch.index.query.QueryBuilders;
+import com.gabriel.web.rest.DTO.StateDTO;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -145,7 +144,7 @@ public class JobService {
 
 
     @Transactional(readOnly = true)
-    public String searchCustom(String techWord,String searchWord,String groupByField) {
+    public Optional<StateDTO> searchJobAgg(String techWord, String searchWord, String groupByField) {
 
         SearchQuery searchQuery = new NativeSearchQueryBuilder()
             .withQuery(boolQuery()
@@ -154,22 +153,31 @@ public class JobService {
             ).addAggregation(AggregationBuilders.terms("by_"+groupByField).field(groupByField))
             .build();
 
-        log.debug("searchCustom by ES query string = {}",searchQuery.getQuery());
-        String result = elasticsearchTemplate.query(searchQuery, response -> {
-//            response.getAggregations().
-
+        log.info("searchJobAgg by ES query = {}",searchQuery.getQuery());
+        Optional<StateDTO> result = elasticsearchTemplate.query(searchQuery, response -> {
+            List<Long> jobIDList = new ArrayList<>();
             for(SearchHit searchHit : response.getHits()){
                 if(response.getHits().getHits().length <= 0) {
-                    return null;
+                    return Optional.ofNullable(null);
                 }
 
                 long id = Long.parseLong(searchHit.getId());
+                jobIDList.add(id);
                 String title = (String) searchHit.getSource().get("title");
                 float score = searchHit.getScore();
-                log.info("find for java {} title={} score={}",id,title,score);
+
+                log.info("find {} in for {} id={} title={} score={} ",techWord,searchWord, id,title,score);
 
             }
-            return response.toString();
+
+            Terms agg = response.getAggregations().get("by_"+groupByField);
+            Map<String,String> bucketMap = new HashMap<>();
+            for(Terms.Bucket entry:agg.getBuckets()){
+                bucketMap.put(entry.getKey().toString(),String.valueOf(entry.getDocCount()));
+            }
+
+            StateDTO stateDTO = new StateDTO(techWord,jobIDList,response.getHits().totalHits(),bucketMap);
+            return Optional.of(stateDTO);
         });
         return result;
     }

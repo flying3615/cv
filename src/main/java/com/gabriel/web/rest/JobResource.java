@@ -2,12 +2,14 @@ package com.gabriel.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.gabriel.domain.Job;
+import com.gabriel.domain.TechWord;
+import com.gabriel.repository.TechWordRepository;
 import com.gabriel.service.JobService;
-import com.gabriel.service.MailService;
 import com.gabriel.service.task.ScheduledCrawlTask;
 import com.gabriel.web.rest.DTO.GoogleLocation;
 import com.gabriel.web.rest.DTO.JobCountDTO;
 import com.gabriel.web.rest.DTO.JobTrendDTO;
+import com.gabriel.web.rest.DTO.StateDTO;
 import com.gabriel.web.rest.util.HeaderUtil;
 import com.gabriel.web.rest.util.PaginationUtil;
 import org.slf4j.Logger;
@@ -23,8 +25,8 @@ import javax.inject.Inject;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * REST controller for managing Job.
@@ -224,11 +226,18 @@ public class JobResource {
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("job", "")).build();
     }
 
+
+    @Inject
+    TechWordRepository techWordRepository;
+
     @GetMapping("/custom/query")
     @Timed
-    public ResponseEntity<String> customQuery()
+    public ResponseEntity<List<StateDTO>> customQuery()
         throws URISyntaxException {
-        String result = jobService.searchCustom("CSS","Java","listDate");
+        List<TechWord> techWords = techWordRepository.findByLanguage("Java");
+        List<StateDTO> result = techWords.stream()
+            .map(word->jobService.searchJobAgg(word.getName(),"Java","location").get())
+            .collect(Collectors.toList());
         return new ResponseEntity<>(result, HttpStatus.OK);
 
     }
