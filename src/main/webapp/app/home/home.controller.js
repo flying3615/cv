@@ -84,7 +84,6 @@
         var markers = [];
 
         function searchByKey(params) {
-            console.log("searchByKey",params);
             getMap(params.name);
         }
 
@@ -97,7 +96,6 @@
                 }
                 map.setZoom(5);
                 $http.get('/api/jobs_map/'+word).then(function (response) {
-                    console.log(response.data)
                     markers.forEach(function(m){m.setMap(null)});
                     markers.lenght=0;
                     response.data.forEach(function(data){

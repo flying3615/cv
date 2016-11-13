@@ -32,6 +32,7 @@ import javax.inject.Inject;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.function.Supplier;
 
@@ -255,12 +256,12 @@ public class JobService {
         log.debug("Request to get {} job trend", keyword);
         Optional<SearchWord> searchWord = searchWordRepository.findByWordName(keyword);
         List<JobCount> result = jobCountRepository.findBySearchWord(searchWord.orElseThrow(IllegalArgumentException::new));
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM");
         List<String> dates = new ArrayList<>();
         List<Long> jobNum = new ArrayList<>();
 
         for (JobCount o : result) {
-            dates.add(sdf.format(o.getLogDate()));
+            dates.add(o.getLogDate().format(dateTimeFormatter));
             jobNum.add(o.getJobNumber());
         }
         JobTrendDTO jobTrendDTO = new JobTrendDTO(keyword, dates, jobNum);
