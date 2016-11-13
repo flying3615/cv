@@ -26,6 +26,12 @@ public class SearchWord implements Serializable {
     @Column(name = "word_name")
     private String wordName;
 
+    public SearchWord() {}
+
+    public SearchWord(String wordName) {
+        this.wordName = wordName;
+    }
+
     public Long getId() {
         return id;
     }

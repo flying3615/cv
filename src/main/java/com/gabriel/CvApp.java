@@ -25,11 +25,12 @@ import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @ComponentScan
-@EnableAutoConfiguration(exclude = { MetricFilterAutoConfiguration.class, MetricRepositoryAutoConfiguration.class })
-@EnableConfigurationProperties({ JHipsterProperties.class, LiquibaseProperties.class })
+@EnableAutoConfiguration(exclude = {MetricFilterAutoConfiguration.class, MetricRepositoryAutoConfiguration.class})
+@EnableConfigurationProperties({JHipsterProperties.class, LiquibaseProperties.class})
 @EnableScheduling
 @EnableCaching
 public class CvApp {
@@ -66,13 +67,10 @@ public class CvApp {
     }
 
     private void initSearchWord() {
-        searchWordRepository.deleteAll();
-        List<SearchWord> searchWordList = Arrays.asList("Java",".Net","PHP","Ruby","Python","JavaScript").stream().map(word->{
-                SearchWord searchWord = new SearchWord();
-                searchWord.setWordName(word);
-            return searchWord;
-            }).collect(Collectors.toList());
-        searchWordRepository.save(searchWordList);
+        Arrays.asList("Java", ".Net", "PHP", "Ruby", "Python", "JavaScript").forEach(word -> {
+            Optional<SearchWord> existing = searchWordRepository.findByWordName(word);
+            searchWordRepository.save(existing.orElseGet(() -> new SearchWord(word)));
+        });
     }
 
     /**
@@ -81,6 +79,7 @@ public class CvApp {
      * @param args the command line arguments
      * @throws UnknownHostException if the local host name could not be resolved into an address
      */
+
     public static void main(String[] args) throws UnknownHostException {
         SpringApplication app = new SpringApplication(CvApp.class);
         DefaultProfileUtil.addDefaultProfile(app);

@@ -154,7 +154,7 @@ public class JobResource {
         List<SearchWord> searchWords = searchWordRepository.findAll();
 
         searchWords.forEach(searchWord ->
-            jobService.getJobTrendByWord(searchWord.getWordName())
+            jobTrendList.add(jobService.getJobTrendByWord(searchWord.getWordName()))
         );
 
         return new ResponseEntity<>(jobTrendList, HttpStatus.OK);

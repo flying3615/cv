@@ -33,6 +33,7 @@ import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.function.Supplier;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
@@ -252,9 +253,8 @@ public class JobService {
     public JobTrendDTO getJobTrendByWord(String keyword) {
 
         log.debug("Request to get {} job trend", keyword);
-        SearchWord searchWord = searchWordRepository.findByWordName(keyword);
-
-        List<JobCount> result = jobCountRepository.findBySearchWord(searchWord);
+        Optional<SearchWord> searchWord = searchWordRepository.findByWordName(keyword);
+        List<JobCount> result = jobCountRepository.findBySearchWord(searchWord.orElseThrow(IllegalArgumentException::new));
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM");
         List<String> dates = new ArrayList<>();
         List<Long> jobNum = new ArrayList<>();
@@ -294,8 +294,8 @@ public class JobService {
         JobCount jobCount = new JobCount();
         jobCount.setJobNumber(countByWordCurrent(searchKeyword));
         jobCount.setLogDate(LocalDate.now());
-        SearchWord searchWord = searchWordRepository.findByWordName(searchKeyword);
-        jobCount.setSearchWord(searchWord);
+        Optional<SearchWord> searchWord = searchWordRepository.findByWordName(searchKeyword);
+        jobCount.setSearchWord(searchWord.orElseThrow(IllegalArgumentException::new));
         jobCountRepository.save(jobCount);
     }
 
