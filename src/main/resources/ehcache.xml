@@ -49,5 +49,13 @@
         timeToLiveSeconds="3600">
     </cache>
 
+    <cache name="com.gabriel.domain.SearchWord"
+        timeToLiveSeconds="3600">
+    </cache>
+
+    <cache name="com.gabriel.domain.JobCount"
+        timeToLiveSeconds="3600">
+    </cache>
+
     <!-- jhipster-needle-ehcache-add-entry -->
 </ehcache>

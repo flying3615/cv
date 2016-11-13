@@ -1,18 +1,20 @@
 package com.gabriel.service;
 
 import com.gabriel.domain.Job;
+import com.gabriel.domain.JobCount;
 import com.gabriel.domain.JobLog;
+import com.gabriel.domain.SearchWord;
 import com.gabriel.domain.enumeration.JobLogType;
+import com.gabriel.repository.JobCountRepository;
 import com.gabriel.repository.JobLogRepository;
 import com.gabriel.repository.JobRepository;
+import com.gabriel.repository.SearchWordRepository;
 import com.gabriel.repository.search.JobLogSearchRepository;
 import com.gabriel.repository.search.JobSearchRepository;
 import com.gabriel.web.rest.DTO.GoogleLocation;
 import com.gabriel.web.rest.DTO.JobTrendDTO;
 import com.gabriel.web.rest.DTO.StateDTO;
 import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.MatchQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
@@ -55,6 +57,13 @@ public class JobService {
     @Inject
     private JobLogRepository jobLogRepository;
 
+    @Inject
+    private JobCountRepository jobCountRepository;
+
+    @Inject
+    private SearchWordRepository searchWordRepository;
+
+
     /**
      * Save a job.
      *
@@ -93,9 +102,9 @@ public class JobService {
 
 
     @Transactional(readOnly = true)
-    public Long countByWordCurrent(String word, Pageable pageable) {
-        Page<Job> jobs = jobRepository.countBySearchWord(word, pageable);
-        return jobs.getTotalElements();
+    public Long countByWordCurrent(String word) {
+        List<Job> jobs = jobRepository.countBySearchWord(word);
+        return (long)jobs.size();
     }
 
     /**
@@ -243,20 +252,16 @@ public class JobService {
     public JobTrendDTO getJobTrendByWord(String keyword) {
 
         log.debug("Request to get {} job trend", keyword);
+        SearchWord searchWord = searchWordRepository.findByWordName(keyword);
 
-        Object[] result = jobRepository.getJobTrend(keyword);
+        List<JobCount> result = jobCountRepository.findBySearchWord(searchWord);
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM");
-
         List<String> dates = new ArrayList<>();
         List<Long> jobNum = new ArrayList<>();
 
-        Map<String, Long> trendMap = new HashMap<>();
-        for (Object o : result) {
-            Object[] item = (Object[]) o;
-            Date date = (Date) item[0];
-            BigInteger count = (BigInteger) item[2];
-            dates.add(sdf.format(date));
-            jobNum.add(count.longValue());
+        for (JobCount o : result) {
+            dates.add(sdf.format(o.getLogDate()));
+            jobNum.add(o.getJobNumber());
         }
         JobTrendDTO jobTrendDTO = new JobTrendDTO(keyword, dates, jobNum);
         return jobTrendDTO;
@@ -280,9 +285,18 @@ public class JobService {
             convertedResult.add(new GoogleLocation(location, keyword, count.longValue()));
 
         }
-
         return convertedResult;
 
+    }
+
+
+    public void recordTodayJobNumber(String searchKeyword) {
+        JobCount jobCount = new JobCount();
+        jobCount.setJobNumber(countByWordCurrent(searchKeyword));
+        jobCount.setLogDate(LocalDate.now());
+        SearchWord searchWord = searchWordRepository.findByWordName(searchKeyword);
+        jobCount.setSearchWord(searchWord);
+        jobCountRepository.save(jobCount);
     }
 
 

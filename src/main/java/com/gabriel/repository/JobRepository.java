@@ -30,19 +30,17 @@ public interface JobRepository extends JpaRepository<Job, Long> {
         countQuery = "SELECT count(j) from Job j, JobLog jl where  j.id=jl.job.id and jl.type <> 'REMOVE' and j.searchWord= ?1"
     )
 //    @Cacheable("SearchWord")
-    Page<Job> countBySearchWord(String searchword, Pageable pageable);
-
-
+    List<Job> countBySearchWord(String searchword);
 
 
     @Query(value = "select area, count(*) as job_count,search_word " +
         "from job j,job_log jl " +
-        "where area in (SELECT distinct area FROM JOB where area<>null or area<>'') and search_word= ?1 and j.id=jl.id and jl.type<>'REMOVE' " +
+        "where area in (SELECT distinct area FROM job where area<>null or area<>'') and search_word= ?1 and j.id=jl.id and jl.type<>'REMOVE' " +
         "group by area " +
         "union " +
         "select j.location as area, count(*) as job_count,search_word " +
         "from job j,job_log jl " +
-        "where location in (SELECT distinct location FROM JOB where area=null or area='') and search_word= ?1 and j.id=jl.id and jl.type<>'REMOVE' and (area='' or area=null) " +
+        "where location in (SELECT distinct location FROM job where area=null or area='') and search_word= ?1 and j.id=jl.id and jl.type<>'REMOVE' and (area='' or area=null) " +
         "group by j.location",
         nativeQuery = true
     )
@@ -52,12 +50,12 @@ public interface JobRepository extends JpaRepository<Job, Long> {
 
     @Query(value="select area, count(*) as job_count " +
         "from job j,job_log jl " +
-        "where area in (SELECT distinct area FROM JOB where area<>null or area<>'') and j.id=jl.id and jl.type<>'REMOVE' " +
+        "where area in (SELECT distinct area FROM job where area<>null or area<>'') and j.id=jl.id and jl.type<>'REMOVE' " +
         "group by area " +
         "union " +
         "select j.location as area, count(*) as job_count " +
         "from job j,job_log jl " +
-        "where location in (SELECT distinct location FROM JOB where area=null or area='') and j.id=jl.id and jl.type<>'REMOVE' and area='' " +
+        "where location in (SELECT distinct location FROM job where area=null or area='') and j.id=jl.id and jl.type<>'REMOVE' and area='' " +
         "group by j.location",
     nativeQuery = true)
     Object[] getMapDataAll();

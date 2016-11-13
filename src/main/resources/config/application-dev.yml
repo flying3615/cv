@@ -22,23 +22,27 @@ spring:
             enabled: false # we use gulp + BrowserSync for livereload
     jackson:
         serialization.indent_output: true
+#        docker run --name cv-mysql -e MYSQL_ROOT_PASSWORD=root -p 3306:3306 -d mysql:latest
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
-        url: jdbc:h2:file:./target/h2db/db/cv;DB_CLOSE_DELAY=-1
+        url: jdbc:mysql://localhost:3306/cv?useUnicode=true&characterEncoding=utf8&useSSL=false
         name:
-        username: cv
-        password:
-    h2:
-        console:
-            enabled: false
+        username: root
+        password: root
+        hikari:
+            data-source-properties:
+                cachePrepStmts: true
+                prepStmtCacheSize: 250
+                prepStmtCacheSqlLimit: 2048
+                useServerPrepStmts: true
     jpa:
-        database-platform: com.gabriel.domain.util.FixedH2Dialect
-        database: H2
+        database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+        database: MYSQL
         show-sql: true
         properties:
             hibernate.cache.use_second_level_cache: true
             hibernate.cache.use_query_cache: false
-            hibernate.generate_statistics: true
+            hibernate.generate_statistics: false
             hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory
     data:
         elasticsearch:
@@ -65,7 +69,7 @@ spring:
         cache: false
 
 liquibase:
-    contexts: dev
+    contexts: prod
 
 server:
     port: 8080

@@ -4,6 +4,8 @@ import com.gabriel.config.Constants;
 import com.gabriel.config.DefaultProfileUtil;
 import com.gabriel.config.JHipsterProperties;
 
+import com.gabriel.domain.SearchWord;
+import com.gabriel.repository.SearchWordRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -22,6 +24,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @ComponentScan
 @EnableAutoConfiguration(exclude = { MetricFilterAutoConfiguration.class, MetricRepositoryAutoConfiguration.class })
@@ -34,6 +38,9 @@ public class CvApp {
 
     @Inject
     private Environment env;
+
+    @Inject
+    private SearchWordRepository searchWordRepository;
 
     /**
      * Initializes cv.
@@ -54,6 +61,18 @@ public class CvApp {
             log.error("You have misconfigured your application! It should not" +
                 "run with both the 'dev' and 'cloud' profiles at the same time.");
         }
+
+        initSearchWord();
+    }
+
+    private void initSearchWord() {
+        searchWordRepository.deleteAll();
+        List<SearchWord> searchWordList = Arrays.asList("Java",".Net","PHP","Ruby","Python","JavaScript").stream().map(word->{
+                SearchWord searchWord = new SearchWord();
+                searchWord.setWordName(word);
+            return searchWord;
+            }).collect(Collectors.toList());
+        searchWordRepository.save(searchWordList);
     }
 
     /**

@@ -2,7 +2,9 @@ package com.gabriel.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.gabriel.domain.Job;
+import com.gabriel.domain.SearchWord;
 import com.gabriel.domain.TechWord;
+import com.gabriel.repository.SearchWordRepository;
 import com.gabriel.repository.TechWordRepository;
 import com.gabriel.service.JobService;
 import com.gabriel.service.task.ScheduledCrawlTask;
@@ -40,6 +42,9 @@ public class JobResource {
 
     @Inject
     private JobService jobService;
+
+    @Inject
+    private SearchWordRepository searchWordRepository;
 
 
     /**
@@ -110,12 +115,13 @@ public class JobResource {
         List<JobCountDTO> jobCountList = new ArrayList<>();
         //TODO by date, need to join log and job table
         //find jobs which status is not remove in joblog table
-        jobCountList.add(new JobCountDTO("Java", jobService.countByWordCurrent("Java", pageable)));
-        jobCountList.add(new JobCountDTO(".Net", jobService.countByWordCurrent(".Net", pageable)));
-        jobCountList.add(new JobCountDTO("Python", jobService.countByWordCurrent("Python", pageable)));
-        jobCountList.add(new JobCountDTO("Ruby", jobService.countByWordCurrent("Ruby", pageable)));
-        jobCountList.add(new JobCountDTO("JavaScript", jobService.countByWordCurrent("JavaScript", pageable)));
-        jobCountList.add(new JobCountDTO("PHP", jobService.countByWordCurrent("PHP", pageable)));
+
+        List<SearchWord> searchWords = searchWordRepository.findAll();
+
+        searchWords.forEach(searchWord -> {
+            String word = searchWord.getWordName();
+            jobCountList.add(new JobCountDTO(word, jobService.countByWordCurrent(word)));
+        });
 
         return new ResponseEntity<>(jobCountList, HttpStatus.OK);
     }
@@ -145,12 +151,11 @@ public class JobResource {
 
         List<JobTrendDTO> jobTrendList = new ArrayList<>();
 
-        jobTrendList.add(jobService.getJobTrendByWord("Java"));
-        jobTrendList.add(jobService.getJobTrendByWord(".Net"));
-        jobTrendList.add(jobService.getJobTrendByWord("Python"));
-        jobTrendList.add(jobService.getJobTrendByWord("Ruby"));
-        jobTrendList.add(jobService.getJobTrendByWord("PHP"));
-        jobTrendList.add(jobService.getJobTrendByWord("JavaScript"));
+        List<SearchWord> searchWords = searchWordRepository.findAll();
+
+        searchWords.forEach(searchWord ->
+            jobService.getJobTrendByWord(searchWord.getWordName())
+        );
 
         return new ResponseEntity<>(jobTrendList, HttpStatus.OK);
     }
@@ -214,15 +219,11 @@ public class JobResource {
     @Timed
     public ResponseEntity<Void> schedule()
         throws URISyntaxException {
-        List<String> keywords = new ArrayList<>();
 
-        keywords.add("Java");
-        keywords.add(".Net");
-        keywords.add("Python");
-        keywords.add("Ruby");
-        keywords.add("JavaScript");
-        keywords.add("PHP");
-        keywords.forEach(scheduledCrawlTask::crawlByWord);
+        List<SearchWord> searchWords = searchWordRepository.findAll();
+
+        searchWords.forEach(searchWord ->
+                scheduledCrawlTask.crawlByWord(searchWord.getWordName()));
 
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("job", "")).build();
     }
@@ -237,7 +238,7 @@ public class JobResource {
         throws URISyntaxException {
         List<TechWord> techWords = techWordRepository.findByUserIsCurrentUser();
         List<StateDTO> result = techWords.stream()
-            .map(word->jobService.searchJobAgg(word.getName(),"Java","location").get())
+            .map(word -> jobService.searchJobAgg(word.getName(), "Java", "location").get())
             .collect(Collectors.toList());
         return new ResponseEntity<>(result, HttpStatus.OK);
 
@@ -249,8 +250,8 @@ public class JobResource {
         throws URISyntaxException {
         List<TechWord> techWords = techWordRepository.findByUserIsCurrentUser();
         List<String> twStr = techWords.stream().map(TechWord::getName).collect(Collectors.toList());
-        Page<Job> jobPage = jobService.searchSuitableJob(twStr,"Java","70%");
-        log.info("find {} @ 70%",jobPage.getTotalElements());
+        Page<Job> jobPage = jobService.searchSuitableJob(twStr, "Java", "70%");
+        log.info("find {} @ 70%", jobPage.getTotalElements());
         return new ResponseEntity<>(jobPage.getContent(), HttpStatus.OK);
     }
 

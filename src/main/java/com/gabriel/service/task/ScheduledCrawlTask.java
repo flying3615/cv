@@ -1,19 +1,17 @@
 package com.gabriel.service.task;
 
 import com.gabriel.domain.Job;
+import com.gabriel.domain.SearchWord;
+import com.gabriel.repository.SearchWordRepository;
 import com.gabriel.service.JobService;
 import com.gabriel.service.MailService;
 import com.gabriel.service.crawler.Crawler;
-import com.gabriel.service.util.MailSender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
-import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -28,14 +26,15 @@ public class ScheduledCrawlTask {
     @Inject
     Map<String, Crawler> crawlerStrategy = new HashMap<>();
 
-//    @Inject
-//    MailSender mailSender;
-
     @Inject
     MailService mailService;
 
     @Inject
     JobService jobService;
+
+    @Inject
+    SearchWordRepository searchWordRepository;
+
 
     @Scheduled(cron = "0 0 6 * * *")  //@ 6:00:00 am every day
 //    @Scheduled(cron = "0 */5 * * * *") //every ten minutes for test
@@ -43,16 +42,9 @@ public class ScheduledCrawlTask {
 
         this.cleanCache();
 
-        List<String> keywords = new ArrayList<>();
+        List<SearchWord> searchWords = searchWordRepository.findAll();
 
-        keywords.add("Java");
-        keywords.add(".Net");
-        keywords.add("Python");
-        keywords.add("Ruby");
-        keywords.add("JavaScript");
-        keywords.add("PHP");
-
-        keywords.forEach(this::crawlByWord);
+        searchWords.forEach(searchWord->crawlByWord(searchWord.getWordName()));
 
         log.info("dailyCrawl job done!!!");
     }
@@ -70,7 +62,6 @@ public class ScheduledCrawlTask {
 
 //    @Async
     public void crawlByWord(String searchKeyword) {
-        log.info("crawl task start @ {}", LocalDateTime.now());
         Set<Map.Entry<String, Crawler>> crawlerSet = crawlerStrategy.entrySet();
         crawlerSet.stream().forEach(crawlerEntry -> {
 
@@ -84,44 +75,61 @@ public class ScheduledCrawlTask {
 
             Map<String, Job> today_jobs = crawler.listJobs(searchKeyword);
 
-            log.info("existing jobs size {} for search word {}", exciting_jobs.size(), searchKeyword);
+            log.info("{} existing jobs size {} for search word {}", crawlerEntry.getKey(),exciting_jobs.size(), searchKeyword);
 
-            Set<Job> ready_to_remove = new HashSet<>();
-            //only care about the latest jobs
-            exciting_jobs.forEach(existing_job -> {
-                    if (today_jobs.containsKey(existing_job.getExternalID())) {
-                        today_jobs.remove(existing_job.getExternalID());
-                        log.debug("duplicate jobs external id={}", existing_job.getExternalID());
-                        ready_to_remove.add(existing_job);
-                    }
-                }
+            Set<Job> ready_to_remove = saveNewJobsAndGetRemovedJobs(exciting_jobs, today_jobs);
 
-            );
+            updateJobDetail(crawlerEntry, crawler, today_jobs);
 
-            //save new jobs
-            today_jobs.values().forEach(today_job -> {
-                    jobService.save(today_job);
-                    jobService.saveJobLog(today_job);
-                }
-            );
-
-            //update job detail
-            if (today_jobs.size() != 0) {
-                log.info("update new coming jobs {}", today_jobs.size());
-                today_jobs.values().parallelStream().forEach(job -> {
-                    Job updated_job = crawler.updateJobDetail(job);
-                    jobService.save(updated_job);
-                });
-                //send mail notify now coming jobs
-//                mailService.sendNewJobMail(today_jobs.values());
-            } else {
-                log.info("No job today...");
-            }
-
-            //save gone jobs, trigger many times!!!!
-            exciting_jobs.removeAll(ready_to_remove);
-            exciting_jobs.forEach(jobService::saveVanishedJob);
+            saveVanishedJobs(exciting_jobs, ready_to_remove);
 
         });
+
+        //record today each search word job number;
+        jobService.recordTodayJobNumber(searchKeyword);
     }
+
+    private void saveVanishedJobs(Set<Job> exciting_jobs, Set<Job> ready_to_remove) {
+        exciting_jobs.removeAll(ready_to_remove);
+        exciting_jobs.forEach(jobService::saveVanishedJob);
+    }
+
+    private void updateJobDetail(Map.Entry<String, Crawler> crawlerEntry, Crawler crawler, Map<String, Job> today_jobs) {
+        if (today_jobs.size() != 0) {
+            log.info("{} update new coming jobs {}", crawlerEntry.getKey(),today_jobs.size());
+            today_jobs.values().parallelStream().forEach(job -> {
+                Job updated_job = crawler.updateJobDetail(job);
+                jobService.save(updated_job);
+            });
+            //send mail notify now coming jobs
+//                mailService.sendNewJobMail(today_jobs.values());
+        } else {
+            log.info("{} No job today...",crawlerEntry.getKey());
+        }
+    }
+
+    private Set<Job> saveNewJobsAndGetRemovedJobs(Set<Job> exciting_jobs, Map<String, Job> today_jobs) {
+        Set<Job> ready_to_remove = new HashSet<>();
+        //only care about the latest jobs
+        exciting_jobs.forEach(existing_job -> {
+                if (today_jobs.containsKey(existing_job.getExternalID())) {
+                    today_jobs.remove(existing_job.getExternalID());
+                    log.debug("duplicate jobs external id={}", existing_job.getExternalID());
+                    ready_to_remove.add(existing_job);
+                }
+            }
+
+        );
+
+        //save new jobs
+        today_jobs.values().forEach(today_job -> {
+                jobService.save(today_job);
+//            we don't care about new coming job but jobs' deletion
+//                jobService.saveJobLog(today_job);
+            }
+        );
+        return ready_to_remove;
+    }
+
+
 }
