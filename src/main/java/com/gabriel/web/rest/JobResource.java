@@ -28,7 +28,6 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**
@@ -271,6 +270,16 @@ public class JobResource {
     public ResponseEntity<Void> synchDBES()
         throws URISyntaxException {
         jobService.synchData();
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("job", "")).build();
+
+    }
+
+
+    @GetMapping("/updateSettingsMappings")
+    @Timed
+    public ResponseEntity<Void> updateSM()
+        throws URISyntaxException {
+        jobService.updateSynonyms();
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("job", "")).build();
 
     }

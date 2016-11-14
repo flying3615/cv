@@ -14,6 +14,9 @@ import com.gabriel.repository.search.JobSearchRepository;
 import com.gabriel.web.rest.DTO.GoogleLocation;
 import com.gabriel.web.rest.DTO.JobTrendDTO;
 import com.gabriel.web.rest.DTO.StateDTO;
+import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
+import org.elasticsearch.client.Client;
+import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
@@ -252,7 +255,6 @@ public class JobService {
     @Transactional(readOnly = true)
     public Set<Job> findBySearchWordAndFromSite(String keyword, String from_site) {
         log.debug("Request to find jobs by search word {} and from site {}", keyword, from_site);
-
         return jobRepository.findBySearchWordAndFromSite(keyword, from_site);
     }
 
@@ -321,6 +323,74 @@ public class JobService {
     public void synchData() {
         jobRepository.findAll().forEach(jobSearchRepository::save);
     }
+
+
+    public void updateSynonyms(){
+        Client client =  elasticsearchTemplate.getClient();
+
+        //delete all
+        client.admin().indices().delete(new DeleteIndexRequest("job")).actionGet();
+
+        log.info("after deleting all");
+
+        //update settings
+        client.admin().indices().prepareCreate("job").setSettings(Settings.builder().loadFromSource(
+            "{  \n" +
+            "      \"analysis\":{  \n" +
+            "         \"filter\":{  \n" +
+            "            \"my_synonym_filter\":{  \n" +
+            "               \"type\":\"synonym\",\n" +
+            "               \"synonyms\":[  \n" +
+            "                  \"angular,angularjs\",\n" +
+            "                  \"react,reactjs\",\n" +
+            "                  \"whh,nodejs,node.js\"\n" +
+            "               ]\n" +
+            "            }\n" +
+            "         },\n" +
+            "         \"analyzer\":{  \n" +
+            "            \"my_synonyms\":{  \n" +
+            "               \"tokenizer\":\"standard\",\n" +
+            "               \"filter\":[  \n" +
+            "                  \"lowercase\",\n" +
+            "                  \"my_synonym_filter\"\n" +
+            "               ]\n" +
+            "            }\n" +
+            "         }\n" +
+            "      }\n" +
+            "   }")).get();
+
+
+        log.info("after creating and set");
+
+
+        client.admin().indices().preparePutMapping("job")
+            .setType("job")
+            .setSource("{\n" +
+                " \"job\":{\n" +
+                "  \"properties\":{\n" +
+                "   \"description\": {\n" +
+                "            \"type\": \"string\",\n" +
+                "            \"analyzer\":\"my_synonyms\"\n" +
+                "          }\n" +
+                "  }\n" +
+                " }\n" +
+                "}").get();
+
+        log.info("after updating mapping");
+
+
+        this.synchData();
+        log.info("after porting back the data");
+
+
+    }
+
+
+    public static void main(String[] args) {
+
+    }
+
+
 
 
 }
