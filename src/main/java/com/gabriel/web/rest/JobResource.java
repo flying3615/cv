@@ -256,4 +256,24 @@ public class JobResource {
     }
 
 
+    @GetMapping("/bubbleData")
+    @Timed
+    public ResponseEntity<Void> findBubbleData()
+        throws URISyntaxException {
+        jobService.bubbleData();
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("job", "")).build();
+
+    }
+
+
+    @GetMapping("/synchDBES")
+    @Timed
+    public ResponseEntity<Void> synchDBES()
+        throws URISyntaxException {
+        jobService.synchData();
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("job", "")).build();
+
+    }
+
+
 }

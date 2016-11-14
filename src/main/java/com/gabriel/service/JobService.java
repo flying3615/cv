@@ -106,7 +106,7 @@ public class JobService {
     @Transactional(readOnly = true)
     public Long countByWordCurrent(String word) {
         List<Job> jobs = jobRepository.countBySearchWord(word);
-        return (long)jobs.size();
+        return (long) jobs.size();
     }
 
     /**
@@ -151,7 +151,7 @@ public class JobService {
     }
 
     @Transactional(readOnly = true)
-    public Page<Job> searchSuitableJob(List<String> techWords,String searchWord,String percentage) {
+    public Page<Job> searchSuitableJob(List<String> techWords, String searchWord, String percentage) {
         //multi match....
 //        {
 //            "query":{
@@ -173,22 +173,39 @@ public class JobService {
 //        }
 //        }
 
-        if(techWords.isEmpty()){
+        if (techWords.isEmpty()) {
             log.info("searchSuitableJob by no tech words....");
         }
 
-
-        BoolQueryBuilder boolQueryBuilder =boolQuery().must(matchQuery("searchWord", searchWord));
-        techWords.forEach(word->boolQueryBuilder.should(matchQuery("description", word)));
+        //find the valid jobs... join job_log search
+//        https://www.elastic.co/guide/en/elasticsearch/client/java-api/current/java-joining-queries.html
+        BoolQueryBuilder boolQueryBuilder = boolQuery().must(matchQuery("searchWord", searchWord));
+        techWords.forEach(word -> boolQueryBuilder.should(matchQuery("description", word)));
         SearchQuery searchQuery = new NativeSearchQueryBuilder()
             .withQuery(boolQueryBuilder
                 .minimumShouldMatch(percentage))
             .build();
 
-        log.info("searchJobAgg by ES query = {}", searchQuery.getQuery());
+//        log.info("searchJobAgg by ES query = {}", searchQuery.getQuery());
 
-        Page<Job> jobPage = elasticsearchTemplate.queryForPage(searchQuery,Job.class);
+        Page<Job> jobPage = elasticsearchTemplate.queryForPage(searchQuery, Job.class);
         return jobPage;
+    }
+
+
+    @Transactional(readOnly = true)
+    public void bubbleData() {
+
+        List<String> possibility = Arrays.asList("20%", "40%", "60%", "80%", "100%");
+        List<String> searchWord = Arrays.asList("Java", ".Net", "JavaScript", "Ruby", "PHP", "Python");
+
+        for (String word : searchWord) {
+            for (String p : possibility) {
+                Page<Job> jobPage = this.searchSuitableJob(Arrays.asList("Spring", "GitHub", "Angular", "Jenkins", "Docker"), "Java", p);
+                log.info("{} {} = {}", word, p, jobPage.getTotalElements());
+            }
+        }
+
     }
 
 
@@ -298,6 +315,11 @@ public class JobService {
         Optional<SearchWord> searchWord = searchWordRepository.findByWordName(searchKeyword);
         jobCount.setSearchWord(searchWord.orElseThrow(IllegalArgumentException::new));
         jobCountRepository.save(jobCount);
+    }
+
+    //just for dev
+    public void synchData() {
+        jobRepository.findAll().forEach(jobSearchRepository::save);
     }
 
 
