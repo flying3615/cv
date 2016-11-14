@@ -6,6 +6,7 @@ import com.gabriel.domain.SearchWord;
 import com.gabriel.domain.TechWord;
 import com.gabriel.repository.SearchWordRepository;
 import com.gabriel.repository.TechWordRepository;
+import com.gabriel.service.ElasticService;
 import com.gabriel.service.JobService;
 import com.gabriel.service.task.ScheduledCrawlTask;
 import com.gabriel.web.rest.DTO.GoogleLocation;
@@ -44,6 +45,9 @@ public class JobResource {
 
     @Inject
     private SearchWordRepository searchWordRepository;
+
+    @Inject
+    private ElasticService elasticService;
 
 
     /**
@@ -237,7 +241,7 @@ public class JobResource {
         throws URISyntaxException {
         List<TechWord> techWords = techWordRepository.findByUserIsCurrentUser();
         List<StateDTO> result = techWords.stream()
-            .map(word -> jobService.searchJobAgg(word.getName(), "Java", "location").get())
+            .map(word -> elasticService.searchJobAgg(word.getName(), "Java", "location").get())
             .collect(Collectors.toList());
         return new ResponseEntity<>(result, HttpStatus.OK);
 
@@ -249,7 +253,7 @@ public class JobResource {
         throws URISyntaxException {
         List<TechWord> techWords = techWordRepository.findByUserIsCurrentUser();
         List<String> twStr = techWords.stream().map(TechWord::getName).collect(Collectors.toList());
-        Page<Job> jobPage = jobService.searchSuitableJob(twStr, "Java", "70%");
+        Page<Job> jobPage = elasticService.searchSuitableJob(twStr, "Java", "70%");
         log.info("find {} @ 70%", jobPage.getTotalElements());
         return new ResponseEntity<>(jobPage.getContent(), HttpStatus.OK);
     }
@@ -263,6 +267,8 @@ public class JobResource {
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("job", "")).build();
 
     }
+
+    //below for dev api test
 
 
     @GetMapping("/synchDBES")
@@ -279,7 +285,7 @@ public class JobResource {
     @Timed
     public ResponseEntity<Void> updateSM()
         throws URISyntaxException {
-        jobService.updateSynonyms();
+        elasticService.updateSynonyms();
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("job", "")).build();
 
     }
