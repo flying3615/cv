@@ -28,6 +28,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -138,7 +139,6 @@ public class JobService {
     }
 
 
-
     /**
      * Search for the job corresponding to the query.
      *
@@ -152,7 +152,6 @@ public class JobService {
 
         return result;
     }
-
 
 
     @Transactional(readOnly = true)
@@ -169,9 +168,6 @@ public class JobService {
 //        }
 
     }
-
-
-
 
 
     @Transactional(readOnly = true)
@@ -228,6 +224,33 @@ public class JobService {
 
         }
         return convertedResult;
+    }
+
+    //TODO how to show ?
+    @Async
+    public void updateDuplicateJobsBySettingKeywords() {
+
+        Map<String, String> dupJobMap = new HashMap<>();
+        //find duplicate ID
+        Object[] id_word = jobRepository.getDuplicateJobs();
+        for (Object o : id_word) {
+            Object[] item = (Object[]) o;
+            String external_id = (String) item[0];
+            String search_word = (String) item[1];
+            dupJobMap.compute(external_id, (key, oldvalue) -> {
+                if (oldvalue == null) return search_word;
+                else return oldvalue + "," + search_word;
+            });
+        }
+
+
+        //update its keywords to all search_word,include SQL&ES
+        dupJobMap.keySet().forEach(externalID ->
+            jobRepository.findByExternalID(externalID).forEach(job -> {
+                job.setKeywords(dupJobMap.get(externalID));
+                jobRepository.save(job);
+                jobSearchRepository.save(job);
+            }));
 
     }
 
@@ -245,21 +268,6 @@ public class JobService {
     public void synchData() {
         jobRepository.findAll().forEach(jobSearchRepository::save);
     }
-
-
-
-
-
-
-
-
-//    public static void main(String[] args) {
-//
-//        JobService jobService = new JobService();
-//        System.out.println(jobService.getSynonyms());
-//
-//    }
-
 
 
 

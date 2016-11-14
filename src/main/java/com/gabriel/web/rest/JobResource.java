@@ -290,5 +290,14 @@ public class JobResource {
 
     }
 
+    @GetMapping("/updateDupicateJobs")
+    @Timed
+    public ResponseEntity<Void> updateDupicateJobs()
+        throws URISyntaxException {
+        jobService.updateDuplicateJobsBySettingKeywords();
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("job", "")).build();
+
+    }
+
 
 }

@@ -108,7 +108,7 @@ public class ElasticService {
     }
 
 
-
+//TODO user input words, and build synonym dictionary...
     private String getSynonyms(){
         List<String> synonyms = new ArrayList<>();
 
@@ -121,14 +121,13 @@ public class ElasticService {
         String nodejs = Arrays.asList("nodejs","node.js").stream().collect(Collectors.joining(","));
         synonyms.add("\""+nodejs+"\"");
 
-        String linux = Arrays.asList("linux","unix").stream().collect(Collectors.joining(","));
+        String linux = Arrays.asList("linux","unix","ubuntu","centos").stream().collect(Collectors.joining(","));
         synonyms.add("\""+linux+"\"");
 
         String git = Arrays.asList("git","github").stream().collect(Collectors.joining(","));
         synonyms.add("\""+git+"\"");
 
         StringJoiner sj = new StringJoiner(",","[","]");
-
 
         synonyms.forEach(sj::add);
         return sj.toString();

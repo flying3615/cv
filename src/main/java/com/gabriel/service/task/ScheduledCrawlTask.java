@@ -87,6 +87,8 @@ public class ScheduledCrawlTask {
 
         //record today each search word job number;
         jobService.recordTodayJobNumber(searchKeyword);
+        //update duplicate jobs' keywords by setting all search words
+        jobService.updateDuplicateJobsBySettingKeywords();
     }
 
     private void saveVanishedJobs(Set<Job> exciting_jobs, Set<Job> ready_to_remove) {

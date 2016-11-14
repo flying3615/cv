@@ -65,4 +65,10 @@ public interface JobRepository extends JpaRepository<Job, Long> {
         nativeQuery = true)
     Object[] getJobTrend(String keyword);
 
+
+    @Query(value="select exter.external_id, search_word from job as j, (select count(*), external_id from job group by external_id having count(*)>1) as exter where j.external_id=exter.external_id and keywords is NULL order by exter.external_id",nativeQuery = true)
+    Object[] getDuplicateJobs();
+
+    List<Job> findByExternalID(String external_id);
+
 }
