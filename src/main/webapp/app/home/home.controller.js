@@ -34,7 +34,8 @@
         function onClick(params) {
             console.log(params);
             //go to job list
-            $state.go('job',{param:params});
+            // $state.go('job',{param:params});
+            $state.go('job');
         };
 
 

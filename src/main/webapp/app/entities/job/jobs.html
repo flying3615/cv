@@ -3,14 +3,14 @@
     <jhi-alert></jhi-alert>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-xs-4 no-padding-left">
-                <button class="btn btn-primary" ui-sref="job.new" >
-                    <span class="glyphicon glyphicon-plus"></span>
-                    <span class="hidden-xs" >
-                        Create new Job
-                    </span>
-                </button>
-            </div>
+            <!--<div class="col-xs-4 no-padding-left">-->
+                <!--<button class="btn btn-primary" ui-sref="job.new" >-->
+                    <!--<span class="glyphicon glyphicon-plus"></span>-->
+                    <!--<span class="hidden-xs" >-->
+                        <!--Create new Job-->
+                    <!--</span>-->
+                <!--</button>-->
+            <!--</div>-->
             <div class="col-xs-8 no-padding-right">
                 <form name="searchForm" class="form-inline">
                     <div class="input-group pull-right" >
@@ -40,19 +40,19 @@
                     <th jh-sort-by="company"><span>Company</span> <span class="glyphicon glyphicon-sort"></span></th>
                     <th jh-sort-by="salary"><span>Salary</span> <span class="glyphicon glyphicon-sort"></span></th>
                     <th jh-sort-by="location"><span>Location</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="description"><span>Description</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="area"><span>Area</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <!--<th jh-sort-by="description"><span>Description</span> <span class="glyphicon glyphicon-sort"></span></th>-->
                     <th jh-sort-by="keywords"><span>Keywords</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="contact"><span>Contact</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="creationTime"><span>Creation Time</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="externalID"><span>External ID</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="searchWord"><span>Search Word</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <!--<th jh-sort-by="contact"><span>Contact</span> <span class="glyphicon glyphicon-sort"></span></th>-->
+                    <!--<th jh-sort-by="creationTime"><span>Creation Time</span> <span class="glyphicon glyphicon-sort"></span></th>-->
+                    <!--<th jh-sort-by="externalID"><span>External ID</span> <span class="glyphicon glyphicon-sort"></span></th>-->
+                    <!--<th jh-sort-by="searchWord"><span>Search Word</span> <span class="glyphicon glyphicon-sort"></span></th>-->
                     <th jh-sort-by="workType"><span>Work Type</span> <span class="glyphicon glyphicon-sort"></span></th>
                     <th jh-sort-by="listDate"><span>List Date</span> <span class="glyphicon glyphicon-sort"></span></th>
                     <th jh-sort-by="fromSite"><span>From Site</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="origURL"><span>Orig URL</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <!--<th jh-sort-by="origURL"><span>Orig URL</span> <span class="glyphicon glyphicon-sort"></span></th>-->
                     <th jh-sort-by="experienceReq"><span>Experience Req</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="area"><span>Area</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="isremoved"><span>Isremoved</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <!--<th jh-sort-by="isremoved"><span>Isremoved</span> <span class="glyphicon glyphicon-sort"></span></th>-->
                     <th></th>
                 </tr>
             </thead>
@@ -63,19 +63,19 @@
                     <td>{{job.company}}</td>
                     <td>{{job.salary}}</td>
                     <td>{{job.location}}</td>
-                    <td>{{job.description}}</td>
-                    <td>{{job.keywords}}</td>
-                    <td>{{job.contact}}</td>
-                        <td>{{job.creationTime | date:'mediumDate'}}</td>
-                    <td>{{job.externalID}}</td>
-                    <td>{{job.searchWord}}</td>
-                    <td>{{job.workType}}</td>
-                        <td>{{job.listDate | date:'mediumDate'}}</td>
-                    <td>{{job.fromSite}}</td>
-                    <td>{{job.origURL}}</td>
-                    <td>{{job.experienceReq}}</td>
                     <td>{{job.area}}</td>
-                    <td>{{job.isremoved}}</td>
+                    <!--<td>{{job.description}}</td>-->
+                    <td>{{job.keywords}}</td>
+                    <!--<td>{{job.contact}}</td>-->
+                    <!--<td>{{job.creationTime | date:'mediumDate'}}</td>-->
+                    <!--<td>{{job.externalID}}</td>-->
+                    <!--<td>{{job.searchWord}}</td>-->
+                    <td>{{job.workType}}</td>
+                    <td>{{job.listDate | date:'mediumDate'}}</td>
+                    <td>{{job.fromSite}}</td>
+                    <!--<td><a href="{{job.origURL}}">{{job.origURL}}</a></td>-->
+                    <td>{{job.experienceReq}}</td>
+                    <!--<td>{{job.isremoved}}</td>-->
                     <td class="text-right">
                         <div class="btn-group flex-btn-group-container">
                             <button type="submit"
@@ -84,18 +84,18 @@
                                 <span class="glyphicon glyphicon-eye-open"></span>
                                 <span class="hidden-xs hidden-sm"></span>
                             </button>
-                            <button type="submit"
-                                    ui-sref="job.edit({id:job.id})"
-                                    class="btn btn-primary btn-sm">
-                                <span class="glyphicon glyphicon-pencil"></span>
-                                <span class="hidden-xs hidden-sm"></span>
-                            </button>
-                            <button type="submit"
-                                    ui-sref="job.delete({id:job.id})"
-                                    class="btn btn-danger btn-sm">
-                                <span class="glyphicon glyphicon-remove-circle"></span>
-                                <span class="hidden-xs hidden-sm"></span>
-                            </button>
+                            <!--<button type="submit"-->
+                                    <!--ui-sref="job.edit({id:job.id})"-->
+                                    <!--class="btn btn-primary btn-sm">-->
+                                <!--<span class="glyphicon glyphicon-pencil"></span>-->
+                                <!--<span class="hidden-xs hidden-sm"></span>-->
+                            <!--</button>-->
+                            <!--<button type="submit"-->
+                                    <!--ui-sref="job.delete({id:job.id})"-->
+                                    <!--class="btn btn-danger btn-sm">-->
+                                <!--<span class="glyphicon glyphicon-remove-circle"></span>-->
+                                <!--<span class="hidden-xs hidden-sm"></span>-->
+                            <!--</button>-->
                         </div>
                     </td>
                 </tr>

@@ -37,8 +37,8 @@
                 }, onSuccess, onError);
 
             } else {
-                var parse = JSON.parse($stateParams.param);
-                if (parse) {
+                if ($stateParams.param) {
+                    var parse = JSON.parse($stateParams.param);
                     //comes from home page
                     var queryStr = "";
                     angular.forEach(parse, function (value, key) {

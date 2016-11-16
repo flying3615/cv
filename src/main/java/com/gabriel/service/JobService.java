@@ -225,7 +225,6 @@ public class JobService {
         return convertedResult;
     }
 
-    //TODO how to show ?
     @Async
     public void updateDuplicateJobsBySettingKeywords() {
 
@@ -250,6 +249,9 @@ public class JobService {
                 jobRepository.save(job);
                 jobSearchRepository.save(job);
             }));
+
+        //TODO update single keyword
+
 
     }
 
