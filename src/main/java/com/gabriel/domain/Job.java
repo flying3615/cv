@@ -8,7 +8,6 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.ZonedDateTime;
 import java.util.Objects;
 
 /**
@@ -75,6 +74,9 @@ public class Job implements Serializable {
 
     @Column(name = "area")
     private String area;
+
+    @Column(name = "isremoved")
+    private Boolean isremoved;
 
     public Long getId() {
         return id;
@@ -292,6 +294,19 @@ public class Job implements Serializable {
         this.area = area;
     }
 
+    public Boolean isIsremoved() {
+        return isremoved;
+    }
+
+    public Job isremoved(Boolean isremoved) {
+        this.isremoved = isremoved;
+        return this;
+    }
+
+    public void setIsremoved(Boolean isremoved) {
+        this.isremoved = isremoved;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -332,6 +347,7 @@ public class Job implements Serializable {
             ", origURL='" + origURL + "'" +
             ", experienceReq='" + experienceReq + "'" +
             ", area='" + area + "'" +
+            ", isremoved='" + isremoved + "'" +
             '}';
     }
 }

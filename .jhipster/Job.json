@@ -71,6 +71,10 @@
         {
             "fieldName": "area",
             "fieldType": "String"
+        },
+        {
+            "fieldName": "isremoved",
+            "fieldType": "Boolean"
         }
     ],
     "changelogDate": "20161030033438",

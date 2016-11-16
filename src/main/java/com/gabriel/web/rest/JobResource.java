@@ -101,10 +101,16 @@ public class JobResource {
      */
     @GetMapping("/jobs")
     @Timed
-    public ResponseEntity<List<Job>> getAllJobs(Pageable pageable)
+    public ResponseEntity<List<Job>> getAllJobs(@RequestParam String query, Pageable pageable)
         throws URISyntaxException {
         log.debug("REST request to get a page of Jobs");
-        Page<Job> page = jobService.findAll(pageable);
+        Page<Job> page = null;
+        if(query!=null&&query.length()>0){
+            //do filter job
+        }else{
+            page = jobService.findAll(pageable);
+        }
+
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/jobs");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
@@ -208,8 +214,9 @@ public class JobResource {
     @Timed
     public ResponseEntity<List<Job>> searchJobs(@RequestParam String query, Pageable pageable)
         throws URISyntaxException {
-        log.debug("REST request to search for a page of Jobs for query {}", query);
+        log.info("REST request to search for a page of Jobs for query {}", query);
         Page<Job> page = jobService.search(query, pageable);
+        log.info("result length {}",page.getTotalElements());
         HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/jobs");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }

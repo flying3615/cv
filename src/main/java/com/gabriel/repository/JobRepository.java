@@ -32,30 +32,25 @@ public interface JobRepository extends JpaRepository<Job, Long> {
     List<Job> countBySearchWord(String searchword);
 
 
-    @Query(value = "select area, count(*) as job_count,search_word " +
-        "from job j,job_log jl " +
-        "where area in (SELECT distinct area FROM job where area<>null or area<>'') and search_word= ?1 and j.id=jl.id and jl.type<>'REMOVE' " +
-        "group by area " +
-        "union " +
-        "select j.location as area, count(*) as job_count,search_word " +
-        "from job j,job_log jl " +
-        "where location in (SELECT distinct location FROM job where area=null or area='') and search_word= ?1 and j.id=jl.id and jl.type<>'REMOVE' and (area='' or area=null) " +
-        "group by j.location",
+    @Query(
+        value = "select area, count(*) as job_count \n" +
+            "from job j \n" +
+            "where area in (SELECT distinct area FROM job where area<>null or area<>'') and search_word= ?1 and j.isremoved is null group by area \n" +
+            "union \n" +
+            "select j.location as area, count(*) as job_count from job j\n" +
+            "where location in (SELECT distinct location FROM job where area is null or area='') and search_word= ?1 and j.isremoved is null and area is null group by j.location",
         nativeQuery = true
     )
     Object[] getMapDataByWord(String keyword);
 
 
 
-    @Query(value="select area, count(*) as job_count " +
-        "from job j,job_log jl " +
-        "where area in (SELECT distinct area FROM job where area<>null or area<>'') and j.id=jl.id and jl.type<>'REMOVE' " +
-        "group by area " +
-        "union " +
-        "select j.location as area, count(*) as job_count " +
-        "from job j,job_log jl " +
-        "where location in (SELECT distinct location FROM job where area=null or area='') and j.id=jl.id and jl.type<>'REMOVE' and area='' " +
-        "group by j.location",
+    @Query(value = "select area, count(*) as job_count \n" +
+        "from job j \n" +
+        "where area in (SELECT distinct area FROM job where area<>null or area<>'') and j.isremoved is null group by area \n" +
+        "union \n" +
+        "select j.location as area, count(*) as job_count from job j\n" +
+        "where location in (SELECT distinct location FROM job where area is null or area='') and j.isremoved is null and area is null group by j.location",
     nativeQuery = true)
     Object[] getMapDataAll();
 

@@ -14,6 +14,7 @@ import com.gabriel.repository.search.JobSearchRepository;
 import com.gabriel.service.crawler.Crawler;
 import com.gabriel.web.rest.DTO.GoogleLocation;
 import com.gabriel.web.rest.DTO.JobTrendDTO;
+import org.elasticsearch.index.query.QueryStringQueryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -136,7 +137,9 @@ public class JobService {
     @Transactional(readOnly = true)
     public Page<Job> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of Jobs for query {}", query);
-        Page<Job> result = jobSearchRepository.search(queryStringQuery(query), pageable);
+        QueryStringQueryBuilder qsq = queryStringQuery(query);
+        log.info(qsq.toString());
+        Page<Job> result = jobSearchRepository.search(qsq, pageable);
 
         return result;
     }
@@ -169,8 +172,14 @@ public class JobService {
 
     public void saveVanishedJob(Job job) {
         log.debug("Request to save VanishedJob job externalID: {}", job.getExternalID());
-//        jobLogSearchRepository.save(new JobLog(JobLogType.REMOVE, LocalDate.now(), job));
-        jobLogRepository.save(new JobLog(JobLogType.REMOVE, LocalDate.now(), job));
+        job.setIsremoved(true);
+        jobSearchRepository.save(job);
+        jobRepository.save(job);
+    }
+
+
+    public void findExprenceJobs(){
+        // TODO: 16/11/16
     }
 
 

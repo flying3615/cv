@@ -1,12 +1,10 @@
 package com.gabriel.service.task;
 
 import com.gabriel.domain.Job;
-import com.gabriel.domain.JobLog;
 import com.gabriel.domain.SearchWord;
-import com.gabriel.domain.enumeration.JobLogType;
-import com.gabriel.repository.JobLogRepository;
 import com.gabriel.repository.JobRepository;
 import com.gabriel.repository.SearchWordRepository;
+import com.gabriel.repository.search.JobSearchRepository;
 import com.gabriel.service.JobService;
 import com.gabriel.service.MailService;
 import com.gabriel.service.crawler.Crawler;
@@ -16,7 +14,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
-import java.time.LocalDate;
 import java.util.*;
 
 /**
@@ -43,8 +40,9 @@ public class ScheduledCrawlTask {
     @Inject
     JobRepository jobRepository;
 
+
     @Inject
-    JobLogRepository jobLogRepository;
+    JobSearchRepository jobSearchRepository;
 
 
     @Scheduled(cron = "0 0 6 * * *")  //@ 6:00:00 am every day
@@ -83,12 +81,9 @@ public class ScheduledCrawlTask {
                     if (!isValid) {
                         log.debug("Job {} url {} is not valid anymore",job.getTitle(),job.getOrigURL());
                         //insert job_log as remove
-                        JobLog jobLog = new JobLog();
-                        jobLog.setType(JobLogType.REMOVE);
-                        jobLog.setLogDate(LocalDate.now());
-                        jobLog.setJob(job);
-                        //duplicate jobLog insert!!!
-                        jobLogRepository.save(jobLog);
+                        job.setIsremoved(true);
+                        jobRepository.save(job);
+                        jobSearchRepository.save(job);
                         count[0]++;
                     }
                 })

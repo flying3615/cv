@@ -34,7 +34,7 @@
         function onClick(params) {
             console.log(params);
             //go to job list
-            $state.go('job');
+            $state.go('job',{param:params});
         };
 
 
@@ -107,7 +107,9 @@
 
                         markers.push(marker);
 
-                        var contentString = '<div id="content"><a href="#"><b>'+data.job_count+'</b> '+data.search_word+' jobs @'+data.location+'</div>'
+                        //isremoved is not null
+                        var param = JSON.stringify({"searchWord":word,"location":data.location})
+                        var contentString = '<div id="content"><a ui-sref="job" href="#/job?param='+encodeURI(param)+'"><b>'+data.job_count+'</b> '+data.search_word+' jobs @'+data.location+'</div>'
 
                         var infowindow = new google.maps.InfoWindow({
                             content: contentString

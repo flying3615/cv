@@ -117,6 +117,7 @@ public class ElasticService {
     @Async
     public void synchDBtoES(){
         log.info("synchDBtoES");
+        jobSearchRepository.deleteAll();
         jobRepository.findAll().forEach(jobSearchRepository::save);
     }
 

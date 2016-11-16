@@ -1,15 +1,15 @@
-(function() {
+(function () {
     'use strict';
 
     angular
         .module('cvApp')
         .controller('JobController', JobController);
 
-    JobController.$inject = ['$scope', '$state', 'Job', 'JobSearch', 'ParseLinks', 'AlertService'];
+    JobController.$inject = ['$scope', '$state', 'Job', 'JobSearch', 'ParseLinks', 'AlertService', '$stateParams'];
 
-    function JobController ($scope, $state, Job, JobSearch, ParseLinks, AlertService) {
+    function JobController($scope, $state, Job, JobSearch, ParseLinks, AlertService, $stateParams) {
         var vm = this;
-        
+
         vm.jobs = [];
         vm.loadPage = loadPage;
         vm.page = 0;
@@ -25,20 +25,44 @@
 
         loadAll();
 
-        function loadAll () {
+        function loadAll() {
+
             if (vm.currentSearch) {
+                //goes to ES
                 JobSearch.query({
                     query: vm.currentSearch,
                     page: vm.page,
                     size: 20,
                     sort: sort()
                 }, onSuccess, onError);
+
             } else {
-                Job.query({
-                    page: vm.page,
-                    size: 20,
-                    sort: sort()
-                }, onSuccess, onError);
+                var parse = JSON.parse($stateParams.param);
+                if (parse) {
+                    //comes from home page
+                    var queryStr = "";
+                    angular.forEach(parse, function (value, key) {
+                        queryStr += key + "=" + value + "&"
+                    })
+
+                    var queryStr2 = queryStr.substring(0, queryStr.lastIndexOf('&'));
+                    Job.query({
+                        query: queryStr2,
+                        page: vm.page,
+                        size: 20,
+                        sort: sort()
+                    }, onSuccess, onError);
+                }else{
+
+                    //goes to DB
+                    Job.query({
+                        query:'',
+                        page: vm.page,
+                        size: 20,
+                        sort: sort()
+                    }, onSuccess, onError);
+                }
+
             }
             function sort() {
                 var result = [vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc')];
@@ -61,7 +85,7 @@
             }
         }
 
-        function reset () {
+        function reset() {
             vm.page = 0;
             vm.jobs = [];
             loadAll();
@@ -72,7 +96,7 @@
             loadAll();
         }
 
-        function clear () {
+        function clear() {
             vm.jobs = [];
             vm.links = {
                 last: 0
@@ -85,8 +109,8 @@
             vm.loadAll();
         }
 
-        function search (searchQuery) {
-            if (!searchQuery){
+        function search(searchQuery) {
+            if (!searchQuery) {
                 return vm.clear();
             }
             vm.jobs = [];

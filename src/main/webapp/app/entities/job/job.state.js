@@ -11,7 +11,7 @@
         $stateProvider
         .state('job', {
             parent: 'entity',
-            url: '/job',
+            url: '/job?param',
             data: {
                 authorities: ['ROLE_USER'],
                 pageTitle: 'Jobs'
@@ -111,6 +111,7 @@
                                 origURL: null,
                                 experienceReq: null,
                                 area: null,
+                                isremoved: null,
                                 id: null
                             };
                         }
