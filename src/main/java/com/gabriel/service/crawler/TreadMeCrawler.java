@@ -29,4 +29,9 @@ public class TreadMeCrawler implements Crawler {
     public Job updateJobDetail(Job job) {
         return job;
     }
+
+    @Override
+    public boolean isJobValid(String url) {
+        return true;
+    }
 }

@@ -37,6 +37,7 @@ public class MailService {
     @Inject
     private JHipsterProperties jHipsterProperties;
 
+
     @Inject
     private JavaMailSenderImpl javaMailSender;
 
@@ -45,6 +46,8 @@ public class MailService {
 
     @Inject
     private SpringTemplateEngine templateEngine;
+
+    
 
     @Async
     public void sendEmail(String to, String subject, String content, boolean isMultipart, boolean isHtml) {
@@ -64,6 +67,9 @@ public class MailService {
         } catch (Exception e) {
             log.warn("E-mail could not be sent to user '{}'", to, e);
         }
+
+
+
     }
 
     @Async

@@ -18,6 +18,8 @@ public interface Crawler {
 
     Job updateJobDetail(Job jobID);
 
+    boolean isJobValid(String url);
+
 
 
 }

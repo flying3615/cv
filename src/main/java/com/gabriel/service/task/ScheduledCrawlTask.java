@@ -1,7 +1,11 @@
 package com.gabriel.service.task;
 
 import com.gabriel.domain.Job;
+import com.gabriel.domain.JobLog;
 import com.gabriel.domain.SearchWord;
+import com.gabriel.domain.enumeration.JobLogType;
+import com.gabriel.repository.JobLogRepository;
+import com.gabriel.repository.JobRepository;
 import com.gabriel.repository.SearchWordRepository;
 import com.gabriel.service.JobService;
 import com.gabriel.service.MailService;
@@ -12,6 +16,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
+import java.time.LocalDate;
 import java.util.*;
 
 /**
@@ -35,12 +40,18 @@ public class ScheduledCrawlTask {
     @Inject
     SearchWordRepository searchWordRepository;
 
+    @Inject
+    JobRepository jobRepository;
+
+    @Inject
+    JobLogRepository jobLogRepository;
+
 
     @Scheduled(cron = "0 0 6 * * *")  //@ 6:00:00 am every day
 //    @Scheduled(cron = "0 */5 * * * *") //every ten minutes for test
     public void dailyCrawl() {
 
-        this.cleanCache();
+        cleanInvalidJobs();
 
         List<SearchWord> searchWords = searchWordRepository.findAll();
 
@@ -55,9 +66,39 @@ public class ScheduledCrawlTask {
         //TODO clean Database invalid job records
     }
 
-    private void cleanCache() {
-        //TODO clean guava cache...
+//    @Scheduled(cron = "0 */2 * * * *") //every ten minutes for test
+    public void cleanInvalidJobs() {
+        log.info("start to clean invalid jobs...");
+        List<SearchWord> searchWords = searchWordRepository.findAll();
+        searchWords.forEach(searchWord -> {
+            //get all current jobs
+            List<Job> jobs = jobRepository.countBySearchWord(searchWord.getWordName());
+
+            Set<Map.Entry<String, Crawler>> crawlerSet = crawlerStrategy.entrySet();
+
+            final int[] count = {0};
+            jobs.forEach(job -> crawlerSet.forEach(crawlerEntry -> {
+                    Crawler crawler = crawlerEntry.getValue();
+                    boolean isValid = crawler.isJobValid(job.getOrigURL());
+                    if (!isValid) {
+                        log.debug("Job {} url {} is not valid anymore",job.getTitle(),job.getOrigURL());
+                        //insert job_log as remove
+                        JobLog jobLog = new JobLog();
+                        jobLog.setType(JobLogType.REMOVE);
+                        jobLog.setLogDate(LocalDate.now());
+                        jobLog.setJob(job);
+                        //duplicate jobLog insert!!!
+                        jobLogRepository.save(jobLog);
+                        count[0]++;
+                    }
+                })
+            );
+            log.info("{} clean {} jobs",searchWord,count[0]);
+        });
+        log.info("finish cleaning invalid jobs...");
     }
+
+
 
 
 //    @Async
@@ -86,6 +127,7 @@ public class ScheduledCrawlTask {
         });
 
         //record today each search word job number;
+        // TODO: 15/11/16  bug here!!!
         jobService.recordTodayJobNumber(searchKeyword);
         //update duplicate jobs' keywords by setting all search words
         jobService.updateDuplicateJobsBySettingKeywords();

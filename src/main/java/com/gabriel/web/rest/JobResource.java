@@ -275,7 +275,7 @@ public class JobResource {
     @Timed
     public ResponseEntity<Void> synchDBES()
         throws URISyntaxException {
-        jobService.synchData();
+        elasticService.synchDBtoES();
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("job", "")).build();
 
     }

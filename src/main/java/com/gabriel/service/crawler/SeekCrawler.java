@@ -6,6 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Connection;
+import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -13,6 +14,7 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
@@ -217,6 +219,32 @@ public class SeekCrawler implements Crawler {
         return job;
 
 
+    }
+
+
+
+    @Override
+    public boolean isJobValid(String url) {
+        Connection.Response response;
+
+        try {
+            response = Jsoup.connect(url)
+                .header("Accept", "*/*")
+                .header("Content-Type", "application/json;charset=UTF-8")
+                .userAgent(userAgent)
+                .method(Connection.Method.GET)
+                .ignoreContentType(true)
+                .timeout(30*1000) //sets timeout to 10 s
+                .execute();
+        } catch (HttpStatusException e) {
+            //410 gone
+            if (e.getStatusCode() == HttpStatus.GONE.value()) {
+                return false;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
 

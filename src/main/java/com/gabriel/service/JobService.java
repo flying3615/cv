@@ -11,37 +11,24 @@ import com.gabriel.repository.JobRepository;
 import com.gabriel.repository.SearchWordRepository;
 import com.gabriel.repository.search.JobLogSearchRepository;
 import com.gabriel.repository.search.JobSearchRepository;
+import com.gabriel.service.crawler.Crawler;
 import com.gabriel.web.rest.DTO.GoogleLocation;
 import com.gabriel.web.rest.DTO.JobTrendDTO;
-import com.gabriel.web.rest.DTO.StateDTO;
-import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
-import org.elasticsearch.client.Client;
-import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.search.SearchHit;
-import org.elasticsearch.search.aggregations.AggregationBuilders;
-import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
-import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.math.BigInteger;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
-import static org.elasticsearch.index.query.QueryBuilders.*;
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 
 /**
  * Service Implementation for managing Job.
@@ -69,6 +56,7 @@ public class JobService {
 
     @Inject
     private SearchWordRepository searchWordRepository;
+
 
 
     /**
@@ -162,7 +150,7 @@ public class JobService {
 
 //        for (String word : searchWord) {
 //            for (String p : possibility) {
-//                Page<Job> jobPage = this.searchSuitableJob(Arrays.asList("Spring", "GitHub", "Angular", "Jenkins", "Docker"), "Java", p);
+//                Page<Job> jobPage = this.s(Arrays.asList("Spring", "GitHub", "Angular", "Jenkins", "Docker"), "Java", p);
 //                log.info("{} {} = {}", word, p, jobPage.getTotalElements());
 //            }
 //        }
@@ -173,6 +161,8 @@ public class JobService {
     @Transactional(readOnly = true)
     public Set<Job> findBySearchWordAndFromSite(String keyword, String from_site) {
         log.debug("Request to find jobs by search word {} and from site {}", keyword, from_site);
+
+
         return jobRepository.findBySearchWordAndFromSite(keyword, from_site);
     }
 
@@ -261,13 +251,12 @@ public class JobService {
         jobCount.setLogDate(LocalDate.now());
         Optional<SearchWord> searchWord = searchWordRepository.findByWordName(searchKeyword);
         jobCount.setSearchWord(searchWord.orElseThrow(IllegalArgumentException::new));
+        log.info("write into job count table for {} {}",jobCount.getSearchWord(),jobCount.getJobNumber());
         jobCountRepository.save(jobCount);
     }
 
     //just for dev
-    public void synchData() {
-        jobRepository.findAll().forEach(jobSearchRepository::save);
-    }
+
 
 
 

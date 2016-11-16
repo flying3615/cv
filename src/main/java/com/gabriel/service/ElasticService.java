@@ -1,6 +1,8 @@
 package com.gabriel.service;
 
 import com.gabriel.domain.Job;
+import com.gabriel.repository.JobRepository;
+import com.gabriel.repository.search.JobSearchRepository;
 import com.gabriel.web.rest.DTO.StateDTO;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.client.Client;
@@ -36,11 +38,17 @@ public class ElasticService {
 
     private final Logger log = LoggerFactory.getLogger(ElasticService.class);
 
-    @Inject
-    JobService jobService;
+//    @Inject
+//    JobService jobService;
 
     @Inject
     ElasticsearchTemplate elasticsearchTemplate;
+
+    @Inject
+    JobRepository jobRepository;
+
+    @Inject
+    JobSearchRepository jobSearchRepository;
 
 
     @Async
@@ -101,10 +109,15 @@ public class ElasticService {
         log.info("after updating mapping");
 
 
-        jobService.synchData();
         log.info("after porting back the data");
 
 
+    }
+
+    @Async
+    public void synchDBtoES(){
+        log.info("synchDBtoES");
+        jobRepository.findAll().forEach(jobSearchRepository::save);
     }
 
 
@@ -134,6 +147,7 @@ public class ElasticService {
     }
 
 
+    // TODO: 16/11/16 user search job engine like pluralsight
     @Transactional(readOnly = true)
     public Page<Job> searchSuitableJob(List<String> techWords, String searchWord, String percentage) {
         //multi match....
