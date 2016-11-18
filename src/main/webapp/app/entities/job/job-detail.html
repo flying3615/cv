@@ -28,10 +28,15 @@
         <dd>
             <span>{{vm.job.keywords}}</span>
         </dd>
+
+
+        <div ng-if="vm.job.contact">
         <dt><span>Contact</span></dt>
         <dd>
             <span>{{vm.job.contact}}</span>
         </dd>
+        </div>
+
         <dt><span>Creation Time</span></dt>
         <dd>
             <span>{{vm.job.creationTime | date:'mediumDate'}}</span>
@@ -58,20 +63,24 @@
         </dd>
         <dt><span>Orig URL</span></dt>
         <dd>
-            <span>{{vm.job.origURL}}</span>
+            <span><a href="{{vm.job.origURL}}">{{vm.job.origURL}}</a></span>
         </dd>
-        <dt><span>Experience Req</span></dt>
-        <dd>
-            <span>{{vm.job.experienceReq}}</span>
-        </dd>
+
+        <div ng-if="vm.job.experienceReq">
+            <dt><span>Experience Req</span></dt>
+            <dd>
+                <span>{{vm.job.experienceReq}}</span>
+            </dd>
+        </div>
+
         <dt><span>Area</span></dt>
         <dd>
             <span>{{vm.job.area}}</span>
         </dd>
-        <dt><span>Isremoved</span></dt>
-        <dd>
-            <span>{{vm.job.isremoved}}</span>
-        </dd>
+        <!--<dt><span>Isremoved</span></dt>-->
+        <!--<dd>-->
+            <!--<span>{{vm.job.isremoved}}</span>-->
+        <!--</dd>-->
     </dl>
 
     <button type="submit"

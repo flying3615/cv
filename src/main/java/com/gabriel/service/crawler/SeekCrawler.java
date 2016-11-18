@@ -20,14 +20,13 @@ import org.springframework.stereotype.Component;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 
-import static com.gabriel.service.util.ElasticSearchUtil.getNullIfEmptyStr;
+import static com.gabriel.service.util.StringUtil.getNullIfEmptyStr;
 
 /**
  * Created by liuyufei on 31/10/16.

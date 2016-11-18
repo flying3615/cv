@@ -101,12 +101,13 @@ public class JobResource {
      */
     @GetMapping("/jobs")
     @Timed
-    public ResponseEntity<List<Job>> getAllJobs(@RequestParam String query, Pageable pageable)
+    public ResponseEntity<List<Job>> getAllJobs(@RequestParam Map<String,String> allRequestParams, Pageable pageable)
         throws URISyntaxException {
         log.debug("REST request to get a page of Jobs");
         Page<Job> page = null;
-        if(query!=null&&query.length()>0){
+        if(allRequestParams.get("query")!=null&&allRequestParams.get("query").length()>0){
             //do filter job
+            page = jobService.findAllByQuery(allRequestParams.get("query"),pageable);
         }else{
             page = jobService.findAll(pageable);
         }

@@ -5,13 +5,13 @@ import com.gabriel.domain.JobCount;
 import com.gabriel.domain.JobLog;
 import com.gabriel.domain.SearchWord;
 import com.gabriel.domain.enumeration.JobLogType;
+import com.gabriel.domain.specification.JobSpecification;
 import com.gabriel.repository.JobCountRepository;
 import com.gabriel.repository.JobLogRepository;
 import com.gabriel.repository.JobRepository;
 import com.gabriel.repository.SearchWordRepository;
 import com.gabriel.repository.search.JobLogSearchRepository;
 import com.gabriel.repository.search.JobSearchRepository;
-import com.gabriel.service.crawler.Crawler;
 import com.gabriel.web.rest.DTO.GoogleLocation;
 import com.gabriel.web.rest.DTO.JobTrendDTO;
 import org.elasticsearch.index.query.QueryStringQueryBuilder;
@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +30,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import static com.gabriel.service.util.StringUtil.splitQuery;
 import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 
 /**
@@ -265,6 +267,33 @@ public class JobService {
         log.info("write into job count table for {} {}",jobCount.getSearchWord(),jobCount.getJobNumber());
         jobCountRepository.save(jobCount);
     }
+
+    public Page<Job> findAllByQuery(String query, Pageable pageable) {
+        Map<String,String> queryMap = splitQuery(query);
+        log.info("getAllJobs query={}",splitQuery(query));
+
+        String searchWord;
+        String location;
+
+        Job jobCriteria = new Job();
+
+        if((searchWord=queryMap.get("searchWord"))!=null&&!searchWord.equals("All")){
+            jobCriteria.setSearchWord(searchWord);
+        }
+
+        if((location=queryMap.get("location"))!=null){
+            jobCriteria.setLocation(location);
+        }
+
+        //TODO more!!!
+
+        return jobRepository.findAll(Specifications
+            .where(JobSpecification.findByCriteria(jobCriteria)),pageable);
+
+    }
+
+
+
 
     //just for dev
 

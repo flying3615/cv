@@ -21,7 +21,7 @@ import java.util.Set;
  * Spring Data JPA repository for the Job entity.
  */
 @SuppressWarnings("unused")
-public interface JobRepository extends JpaRepository<Job, Long> {
+public interface JobRepository extends JpaRepository<Job, Long>,JpaSpecificationExecutor<Job> {
 
     Set<Job> findBySearchWordAndFromSite(String java, String from_site);
 
