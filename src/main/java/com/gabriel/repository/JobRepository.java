@@ -65,4 +65,5 @@ public interface JobRepository extends JpaRepository<Job, Long>,JpaSpecification
 
     List<Job> findByExternalID(String external_id);
 
+    List<Job> findByKeywordsIsNull();
 }

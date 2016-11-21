@@ -252,7 +252,14 @@ public class JobService {
                 jobSearchRepository.save(job);
             }));
 
-        //TODO update single keyword
+
+        //update single keywords when seach_word finding single job
+        List<Job> singleWordJobs = jobRepository.findByKeywordsIsNull();
+        singleWordJobs.forEach(job -> {
+            job.setKeywords(job.getSearchWord());
+            jobRepository.save(job);
+            jobSearchRepository.save(job);
+        });
 
 
     }
