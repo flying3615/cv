@@ -66,4 +66,7 @@ public interface JobRepository extends JpaRepository<Job, Long>,JpaSpecification
     List<Job> findByExternalID(String external_id);
 
     List<Job> findByKeywordsIsNull();
+
+    @Query(value="select * from job where experience_req is not null;",nativeQuery = true)
+    List<Job> findByExpIsNotNull();
 }

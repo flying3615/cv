@@ -180,8 +180,8 @@ public class JobService {
     }
 
 
-    public void findExprenceJobs(){
-        // TODO: 16/11/16
+    public List<Job> findExprenceJobs(){
+        return jobRepository.findByExpIsNotNull();
     }
 
 
