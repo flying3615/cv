@@ -180,8 +180,8 @@ public class JobService {
     }
 
 
-    public List<Job> findExprenceJobs(){
-        return jobRepository.findByExpIsNotNull();
+    public List<Job> findExprenceJobs(String searchWord){
+        return jobRepository.findByExpIsNotNull(searchWord);
     }
 
 

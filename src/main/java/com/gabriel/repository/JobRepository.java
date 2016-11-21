@@ -20,7 +20,6 @@ import java.util.Set;
 /**
  * Spring Data JPA repository for the Job entity.
  */
-@SuppressWarnings("unused")
 public interface JobRepository extends JpaRepository<Job, Long>,JpaSpecificationExecutor<Job> {
 
     Set<Job> findBySearchWordAndFromSite(String java, String from_site);
@@ -55,9 +54,9 @@ public interface JobRepository extends JpaRepository<Job, Long>,JpaSpecification
     Object[] getMapDataAll();
 
 
-    @Query(value="select creation_time,search_word, count(*) from job  where search_word= ?1 group by search_word, creation_time",
-        nativeQuery = true)
-    Object[] getJobTrend(String keyword);
+//    @Query(value="select creation_time,search_word, count(*) from job  where search_word= ?1 group by search_word, creation_time",
+//        nativeQuery = true)
+//    Object[] getJobTrend(String keyword);
 
 
     @Query(value="select exter.external_id, search_word from job as j, (select count(*), external_id from job group by external_id having count(*)>1) as exter where j.external_id=exter.external_id and keywords is NULL order by exter.external_id",nativeQuery = true)
@@ -67,6 +66,6 @@ public interface JobRepository extends JpaRepository<Job, Long>,JpaSpecification
 
     List<Job> findByKeywordsIsNull();
 
-    @Query(value="select * from job where experience_req is not null;",nativeQuery = true)
-    List<Job> findByExpIsNotNull();
+    @Query(value="select * from job where experience_req is not null and search_word=?1",nativeQuery = true)
+    List<Job> findByExpIsNotNull(String search_word);
 }
