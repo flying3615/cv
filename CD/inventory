@@ -1,0 +1,5 @@
+#146.185.153.82
+web ansible_ssh_host=146.185.153.82 ansible_ssh_user=root
+
+[webserver]
+web
