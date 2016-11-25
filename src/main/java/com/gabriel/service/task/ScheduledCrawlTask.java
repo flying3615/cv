@@ -129,6 +129,7 @@ public class ScheduledCrawlTask {
     }
 
     private void saveVanishedJobs(Set<Job> exciting_jobs, Set<Job> ready_to_remove) {
+        log.info("remove jobs {} {} from existing {}",ready_to_remove.size(),ready_to_remove,exciting_jobs.size());
         exciting_jobs.removeAll(ready_to_remove);
         exciting_jobs.forEach(jobService::saveVanishedJob);
     }
