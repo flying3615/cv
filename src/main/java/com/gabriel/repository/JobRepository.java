@@ -25,7 +25,7 @@ public interface JobRepository extends JpaRepository<Job, Long>,JpaSpecification
     Set<Job> findBySearchWordAndFromSite(String java, String from_site);
 
     @Query(
-        value = "select * from job as j where j.search_word= ?1 and j.id not in (select job_id from job_log)",
+        value = "select * from job as j where j.search_word= ?1 and j.isremoved is null",
         nativeQuery = true
     )
     List<Job> countBySearchWord(String searchword);
