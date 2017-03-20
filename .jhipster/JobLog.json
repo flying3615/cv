@@ -1,0 +1,27 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipName": "job",
+            "otherEntityName": "job",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "title"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "type",
+            "fieldType": "JobLogType",
+            "fieldValues": "ADD,REMOVE"
+        },
+        {
+            "fieldName": "logDate",
+            "fieldType": "LocalDate"
+        }
+    ],
+    "changelogDate": "20161102090501",
+    "dto": "no",
+    "service": "no",
+    "entityTableName": "job_log",
+    "pagination": "no"
+}

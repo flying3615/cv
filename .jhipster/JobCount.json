@@ -1,0 +1,26 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipName": "searchWord",
+            "otherEntityName": "searchWord",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "wordName"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "logDate",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "jobNumber",
+            "fieldType": "Long"
+        }
+    ],
+    "changelogDate": "20161113065856",
+    "dto": "no",
+    "service": "no",
+    "entityTableName": "job_count",
+    "pagination": "no"
+}

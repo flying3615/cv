@@ -1,0 +1,31 @@
+
+<div>
+    <h2><span>Job Count</span> {{vm.jobCount.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="dl-horizontal jh-entity-details">
+        <dt><span>Log Date</span></dt>
+        <dd>
+            <span>{{vm.jobCount.logDate | date:'mediumDate'}}</span>
+        </dd>
+        <dt><span>Job Number</span></dt>
+        <dd>
+            <span>{{vm.jobCount.jobNumber}}</span>
+        </dd>
+        <dt><span>Search Word</span></dt>
+        <dd>
+            <a ui-sref="search-word-detail({id:vm.jobCount.searchWord.id})">{{vm.jobCount.searchWord.wordName}}</a>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            ui-sref="{{ vm.previousState }}"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button type="button" ui-sref="job-count-detail.edit({id:vm.jobCount.id})" class="btn btn-primary">
+        <span class="glyphicon glyphicon-pencil"></span>
+        <span class="hidden-xs hidden-sm"> Edit</span>
+    </button>
+</div>

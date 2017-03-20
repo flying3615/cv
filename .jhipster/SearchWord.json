@@ -1,0 +1,15 @@
+{
+    "fluentMethods": true,
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "wordName",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20161113065635",
+    "dto": "no",
+    "service": "no",
+    "entityTableName": "search_word",
+    "pagination": "no"
+}

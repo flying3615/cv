@@ -1,0 +1,48 @@
+
+<form name="editForm" role="form" novalidate ng-submit="vm.save()">
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="vm.clear()">&times;</button>
+        <h4 class="modal-title" id="myJobCountLabel">Create or edit a Job Count</h4>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" ng-show="vm.jobCount.id">
+            <label for="id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                    ng-model="vm.jobCount.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_logDate">Log Date</label>
+                <div class="input-group">
+                    <input id="field_logDate" type="text" class="form-control" name="logDate" uib-datepicker-popup="{{dateformat}}" ng-model="vm.jobCount.logDate" is-open="vm.datePickerOpenStatus.logDate"
+                    />
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="vm.openCalendar('logDate')"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_jobNumber">Job Number</label>
+            <input type="number" class="form-control" name="jobNumber" id="field_jobNumber"
+                    ng-model="vm.jobCount.jobNumber"
+                     />
+        </div>
+
+        <div class="form-group">
+            <label for="field_searchWord">Search Word</label>
+            <select class="form-control" id="field_searchWord" name="searchWord" ng-model="vm.jobCount.searchWord" ng-options="searchWord as searchWord.wordName for searchWord in vm.searchwords track by searchWord.id">
+                <option value=""></option>
+            </select>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Cancel</span>
+        </button>
+        <button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
+        </button>
+    </div>
+</form>
